@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Our Embeddeds</title>
+    <link>http://example.org/</link>
+    <description>Recent content on Our Embeddeds</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 06 Aug 2020 18:30:54 -0300</lastBuildDate>
+    
+	<atom:link href="http://example.org/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Fisrt Post</title>
+      <link>http://example.org/blog/2020/08/06/first-post/</link>
+      <pubDate>Thu, 06 Aug 2020 18:30:54 -0300</pubDate>
+      
+      <guid>http://example.org/blog/2020/08/06/first-post/</guid>
+      <description>Welcome to our site Hello everyone, welcome to the engineering blog &amp;ldquo;ourEmbedded&amp;rdquo;. We hope that the blog section is useful for all of you. We will be publishing technical notes, works carried out by our engineers, and comments on new techniques and products that we consider useful for all of you.
+Additionally, all of you are welcome to send your questions, doubts or suggestions to our engineering staff.
+About ourEmbeddeds We are a fresh company formed by entusiast engineers and expersts with great skills in electronic engineering, deep embedded oftware, communication systems, RF technologies and many other reas of interest.</description>
+    </item>
+    
+    <item>
+      <title>Contact</title>
+      <link>http://example.org/contact/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/contact/</guid>
+      <description>We are here to help you If you have any questions, do not hesitate to ask us. We are available 24/7 although we may take time to answer depending on the work flow we have.</description>
+    </item>
+    
+    <item>
+      <title>FAQ</title>
+      <link>http://example.org/faq/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>http://example.org/faq/</guid>
+      <description>Question 1 Answer 1
+Question 2 Answer 2</description>
+    </item>
+    
+  </channel>
+</rss>
