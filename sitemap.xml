@@ -3,40 +3,40 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   
   <url>
-    <loc>http://example.org/blog/</loc>
+    <loc>https://ourembeddeds.github.io/blog/</loc>
     <lastmod>2020-08-06T18:30:54-03:00</lastmod>
   </url>
   
   <url>
-    <loc>http://example.org/categories/</loc>
+    <loc>https://ourembeddeds.github.io/categories/</loc>
     <lastmod>2020-08-06T18:30:54-03:00</lastmod>
   </url>
   
   <url>
-    <loc>http://example.org/blog/2020/08/06/first-post/</loc>
+    <loc>https://ourembeddeds.github.io/blog/2020/08/06/first-post/</loc>
     <lastmod>2020-08-06T18:30:54-03:00</lastmod>
   </url>
   
   <url>
-    <loc>http://example.org/categories/institutional/</loc>
+    <loc>https://ourembeddeds.github.io/categories/institutional/</loc>
     <lastmod>2020-08-06T18:30:54-03:00</lastmod>
   </url>
   
   <url>
-    <loc>http://example.org/</loc>
+    <loc>https://ourembeddeds.github.io/</loc>
     <lastmod>2020-08-06T18:30:54-03:00</lastmod>
   </url>
   
   <url>
-    <loc>http://example.org/contact/</loc>
+    <loc>https://ourembeddeds.github.io/contact/</loc>
   </url>
   
   <url>
-    <loc>http://example.org/faq/</loc>
+    <loc>https://ourembeddeds.github.io/faq/</loc>
   </url>
   
   <url>
-    <loc>http://example.org/tags/</loc>
+    <loc>https://ourembeddeds.github.io/tags/</loc>
   </url>
   
 </urlset>
