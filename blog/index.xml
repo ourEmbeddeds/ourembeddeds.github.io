@@ -6,10 +6,20 @@
     <description>Recent content in Blogs on Our Embeddeds</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 06 Aug 2020 18:30:54 -0300</lastBuildDate>
+    <lastBuildDate>Sun, 16 Aug 2020 15:08:33 -0300</lastBuildDate>
     
 	<atom:link href="https://ourembeddeds.github.io/blog/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Elf Loader</title>
+      <link>https://ourembeddeds.github.io/blog/2020/08/16/elf-loader/</link>
+      <pubDate>Sun, 16 Aug 2020 15:08:33 -0300</pubDate>
+      
+      <guid>https://ourembeddeds.github.io/blog/2020/08/16/elf-loader/</guid>
+      <description>ELF Load: Dynamic load and execute for your mcu. Perfect, you&amp;rsquo;ve created your embedded system, provided it with an external storage system, created a serial terminal to test things out, and then started your journey through routine&amp;hellip; testing as if you were sitting on an old 70&amp;rsquo;s ticker while you listen to &amp;ldquo;Sheer Heart Attack&amp;rdquo; by Queen (a plus for the sound without a synth)
+But wait! This is not totally the old-fashionist experience&amp;hellip; My binaries must be embedded in the firmware in order to work!</description>
+    </item>
     
     <item>
       <title>Fisrt Post</title>

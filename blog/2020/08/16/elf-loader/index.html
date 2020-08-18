@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+  <head>
+  <meta charset="utf-8">
+  <meta name="robots" content="all,follow">
+  <meta name="googlebot" content="index,follow,snippet,archive">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <title>Elf Loader</title>
+  <meta name="author" content="Martin Ribelotta" />
+  
+  
+  
+  
+  <meta name="keywords" content="embedded, electronics, iot, Cortex-m, Microcontroller, ELF, ARM">
+  
+  
+  <meta name="description" content="ourEmbeddeds main site">
+
+  <meta name="generator" content="Hugo 0.74.3" />
+
+  
+  <link href='//fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,500,700,800' rel='stylesheet' type='text/css'>
+
+  
+  <link rel="stylesheet" href="//use.fontawesome.com/releases/v5.11.2/css/all.css">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+  
+  <link href="/css/animate.css" rel="stylesheet">
+
+  
+  
+    <link href="/css/style.blue.css" rel="stylesheet" id="theme-stylesheet">
+  
+
+  
+  <link href="/css/custom.css" rel="stylesheet">
+
+  
+  
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  
+
+  
+  <link rel="shortcut icon" href="/img/favicon.ico" type="image/x-icon" />
+  <link rel="apple-touch-icon" href="/img/apple-touch-icon.png" />
+
+  
+  <link href="/css/owl.carousel.css" rel="stylesheet">
+  <link href="/css/owl.theme.css" rel="stylesheet">
+
+  
+  <link rel="alternate" href="https://ourembeddeds.github.io/index.xml" type="application/rss+xml" title="Our Embeddeds">
+
+  
+  
+  
+  
+  
+  
+  
+  <meta property="og:locale" content="en_us">
+  <meta property="og:site_name" content="Our Embeddeds">
+  <meta property="og:title" content="Elf Loader">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://ourembeddeds.github.io/blog/2020/08/16/elf-loader/" />
+  <meta property="og:description" content="ourEmbeddeds main site">
+  <meta property="og:image" content="https://ourembeddeds.github.io/img/Tomtebobarnen.jpg">
+  <meta property="og:image:type" content="image/jpg">
+  
+  
+  
+    <meta property="og:image:width" content="371">
+    <meta property="og:image:height" content="271">
+  
+  
+  <meta property="og:updated_time" content="2020-08-16T15:08:33-0300">
+  
+    
+    
+    <meta property="article:section" content="Embedded">
+    
+    
+    <meta property="article:published_time" content="2020-08-16T15:08:33-0300">
+    <meta property="article:modified_time" content="2020-08-16T15:08:33-0300">
+  
+
+  
+  <meta name="twitter:card" content="summary_large_image">
+  
+  <meta name="twitter:title" content="Elf Loader">
+  
+  <meta name="twitter:image" content="https://ourembeddeds.github.io/img/Tomtebobarnen.jpg">
+  
+  <meta name="twitter:description" content="ourEmbeddeds main site">
+  
+
+</head>
+
+
+  <body>
+
+    <div id="all">
+
+        <header class="navbar-affixed-top" data-spy="affix" data-offset-top="62">
+    <div class="navbar navbar-default yamm" role="navigation" id="navbar">    
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand home" href="/">
+                    <img src="/img/ourembeddeds-banner.png" alt="Elf Loader logo" class="hidden-xs hidden-sm">
+                    <img src="/img/logo-small.png" alt="Elf Loader logo" class="visible-xs visible-sm">
+                    <span class="sr-only">Elf Loader - go to homepage</span>
+                </a>
+                <div class="navbar-buttons">
+                    <button type="button" class="navbar-toggle btn-template-main" data-toggle="collapse" data-target="#navigation">
+                      <span class="sr-only">Toggle Navigation</span>
+                        <i class="fas fa-align-justify"></i>
+                    </button>
+                </div>
+            </div>
+            
+
+            <div class="navbar-collapse collapse" id="navigation">
+                <ul class="nav navbar-nav navbar-right">
+                  
+                  
+                  
+                  <li class="dropdown">
+                    
+                    <a href="/">Home</a>
+                    
+                  </li>
+                  
+                  
+                  <li class="dropdown active">
+                    
+                    <a href="/blog/">Blog</a>
+                    
+                  </li>
+                  
+                  
+                  <li class="dropdown">
+                    
+                    <a href="/contact/">Contact</a>
+                    
+                  </li>
+                  
+                </ul>
+            </div>
+            
+
+            <div class="collapse clearfix" id="search">    
+                <form class="navbar-form" role="search">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Search">
+                        <span class="input-group-btn">
+                    <button type="submit" class="btn btn-template-main"><i class="fas fa-search"></i></button>
+                </span>
+                    </div>
+                </form>
+            </div>
+            
+        </div>
+    </div>
+</header>
+
+
+
+
+        <div id="heading-breadcrumbs">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h1>Elf Loader</h1>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+        <div id="content">
+            <div class="container">
+
+                <div class="row">
+
+                    
+
+                    <div class="col-md-9" id="blog-post">
+
+                        
+                          <p class="text-muted text-uppercase mb-small text-right">
+                            By <a href="#">Martin Ribelotta</a>
+                             | 
+                            August 16, 2020
+                          </p>
+                        
+
+                        <div id="post-content">
+                          <h1 id="elf-load-dynamic-load-and-execute-for-your-mcu">ELF Load: Dynamic load and execute for your mcu.</h1>
+<p>Perfect, you&rsquo;ve created your embedded system, provided it with an
+external storage system, created a serial terminal to test things
+out, and then started your journey through routine&hellip; testing as
+if you were sitting on an old 70&rsquo;s ticker while you listen to
+&ldquo;Sheer Heart Attack&rdquo; by Queen (a plus for the sound without a
+synth)</p>
+<p>But wait! This is not totally the old-fashionist experience&hellip;
+My binaries must be embedded in the firmware in order to work!
+You also shouldn&rsquo;t expect to be able to listen to your old
+5&rsquo;&rsquo; 1/4 drive (or better, your dataset) but the fresh experience
+of binary loaded is lost for ever and never&hellip; or not?</p>
+<h2 id="loading-binaries-the-simplest-way">Loading binaries, the simplest way</h2>
+<p>In an old PC, when you type a command, the operating system
+search a file with the command name and extension COM (or EXE in
+newer versions) and try to load it&hellip; At this moment, several
+things happend:</p>
+<ol>
+<li>The system calculate memory usage of the executable and
+reserve this amount of memory in the system</li>
+<li>The OS read the file and copy the pertinent areas in the
+reserved memory.</li>
+<li>Depending on architecture, some adjust to loaded data may
+need. In the case of 8086 and <code>*.com</code> files, the architecture
+of the memory management unit enables load without adjust in
+this phase.</li>
+<li>An execution environment is created (reserving memory if
+required) and configure some registers of processor to point
+to this environment before the next phase</li>
+<li>Finally, the OS jump to the entry point of binary and
+delegate the execution to the recently loaded code</li>
+</ol>
+<p>As said in the point 3, normally in a PC processor, the
+architecture of this, enable execution with minimun or unexisting
+binary modifications (segmentation in 8086 and MMU in modern x86
+systems).</p>
+<p>You can see next, the 8086 memory layout at COM executable load:</p>
+<p><img src="/img/articles/elf-loader/8086-executable-load.png" alt="8086-executable-load"></p>
+<p>In this example, the binary is limited to 64K of memory
+and the processor reserve one of the segments for the program usage
+(in the execution, the program can load more code or request
+more memory to OS, but the binary is limited to one 64K segment).
+In modern systems, with a memory management unit (MMU), you can map any virtual direction
+to any real direction (well, not exactly&hellip; in 4K blocks of granularity, but you do understand, right?)
+and can select the memory layout of your executable freely.</p>
+<p><img src="/img/articles/elf-loader/VM-executable-load.png" alt="VM-executable-load"></p>
+<p>Normally, the process to load executable in MMU systems is more complex, involved copy of a portion of the file dynamically at request using virtual memory trick called page-fault (in short, you only need to configure the memory of your process with required pages and mark as no-present this pages; in the moment to access these pages, the hardware trigger an interrupt catches by the OS and it load these page for you.. cool don&rsquo;t you think?).</p>
+<p>But when you try to replicate this behavior in your embedded system&hellip; the magic is gone and you will quickly see the problem: You need to use fixed address for your binary load:</p>
+<p><img src="/img/articles/elf-loader/mcu-executable-load.png" alt="mcu-executable-load"></p>
+<p>This schema work more or less correctly for a single executable,
+but if you need nested executable load, or multithread load this
+approach is quickly wasted.</p>
+<p>In many architectures (highlighting ARM, MIPS and RISC-V) the jumps normally refer to the current program counter (PC) to jump. In this architectures, the code is easy loadable in any position of memory (respecting some rules of aligns) but the data is more complex because they need one or two indirections to refer a proper memory area independently of the load position.</p>
+<h2 id="fixing-the-world-one-word-at-time">Fixing the world one word at time</h2>
+<p>If your processor lacks MMU, to load programs at arbitrary addresses, you can look for several approaches:</p>
+<ul>
+<li>
+<p>Make the code suitable to detect the current addres and adjust their references in accordance to it: This is called &ldquo;position independent code&rdquo; or PIC (similar approach with very sutil diferences is called &ldquo;position independent executable&rdquo; or PIE) and implies one or two levels of indirection in any codes. But not all is so easy the PIC code have various chalenges to solve:</p>
+<ul>
+<li>Jump of code independent of position: This normally is made
+using special processor features like PC relative jumps.
+This is easy when the compiler known the relative position
+of code in compile time, but is more dificult when the
+address of the code is dinamically calculated like in jump
+tables.</li>
+<li>Access data in arbitrary loadable position: Normally, the PIC code uses indirect access through a relocation table called global offset table (GOT) modified by the loader before code startup.</li>
+<li>Mix of previous points: Normally, when your code jump to
+a calculated position, you need a GOT entry reserved for
+this calculus and need to adjust this entry like other
+data access. Due to speed the code jump, the compiler may
+prefer other approach to do this, using an stub of code
+adjustable at startup for perform this dinamic jump. This
+technique is called procedure linkage table and consist in
+little stub of code that perform a call to undefined pointer
+(normally an error function) and the loader adjust this code
+in the load time to point the corret code blok. This
+approach enable you to share code in libraries but need
+more work than this.</li>
+</ul>
+</li>
+<li>
+<p>Leave any memory reference undefined and mark in a table the needed of modify this portion of code in order to program work correctly.</p>
+</li>
+</ul>
+<p>The first approach need less work in the loader area but the
+performance at runtime is less than the fixed memory address code,
+in contrast, the second approach need more loader work but the
+performance of the code is nearly (maybe the same) to the fixed
+address code&hellip;</p>
+<p>But at the end, the PIC code is the only suitable way to share code across multiple libraries for single binary. By example with the PIC code, you can have a one library for string format (aka printf) and share the code with many programs. Additionally, the PIC code can reside in flash without modification, only a PLT and GOT is required in RAM, and change from program to program (this require OS help on context switch).</p>
+<h6 id="global-offset-table-schema">Global offset table schema</h6>
+<p><img src="/img/articles/elf-loader/got-operation.png" alt="got-operation"></p>
+<h6 id="relocation-schema">Relocation schema</h6>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-as" data-lang="as"><span style="color:#75715e">// extern int f1(int, int, char);
+</span><span style="color:#75715e">// void func1() {
+</span><span style="color:#75715e">//   f1(0, 0xAA55AA55, 32);
+</span><span style="color:#75715e"></span>  <span style="color:#a6e22e">movs</span>    <span style="color:#a6e22e">r2</span><span style="color:#f92672">,</span> <span style="color:#960050;background-color:#1e0010">#</span><span style="color:#ae81ff">32</span>
+  <span style="color:#a6e22e">movs</span>    <span style="color:#a6e22e">r0</span><span style="color:#f92672">,</span> <span style="color:#960050;background-color:#1e0010">#</span><span style="color:#ae81ff">0</span>
+  <span style="color:#a6e22e">ldr</span>     <span style="color:#a6e22e">r1</span><span style="color:#f92672">,</span> [<span style="color:#a6e22e">pc</span><span style="color:#f92672">,</span> <span style="color:#960050;background-color:#1e0010">#</span><span style="color:#ae81ff">4</span>]    <span style="color:#75715e">// &lt;func1+0xc&gt;
+</span><span style="color:#75715e"></span>  <span style="color:#a6e22e">ldr</span>     <span style="color:#a6e22e">r3</span><span style="color:#f92672">,</span> [<span style="color:#a6e22e">pc</span><span style="color:#f92672">,</span> <span style="color:#960050;background-color:#1e0010">#</span><span style="color:#ae81ff">8</span>]    <span style="color:#75715e">// &lt;func1+0x10&gt;
+</span><span style="color:#75715e"></span>  <span style="color:#a6e22e">bx</span>      <span style="color:#a6e22e">r3</span>
+  <span style="color:#a6e22e">nop</span> <span style="color:#75715e">// Align instruction
+</span><span style="color:#75715e"></span>  .<span style="color:#a6e22e">word</span>   <span style="color:#ae81ff">0xaa55aa55</span>
+  .<span style="color:#a6e22e">word</span>   <span style="color:#ae81ff">0x00000000</span> <span style="color:#75715e">// &lt;f1&gt; replace with addr of symbol
+</span></code></pre></div><h2 id="put-ya-guns-on">Put ya guns on!</h2>
+<p>Our preferred approach in embedded systems in load the code and
+relocate individual references instead of GOT usage due the
+performance degradation adding two indirections (one for GOT
+pointer and one for GOT entry) in every memory access.</p>
+<p>In MMU systems, the ELF load process is really straight forward:</p>
+<ul>
+<li>Map the file from disk to memory (halped by MMU and OS swap
+service) and resolve memory map to satisfy the ELF layout.</li>
+<li>Scan relocation table and resolve undefined symbols (normally
+from dynamic libraries in the system).</li>
+<li>Make process environment and adjust process register to point to it (normally an in-memory structure representing the process state).</li>
+<li>Let the OS load the new processor state with the correct
+environment. Normaly, this is limited to put the process
+state in a ready queue in the OS structures and let the
+scheduler do the switch process soon.</li>
+</ul>
+<p>Without MMU, the process require some cares:</p>
+<ol>
+<li>You cannot load entire ELF from secondary storage because
+this action consume more memory than expected (the ELF
+may contains debugging sections, some unneded information
+like symbol tables and other non required data at runtime).</li>
+<li>The memory is non virtualized, all process share the same
+memory space and potentially can access (in non a good way)
+the memory from other process&hellip; You need to take care of this,
+some MCU have a protection memory system (like MPU on ARM
+or PMP on RISC-V) to mitigate this issue.</li>
+<li>You need to reserve only loadable sections like <code>.text</code>,
+<code>.data</code>, <code>.rodata</code>, <code>.bss</code>, and <code>.stack</code>, other sections
+are only used at the load time like relocation symbols and
+elf header.</li>
+<li>You need to travel trougth al symbols and relocate every
+entry in the binary&hellip; this take some time but the execution
+time have no impact compared with the PIC code.</li>
+</ol>
+<p>You can see our implementation of the load-relocate schema in
+<a href="https://github.com/martinribelotta/elfloader">this link</a>.</p>
+<p>Due to simple nature of the loader, it cannot handle all type of
+relocations and sections. Ideally, you can extend the code for
+cover your necessities, but the actual implementation works fine
+with some cares at the moment of guest binary compilation:</p>
+<ul>
+<li>You cannot use &ldquo;COMMON&rdquo; sections, all of non inited data must
+be in BSS. The gcc flag to force this is <code>-fno-common</code>.</li>
+<li>You need to link the final ELF as relocatable executable.
+This prevents the linker from resolving undefined symbols,
+instead embeds the information needed to resolve this in the
+binary. The gcc or ld  flag to force this linking behavioural is
+<code>-r</code>.</li>
+<li>You need to force the compiler to produce only &ldquo;word
+relocation&rdquo; type. This is the most simple relocation form and
+more  easy to handle in load time. In ARM architecture, this
+force all relocation to be a type <code>R_ARM_ABS32</code>. For enable
+this, gcc for ARM provides the flag: <code>-mlong-call</code>. In old
+compilers this is not strictly true and the flag not work well,
+many relocations will be of type <code>R_ARM_THB_CALL</code> or
+<code>R_ARM_THB_JMP</code>. Don&rsquo;t panic, the actual loader can handle this
+type of relocations, but the load phase will be sensitive more
+slow due to major processing work.</li>
+<li>By default, all compilers provide a startup library that is
+executed before main, and initialize some data and code for you,
+but this is undesirable in this situation. You need to disable
+the inclusion of these code and provide a self writed version
+to <code>_start</code> or other function of your election. This behavior
+can be enabled in gcc using <code>-nostartfiles</code> flag.</li>
+</ul>
+<p>Additionally, you can provide a linker script with your preferred
+memory layout, but the suggested minimum linker script layout is
+like this:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c">ENTRY(_start)
+SECTIONS
+{
+	.text <span style="color:#ae81ff">0x00000000</span> <span style="color:#f92672">:</span>
+	{
+		<span style="color:#f92672">*</span>(.text<span style="color:#f92672">*</span> .text.<span style="color:#f92672">*</span>)
+	}
+	.rodata :
+	{
+		<span style="color:#f92672">*</span>(.rodata<span style="color:#f92672">*</span> .rodata.<span style="color:#f92672">*</span>)
+	}
+	.data :
+	{
+		<span style="color:#f92672">*</span>(.data<span style="color:#f92672">*</span> .data.<span style="color:#f92672">*</span>)
+	}
+	.bss :
+	{
+		<span style="color:#f92672">*</span>(.bss .bss.<span style="color:#f92672">*</span> .sbss .sbss.<span style="color:#f92672">*</span> COMMON)
+	}
+</code></pre></div><p>This put continuos memory to all of sections. If your architecture
+requires some align, you need to add &ldquo;<code>. = ALIGN(n);</code>&rdquo; statements
+between sections.</p>
+<p>At this point, the loader API is really simple:</p>
+<h4 id="initialize-it">Initialize it.</h4>
+<p>You need to define an environment variable for the new binary
+with:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#66d9ef">typedef</span> <span style="color:#66d9ef">struct</span> {
+   <span style="color:#66d9ef">const</span> ELFSymbol_t <span style="color:#f92672">*</span>exported;
+   size_t exported_size;
+} ELFEnv_t;
+...
+<span style="color:#66d9ef">const</span> ELFEnv_t elfEnv <span style="color:#f92672">=</span> {
+   symbolTable,
+   <span style="color:#66d9ef">sizeof</span>(symbolTable) <span style="color:#f92672">/</span> <span style="color:#66d9ef">sizeof</span>(ELFSymbol_t)
+};
+</code></pre></div><p>This contain a reference to an array of resolvable symbols
+and the count of the elements of these array. The entries of
+this array contains the name and the pointer to resolve:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#66d9ef">typedef</span> <span style="color:#66d9ef">struct</span> {
+  <span style="color:#66d9ef">const</span> <span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>name; <span style="color:#75715e">/*!&lt; Name of symbol */</span>
+  <span style="color:#66d9ef">void</span> <span style="color:#f92672">*</span>ptr; <span style="color:#75715e">/*!&lt; Pointer of symbol in memory */</span>
+} ELFSymbol_t;
+...
+<span style="color:#66d9ef">const</span> ELFSymbol_t symbolTable[] <span style="color:#f92672">=</span> {
+   { <span style="color:#e6db74">&#34;printf&#34;</span>, (<span style="color:#66d9ef">void</span><span style="color:#f92672">*</span>) printf },
+   { <span style="color:#e6db74">&#34;scanf&#34;</span>, (<span style="color:#66d9ef">void</span><span style="color:#f92672">*</span>) scanf },
+   { <span style="color:#e6db74">&#34;strstr&#34;</span>, (<span style="color:#66d9ef">void</span><span style="color:#f92672">*</span>) strstr },
+   { <span style="color:#e6db74">&#34;fctrl&#34;</span>, (<span style="color:#66d9ef">void</span><span style="color:#f92672">*</span>) fctrl },
+};
+</code></pre></div><p>Additionally, you need to create an object of type
+<code>loader_env_t</code> and set the symbol table into this struct.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c">ELFExec_t <span style="color:#f92672">*</span>exec;
+loader_env_t loader_env;
+loader_env.env <span style="color:#f92672">=</span> env;
+</code></pre></div><p>In the next phase, you need to call <code>load_elf</code> with the PATH of
+the binary, the environment and a reference to the pointer of
+<code>ELFExec_t</code>:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c">load_elf(<span style="color:#e6db74">&#34;/flash/bin/test1.elf&#34;</span>, loader_env, <span style="color:#f92672">&amp;</span>exec);
+</code></pre></div><p>If the operation end sucessfully, the return status is <code>0</code>, in
+case of error, a negative number depending the specific error
+is returned.</p>
+<p>In this point, you have the binary loaded and relocated in the
+memory, and you can jump into start entry point or request the
+address of specific symbol:</p>
+<p>In the first case, you need to call these function like this:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#66d9ef">int</span> ret <span style="color:#f92672">=</span> jumpTo(exec);
+<span style="color:#66d9ef">if</span> (ret...
+</code></pre></div><p>If the program end sucessfully, the function return 0, otherwise
+return negative number depending to the error.</p>
+<p>If you need to request an specific function pointer you can use</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#66d9ef">void</span> <span style="color:#f92672">*</span>symbolPtr <span style="color:#f92672">=</span> get_func(<span style="color:#e6db74">&#34;myFunction&#34;</span>, exec);
+</code></pre></div><p>This return the pointer to function start or <code>NULL</code> if the object
+is not found.</p>
+<p>If you need an arbitrary pointer to other symbol (variable,
+constant or whatever) you can use:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#66d9ef">void</span> <span style="color:#f92672">*</span>symbolPtr <span style="color:#f92672">=</span> get_obj(<span style="color:#e6db74">&#34;myVar&#34;</span>, exec);
+</code></pre></div><p>After all, you can free all allocated memory for the binary and
+the metadata of the ELF file with:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c">unload_elf(exec);
+</code></pre></div><h3 id="system-interface">System interface</h3>
+<p>In order to be flexible in the implementation, the library leaves
+undefined some API of low level access for port to any system.</p>
+<p>The low level layer need the next macros defined:</p>
+<ul>
+<li><code>LOADER_USER_DATA</code>: Structure or datatype to contains the
+plataform dependent data for file access. By example, this need
+at least, a file object (integer file descriptor, FILE* struct,
+or whatever) and envirnoment pointer to <code>ELFEnv_t</code>.</li>
+<li><code>LOADER_OPEN_FOR_RD(userdata, path)</code>: open file in path and
+modify userdata in order to save the file descriptor, or file
+pointer.</li>
+<li><code>LOADER_FD_VALID(userdata)</code>: Check if the opened file data is
+a valid file and can read from it.</li>
+<li><code>LOADER_READ(userdata, buffer, size)</code>: Read <code>size</code> bytes from
+file descriptor in <code>userdata</code> and put in <code>buffer</code> array.</li>
+<li><code>LOADER_WRITE(userdata, buffer, size)</code>: Write <code>size</code> bytes to
+file descriptor in <code>userdata</code> from <code>buffer</code> pointer. Actually
+this macro is not used internally, it is only defined
+in symmetry with the macro above.</li>
+<li><code>LOADER_CLOSE(userdata)</code>: Close the file descriptor in
+<code>userdata</code>.</li>
+<li><code>LOADER_SEEK_FROM_START(userdata, off)</code>: Move read pointer
+<code>off</code> bytes from start of file pointed by descriptor in
+<code>userdata</code>.</li>
+<li><code>LOADER_TELL(userdata)</code>: Return current position of file
+descriptor in <code>userdata</code>.</li>
+<li><code>LOADER_ALIGN_ALLOC(size, align, perm)</code>: Return <code>size</code> bytes
+aligned as <code>align</code> bytes with <code>perm</code> permition access. If you
+not privides diferentiate access of memory region, the returned
+region can be write, read and execute. By default, the macro
+call a function <code>void *do_alloc(size_t size, size_t align,  ELFSecPerm_t perm);</code>.</li>
+<li><code>LOADER_FREE(ptr)</code>: Deallocate memory from pointer <code>ptr</code></li>
+<li><code>LOADER_STREQ(s1, s2)</code>: Compare two strings s1, and s2. The
+result of equal strings must be <strong><code>!= 0</code></strong> and when the strings
+difer, the result of this macro must be <strong><code>0</code></strong>. The most simple
+implementation is: <code>(strcmp((s1), (s2)) == 0)</code></li>
+<li><code>LOADER_JUMP_TO(entry)</code>: Perform a jump to application entry
+point. <code>entry</code> is the address of the first instruction of the
+code. You can simply cast the value to a function pointer with
+selected fingerprint or do a more complex operation like
+environment creation, start a new RTOS thread or whatever
+is required for your architecture.</li>
+<li><code>DBG(...)</code>: Print (in printf like format) debug messages. Can
+be empty if you not need debug messages.</li>
+<li><code>ERR(...)</code>: Print (in printf like format) error messages. Can
+be empty if you not need error messages.</li>
+<li><code>MSG(msg)</code>: Print (in printf like format) information
+messages. Can be empty if you not need information messages.</li>
+<li><code>#define LOADER_GETUNDEFSYMADDR(userdata, name)</code>: Resolve
+symbol name <code>name</code> and return the address of this. The most
+simple way to do this is peform a search in specific structure
+under <code>userdata</code> with a symbol table. If the process fail, the
+data returned must be <code>0xffffffff</code> AKA <code>((uint32_t) -1)</code></li>
+</ul>
+<p>The golden implementation uses ARM semihosting IO for file access, but you can port this to any API like fatfs or similar.</p>
+<h2 id="references">References</h2>
+<p><a href="https://github.com/martinribelotta/elfloader">elf-loader</a></p>
+<p><a href="https://github.com/niicoooo/esp32-elfloader">elf-loader for esp32 implementation</a></p>
+<p><a href="https://en.wikipedia.org/wiki/COM_file">MSDOS COM Executable</a></p>
+<p><a href="https://en.wikipedia.org/wiki/Relocation_(computing)">Relocation technics</a></p>
+<p><a href="https://en.wikipedia.org/wiki/Executable_and_Linkable_Format">ELF file format</a></p>
+<p><a href="https://lwn.net/Articles/631631/">Executable an linkable file load on linux</a></p>
+<p><a href="https://wiki.osdev.org/ELF_Tutorial">More ELF information with relocation format</a></p>
+<p><a href="https://static.docs.arm.com/ihi0044/e/IHI0044E_aaelf.pdf">ELF Relocation types from ARM</a> The main goal is section 4.6 explaingin all relocation formats</p>
+
+                        </div>
+                        
+                        
+
+                    </div>
+                    
+
+                    
+
+                    
+
+                    <div class="col-md-3">
+
+                        
+
+                        
+
+<div class="panel panel-default sidebar-menu">
+
+    <div class="panel-heading">
+      <h3 class="panel-title">Search</h3>
+    </div>
+
+    <div class="panel-body">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" role="search">
+            <div class="input-group">
+                <input type="search" name="q" class="form-control" placeholder="Search">
+                <input type="hidden" name="sitesearch" value="https://ourembeddeds.github.io/">
+                <span class="input-group-btn">
+                    <button type="submit" class="btn btn-template-main"><i class="fas fa-search"></i></button>
+                </span>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+
+
+
+
+<div class="panel panel-default sidebar-menu">
+
+    <div class="panel-heading">
+        <h3 class="panel-title">Categories</h3>
+    </div>
+
+    <div class="panel-body">
+        <ul class="nav nav-pills nav-stacked">
+            
+            
+            <li>
+                <a href="/categories/arm">arm (1)</a>
+            </li>
+            
+            <li>
+                <a href="/categories/embedded">embedded (1)</a>
+            </li>
+            
+            <li>
+                <a href="/categories/institutional">institutional (1)</a>
+            </li>
+            
+            <li>
+                <a href="/categories/microcontrollers">microcontrollers (1)</a>
+            </li>
+            
+        </ul>
+    </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+                        
+
+                    </div>
+                    
+
+                    
+
+                </div>
+                
+
+            </div>
+            
+        </div>
+        
+
+        <footer id="footer">
+    <div class="container">
+
+        
+        <div class="col-md-4 col-sm-6">
+            <h4>About us</h4>
+
+            <p>Embedded developers professional group.</p>
+
+            <hr class="hidden-md hidden-lg hidden-sm">
+
+        </div>
+        
+        
+
+        <div class="col-md-4 col-sm-6">
+
+             
+            <h4>Recent posts</h4>
+
+            <div class="blog-entries">
+                
+                <div class="item same-height-row clearfix">
+                    <div class="image same-height-always">
+                        <a href="https://ourembeddeds.github.io/blog/2020/08/16/elf-loader/">
+                          
+                            <img src="/img/Tomtebobarnen.jpg" class="img-responsive" alt="Elf Loader">
+                          
+                        </a>
+                    </div>
+                    <div class="name same-height-always">
+                        <h5><a href="https://ourembeddeds.github.io/blog/2020/08/16/elf-loader/">Elf Loader</a></h5>
+                    </div>
+                </div>
+                
+                <div class="item same-height-row clearfix">
+                    <div class="image same-height-always">
+                        <a href="https://ourembeddeds.github.io/blog/2020/08/06/first-post/">
+                          
+                            <img src="/img/ourembeddeds.png" class="img-responsive" alt="Fisrt Post">
+                          
+                        </a>
+                    </div>
+                    <div class="name same-height-always">
+                        <h5><a href="https://ourembeddeds.github.io/blog/2020/08/06/first-post/">Fisrt Post</a></h5>
+                    </div>
+                </div>
+                
+            </div>
+
+            <hr class="hidden-md hidden-lg">
+             
+
+        </div>
+        
+
+        
+        <div class="col-md-4 col-sm-6">
+
+          <h4>Contact</h4>
+
+            <p class="text-uppercase"><strong>Bariloche</strong>
+        <br>Vte O'Connor 647
+        <br>Floor 5, Box 2
+        <br>Rio Negro
+        <br>
+        <strong>Argentina</strong>
+      </p>
+      
+
+            <a href="/contact" class="btn btn-small btn-template-main">Go to contact page</a>
+
+            <hr class="hidden-md hidden-lg hidden-sm">
+
+        </div>
+        
+        
+
+    </div>
+    
+</footer>
+
+
+
+
+
+
+
+<div id="copyright">
+    <div class="container">
+        <div class="col-md-12">
+            
+            <p class="pull-left">Copyright (c) 2020, OurEmbeddeds; all rights reserved.</p>
+            
+            <p class="pull-right">
+              Template by <a href="https://bootstrapious.com/p/universal-business-e-commerce-template">Bootstrapious</a>.
+              
+
+              Ported to Hugo by <a href="https://github.com/devcows/hugo-universal-theme">DevCows</a>.
+            </p>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+    </div>
+    
+
+    
+<script src="//code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/waypoints/4.0.1/jquery.waypoints.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/Counter-Up/1.0/jquery.counterup.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-parallax/1.1.3/jquery-parallax.js"></script>
+
+<script src="/js/front.js"></script>
+
+
+<script src="/js/owl.carousel.min.js"></script>
+
+
+
+  </body>
+</html>
