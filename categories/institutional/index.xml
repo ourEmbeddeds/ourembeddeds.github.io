@@ -12,14 +12,12 @@
     
     
     <item>
-      <title>First Post</title>
+      <title>Welcome to our site</title>
       <link>https://ourembeddeds.github.io/blog/2020/08/06/first-post/</link>
       <pubDate>Thu, 06 Aug 2020 18:30:54 -0300</pubDate>
       
       <guid>https://ourembeddeds.github.io/blog/2020/08/06/first-post/</guid>
-      <description>Welcome to our site Hello everyone, welcome to the engineering blog &amp;ldquo;ourEmbedded&amp;rdquo;. We hope this blog section will be useful for all of you. We will be publishing technical notes, works carried out by our engineers, and comments on new techniques and products that we consider relevant.
-Additionally, everyone is welcome to send questions, doubts or suggestions to our engineering staff.
-About ourEmbeddeds We are a fresh company composed by entusiast engineers and experts with great skills in electronic engineering, deep embedded software, communication systems, RF technologies and many other areas of interest.</description>
+      <description>&lt;p&gt;Hello everyone, welcome to the engineering blog &amp;ldquo;ourEmbedded&amp;rdquo;.&lt;/p&gt;</description>
     </item>
     
   </channel>

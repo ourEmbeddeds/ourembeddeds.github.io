@@ -17,19 +17,21 @@
       <pubDate>Sun, 16 Aug 2020 15:08:33 -0300</pubDate>
       
       <guid>https://ourembeddeds.github.io/blog/2020/08/16/elf-loader/</guid>
-      <description>ELF Load: Dynamic load and execute for your mcu. Perfect, you&amp;rsquo;ve created your embedded system, provided it with an external storage system, created a serial terminal to test things out, and then started your journey through routine&amp;hellip; testing as if you were sitting on an old 70&amp;rsquo;s ticker while you listen to &amp;ldquo;Sheer Heart Attack&amp;rdquo; by Queen (a plus for the sound without a synth)
-But wait! This is not totally the old-fashionist experience&amp;hellip; My binaries must be embedded in the firmware in order to work!</description>
+      <description>&lt;p&gt;Perfect, you&amp;rsquo;ve created your embedded system, provided it with an
+external storage system, created a serial terminal to test things
+out, and then started your journey through routine&amp;hellip; testing as
+if you were sitting on an old 70&amp;rsquo;s ticker while you listen to
+&amp;ldquo;Sheer Heart Attack&amp;rdquo; by Queen (a plus for the sound without a
+synth)&lt;/p&gt;</description>
     </item>
     
     <item>
-      <title>First Post</title>
+      <title>Welcome to our site</title>
       <link>https://ourembeddeds.github.io/blog/2020/08/06/first-post/</link>
       <pubDate>Thu, 06 Aug 2020 18:30:54 -0300</pubDate>
       
       <guid>https://ourembeddeds.github.io/blog/2020/08/06/first-post/</guid>
-      <description>Welcome to our site Hello everyone, welcome to the engineering blog &amp;ldquo;ourEmbedded&amp;rdquo;. We hope this blog section will be useful for all of you. We will be publishing technical notes, works carried out by our engineers, and comments on new techniques and products that we consider relevant.
-Additionally, everyone is welcome to send questions, doubts or suggestions to our engineering staff.
-About ourEmbeddeds We are a fresh company composed by entusiast engineers and experts with great skills in electronic engineering, deep embedded software, communication systems, RF technologies and many other areas of interest.</description>
+      <description>&lt;p&gt;Hello everyone, welcome to the engineering blog &amp;ldquo;ourEmbedded&amp;rdquo;.&lt;/p&gt;</description>
     </item>
     
   </channel>
