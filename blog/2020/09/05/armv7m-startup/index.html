@@ -1,0 +1,1094 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+  <head>
+  <meta charset="utf-8">
+  <meta name="robots" content="all,follow">
+  <meta name="googlebot" content="index,follow,snippet,archive">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <title>Armv7m Startup</title>
+  <meta name="author" content="Martin Ribelotta" />
+  
+  
+  
+  
+  <meta name="keywords" content="embedded, electronics, iot, Cortex-m, Microcontroller, ELF, ARM">
+  
+  
+  <meta name="description" content="ourEmbeddeds main site">
+
+  <meta name="generator" content="Hugo 0.74.3" />
+
+  
+  <link href='//fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,500,700,800' rel='stylesheet' type='text/css'>
+
+  
+  <link rel="stylesheet" href="//use.fontawesome.com/releases/v5.11.2/css/all.css">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+  
+  <link href="/css/animate.css" rel="stylesheet">
+
+  
+  
+    <link href="/css/style.blue.css" rel="stylesheet" id="theme-stylesheet">
+  
+
+  
+  <link href="/css/custom.css" rel="stylesheet">
+
+  
+  
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  
+
+  
+  <link rel="shortcut icon" href="/img/favicon.ico" type="image/x-icon" />
+  <link rel="apple-touch-icon" href="/img/apple-touch-icon.png" />
+
+  
+  <link href="/css/owl.carousel.css" rel="stylesheet">
+  <link href="/css/owl.theme.css" rel="stylesheet">
+
+  
+  <link rel="alternate" href="https://ourembeddeds.github.io/index.xml" type="application/rss+xml" title="Our Embeddeds">
+
+  
+  
+  
+  
+  
+  
+  
+  <meta property="og:locale" content="en_us">
+  <meta property="og:site_name" content="Our Embeddeds">
+  <meta property="og:title" content="Armv7m Startup">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://ourembeddeds.github.io/blog/2020/09/05/armv7m-startup/" />
+  <meta property="og:description" content="ourEmbeddeds main site">
+  <meta property="og:image" content="https://ourembeddeds.github.io/img/articles/armv7m-boot/baron-bootstrapping.jpg">
+  <meta property="og:image:type" content="image/jpg">
+  
+  
+  
+    <meta property="og:image:width" content="369">
+    <meta property="og:image:height" content="537">
+  
+  
+  <meta property="og:updated_time" content="2020-09-05T12:19:37-0300">
+  
+    
+    
+    <meta property="article:section" content="Embedded">
+    
+    
+    <meta property="article:published_time" content="2020-09-05T12:19:37-0300">
+    <meta property="article:modified_time" content="2020-09-05T12:19:37-0300">
+  
+
+  
+  <meta name="twitter:card" content="summary_large_image">
+  
+  <meta name="twitter:title" content="Armv7m Startup">
+  
+  <meta name="twitter:image" content="https://ourembeddeds.github.io/img/articles/armv7m-boot/baron-bootstrapping.jpg">
+  
+  <meta name="twitter:description" content="ourEmbeddeds main site">
+  
+
+</head>
+
+
+  <body>
+
+    <div id="all">
+
+        <header class="navbar-affixed-top" data-spy="affix" data-offset-top="62">
+    <div class="navbar navbar-default yamm" role="navigation" id="navbar">    
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand home" href="/">
+                    <img src="/img/ourembeddeds-banner.png" alt="Armv7m Startup logo" class="hidden-xs hidden-sm">
+                    <img src="/img/logo-small.png" alt="Armv7m Startup logo" class="visible-xs visible-sm">
+                    <span class="sr-only">Armv7m Startup - go to homepage</span>
+                </a>
+                <div class="navbar-buttons">
+                    <button type="button" class="navbar-toggle btn-template-main" data-toggle="collapse" data-target="#navigation">
+                      <span class="sr-only">Toggle Navigation</span>
+                        <i class="fas fa-align-justify"></i>
+                    </button>
+                </div>
+            </div>
+            
+
+            <div class="navbar-collapse collapse" id="navigation">
+                <ul class="nav navbar-nav navbar-right">
+                  
+                  
+                  
+                  <li class="dropdown">
+                    
+                    <a href="/">Home</a>
+                    
+                  </li>
+                  
+                  
+                  <li class="dropdown active">
+                    
+                    <a href="/blog/">Blog</a>
+                    
+                  </li>
+                  
+                  
+                  <li class="dropdown">
+                    
+                    <a href="/contact/">Contact</a>
+                    
+                  </li>
+                  
+                </ul>
+            </div>
+            
+
+            <div class="collapse clearfix" id="search">    
+                <form class="navbar-form" role="search">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Search">
+                        <span class="input-group-btn">
+                    <button type="submit" class="btn btn-template-main"><i class="fas fa-search"></i></button>
+                </span>
+                    </div>
+                </form>
+            </div>
+            
+        </div>
+    </div>
+</header>
+
+
+
+
+        <div id="heading-breadcrumbs">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h1>Armv7m Startup</h1>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+        <div id="content">
+            <div class="container">
+
+                <div class="row">
+
+                    
+
+                    <div class="col-md-9" id="blog-post">
+
+                        
+                          <p class="text-muted text-uppercase mb-small text-right">
+                            By <a href="#">Martin Ribelotta</a>
+                             | 
+                            September 5, 2020
+                          </p>
+                        
+
+                        <div id="post-content">
+                          <p>One of the most successful families microcontrollers has been
+the cortex-m in its various versions (m0, m0+, m3, m4, m7,
+m33, etc), and one of the reason of these success is the
+simplest boot process. In this article, we travel around the
+magic of code writing and see the different implementations
+across some vendors and propose a vendor-neutral startup
+schema with many advantages for your projects.</p>
+<p>In this series of articles I try to explain the tricks around
+code compilation, linker scripts and build systems, proposing,
+additionally, a vendor neutral startup system for your cortex-m
+project.</p>
+<div class="toc">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#in-the-way-of-universal-cortex-m-bootstrap">In the way of universal cortex-m bootstrap</a>
+      <ul>
+        <li><a href="#writing-simple-startup">Writing simple startup&hellip;</a></li>
+      </ul>
+    </li>
+    <li><a href="#dissecting-the-generated-code">Dissecting the generated code.</a>
+      <ul>
+        <li><a href="#play-the-game-of-compiler-optimization">Play the game&hellip; of compiler optimization</a></li>
+        <li><a href="#exploring-custom-optimizations">Exploring custom optimizations</a></li>
+      </ul>
+    </li>
+    <li><a href="#the-hex-of-scripts-linker-script">The hex of scripts: Linker script</a>
+      <ul>
+        <li><a href="#a-fast-review">A fast review</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+</div>
+<h2 id="in-the-way-of-universal-cortex-m-bootstrap">In the way of universal cortex-m bootstrap</h2>
+<p>The boot process for the cortex-m series is straight forward:</p>
+<ul>
+<li>On the reset, the processor take the value of the special
+memory-mapped register <code>VTOR</code> and use this as a pointer
+to &ldquo;interrupt table&rdquo;.</li>
+<li>The first 32 bits of this table is loaded in the register
+SP for point the processor stack</li>
+<li>The second 32 bits is loaded in register PC and point to
+start of the user code.</li>
+<li>The processor start executing the instruction pointed by
+the current PC (the value previously loaded from VTOR+4 table)</li>
+</ul>
+<p>This schema, is really simple but powerful, this enables the user
+code to be writes entirely in C following the binary interface of
+ARM processors (AAPCS standard) followed by virtually any compiler
+for this architecture.</p>
+<p><img src="/img/articles/armv7m-boot/armv7m-reset.png" alt="armv7m reset schema"></p>
+<p>In contrast, the bast majority of firmware uses assembler routine
+for the main startup sequence for simplicity and control. in fact,
+this speak about the trust in the compiler that the chip vendor
+have. The main reason for this is to provide a consistent boot code
+across different compilation parameters and optimizations, because
+some compiler bugs in the past break the startup routine in weird
+manners. At this time, the serious compilers like gcc or clang
+(and the arm tunned version: armcc6) have a regression test battery
+as part of continuos integration process and the weird bugs in
+common code is really rare.</p>
+<h3 id="writing-simple-startup">Writing simple startup&hellip;</h3>
+<p>First of all, you need a vector with pointers to exception handlers,
+reset handler and the initial stack pointer:</p>
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#6ab825;font-weight:bold">extern</span> <span style="color:#6ab825;font-weight:bold">unsigned</span> <span style="color:#6ab825;font-weight:bold">int</span> _stack; <span style="color:#999;font-style:italic">/* Defined by the linker */</span>
+
+<span style="color:#999;font-style:italic">/* Function prototype, defined after */</span>
+<span style="color:#6ab825;font-weight:bold">void</span> <span style="color:#447fcf">reset_handler</span>(<span style="color:#6ab825;font-weight:bold">void</span>);
+<span style="color:#6ab825;font-weight:bold">void</span> <span style="color:#447fcf">hang_isr</span>(<span style="color:#6ab825;font-weight:bold">void</span>);
+<span style="color:#6ab825;font-weight:bold">void</span> <span style="color:#447fcf">pass_isr</span>(<span style="color:#6ab825;font-weight:bold">void</span>);
+
+<span style="color:#6ab825;font-weight:bold">void</span> *vector_core[] __attribute__((section(<span style="color:#ed9d13">&#34;.vector_core&#34;</span>))) = {
+    (<span style="color:#6ab825;font-weight:bold">void</span>*) &amp;_stack,
+    (<span style="color:#6ab825;font-weight:bold">void</span>*) reset_handler,
+    (<span style="color:#6ab825;font-weight:bold">void</span>*) hang_isr, <span style="color:#999;font-style:italic">/* NMI */</span>
+    (<span style="color:#6ab825;font-weight:bold">void</span>*) hang_isr, <span style="color:#999;font-style:italic">/* Hard Fault */</span>
+    (<span style="color:#6ab825;font-weight:bold">void</span>*) hang_isr, <span style="color:#999;font-style:italic">/* Memory Manager Fault */</span>
+    (<span style="color:#6ab825;font-weight:bold">void</span>*) hang_isr, <span style="color:#999;font-style:italic">/* Bus Fault */</span>
+    (<span style="color:#6ab825;font-weight:bold">void</span>*) hang_isr, <span style="color:#999;font-style:italic">/* Usage Fault */</span>
+    (<span style="color:#6ab825;font-weight:bold">void</span>*) <span style="color:#3677a9">0UL</span>,
+    (<span style="color:#6ab825;font-weight:bold">void</span>*) <span style="color:#3677a9">0UL</span>,
+    (<span style="color:#6ab825;font-weight:bold">void</span>*) <span style="color:#3677a9">0UL</span>,
+    (<span style="color:#6ab825;font-weight:bold">void</span>*) <span style="color:#3677a9">0UL</span>,
+    (<span style="color:#6ab825;font-weight:bold">void</span>*) <span style="color:#3677a9">0UL</span>,
+    (<span style="color:#6ab825;font-weight:bold">void</span>*) <span style="color:#3677a9">0UL</span>,
+    (<span style="color:#6ab825;font-weight:bold">void</span>*) <span style="color:#3677a9">0UL</span>,
+    (<span style="color:#6ab825;font-weight:bold">void</span>*) pass_isr, <span style="color:#999;font-style:italic">/* SVC Call */</span>
+    (<span style="color:#6ab825;font-weight:bold">void</span>*) <span style="color:#3677a9">0UL</span>,
+    (<span style="color:#6ab825;font-weight:bold">void</span>*) <span style="color:#3677a9">0UL</span>,
+    (<span style="color:#6ab825;font-weight:bold">void</span>*) pass_isr, <span style="color:#999;font-style:italic">/* Pend Supervisor Call */</span>
+    (<span style="color:#6ab825;font-weight:bold">void</span>*) pass_isr, <span style="color:#999;font-style:italic">/* SysTick */</span>
+};
+</code></pre></div><p>This vector is marked to belong into a code section called &ldquo;.vector_core&rdquo;,
+the linker (via linking scripts) will ensure to place it in the reset
+vector of the chip, either the one identified by the manufacturer or the
+one specified by ARM default.</p>
+<p>In fact, the vector table is more big than this common entries but the
+rest of vectors is vendor specific and need to handle more robust.
+In all implementations, the vector table is a big array with the first 16
+entries common of all cortex-m parts (ARMv7M specifications).</p>
+<p>The hang action take on severe condition ISR is to halt the processor and
+is very simple, an infinite loop.</p>
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#6ab825;font-weight:bold">void</span> <span style="color:#447fcf">hang_isr</span>(<span style="color:#6ab825;font-weight:bold">void</span>)
+{
+    <span style="color:#6ab825;font-weight:bold">while</span> (<span style="color:#3677a9">1</span>) {} <span style="color:#999;font-style:italic">/* Or if you love code obfuscation try this: for(;;); */</span>
+}
+</code></pre></div><p>The <em>do-nothing</em> handler is only an empty function</p>
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#6ab825;font-weight:bold">void</span> <span style="color:#447fcf">pass_isr</span>(<span style="color:#6ab825;font-weight:bold">void</span>)
+{
+}
+</code></pre></div><p>Ideally you be provide an individual function for all of exception type
+and store this in your own file (one for hard fault, one for mem fault,
+one for systick, etc) but, for the example, this is a valid approach.</p>
+<p>Finally, the reset handler is the start point of your program:</p>
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#6ab825;font-weight:bold">void</span> <span style="color:#447fcf">reset_handler</span>(<span style="color:#6ab825;font-weight:bold">void</span>)
+{
+    <span style="color:#999;font-style:italic">/* Your program here */</span>
+    <span style="color:#6ab825;font-weight:bold">while</span> (<span style="color:#3677a9">1</span>) {
+
+    }
+}
+</code></pre></div><p>Ideally, at this point, you can execute any C code, but some extra work
+is required due to provide a perfect standard-fits C environment.</p>
+<p>In the reset_handler function some thinks is not compliance:</p>
+<ul>
+<li>The C language specify that all uninitialized data must be zeroed
+by the startup code or OS before main function. This is called BSS
+section.</li>
+<li>Uninitialized data has not been copied from ROM to RAM. These
+operation must be done before main. This is called DATA section.</li>
+<li>Some C constructions emit initialization code that requires manually
+executed before main function. These code must need to called in this point.
+This is essential for C++ compatibility, virtually all constructors of
+static class is called here.</li>
+</ul>
+<p>In order to complete the pre-main code, the compiler need some help of the
+linker script to find these memory address:</p>
+<ul>
+<li>Start of initialized data in RAM: <code>_data</code></li>
+<li>End of initialized data in RAM: <code>_edata</code></li>
+<li>Start of the copy of initialized data in ROM: <code>_data_loadaddr</code></li>
+<li>Start of BSS address</li>
+<li>End of BSS address</li>
+<li>Start of array with initialization function pointers <code>__init_array_start</code>;</li>
+<li>End of array with initialization function pointers <code>__init_array_end</code>;</li>
+</ul>
+<p>These symbols must be provided by the linker script and, for the C compiler,
+this is viewed as an &ldquo;extern defined unsigned integer&rdquo;. The real type of these
+symbols may be anything, but <code>unsigned int</code> is usefully to work with the
+natural type of data (in cortex-m, int match the register size)</p>
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#6ab825;font-weight:bold">extern</span> <span style="color:#6ab825;font-weight:bold">unsigned</span> <span style="color:#6ab825;font-weight:bold">int</span> _data_loadaddr;
+<span style="color:#6ab825;font-weight:bold">extern</span> <span style="color:#6ab825;font-weight:bold">unsigned</span> <span style="color:#6ab825;font-weight:bold">int</span> _data;
+<span style="color:#6ab825;font-weight:bold">extern</span> <span style="color:#6ab825;font-weight:bold">unsigned</span> <span style="color:#6ab825;font-weight:bold">int</span> _edata;
+<span style="color:#6ab825;font-weight:bold">extern</span> <span style="color:#6ab825;font-weight:bold">unsigned</span> <span style="color:#6ab825;font-weight:bold">int</span> _bss;
+<span style="color:#6ab825;font-weight:bold">extern</span> <span style="color:#6ab825;font-weight:bold">unsigned</span> <span style="color:#6ab825;font-weight:bold">int</span> _ebss;
+<span style="color:#6ab825;font-weight:bold">extern</span> <span style="color:#6ab825;font-weight:bold">unsigned</span> <span style="color:#6ab825;font-weight:bold">int</span> __init_array_start;
+<span style="color:#6ab825;font-weight:bold">extern</span> <span style="color:#6ab825;font-weight:bold">unsigned</span> <span style="color:#6ab825;font-weight:bold">int</span> __init_array_end;
+</code></pre></div><p>With these data defined in the linker script you can process to all task
+for prepare to main:</p>
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#999;font-style:italic">/* Define a convenient type for cast integer ptr to function ptr */</span>
+<span style="color:#6ab825;font-weight:bold">typedef</span> <span style="color:#447fcf">void</span> (*func_t)(<span style="color:#6ab825;font-weight:bold">void</span>);
+
+<span style="color:#999;font-style:italic">/* Prototype of main function */</span>
+<span style="color:#6ab825;font-weight:bold">extern</span> <span style="color:#6ab825;font-weight:bold">int</span> <span style="color:#447fcf">main</span>(<span style="color:#6ab825;font-weight:bold">void</span>);
+
+<span style="color:#6ab825;font-weight:bold">void</span> <span style="color:#447fcf">reset_handler</span>(<span style="color:#6ab825;font-weight:bold">void</span>)
+{
+    <span style="color:#6ab825;font-weight:bold">unsigned</span> <span style="color:#6ab825;font-weight:bold">int</span> *src;
+    <span style="color:#6ab825;font-weight:bold">unsigned</span> <span style="color:#6ab825;font-weight:bold">int</span> *dst;
+
+    <span style="color:#999;font-style:italic">/* Copy data from rom to ram */</span>
+    src = &amp;_data_loadaddr;
+    dst = &amp;_data;
+    <span style="color:#6ab825;font-weight:bold">while</span> (dst &lt; &amp;_edata) {
+        *dst++ = *src++;
+    }
+
+    <span style="color:#999;font-style:italic">/* Set to 0 all uninitialized data */</span>
+    dst = &amp;_bss;
+    <span style="color:#6ab825;font-weight:bold">while</span> (dst &lt; &amp;_ebss) {
+        *dst++ = <span style="color:#3677a9">0</span>;
+    }
+
+    <span style="color:#999;font-style:italic">/* Call all startup functions */</span>
+    src = &amp;__init_array_start;
+    <span style="color:#6ab825;font-weight:bold">while</span> (src &lt; &amp;__init_array_end) {
+        ((func_t)src++)();
+    }
+
+    <span style="color:#999;font-style:italic">/* Finally, call main */</span>
+    main();
+
+    <span style="color:#6ab825;font-weight:bold">while</span> (<span style="color:#3677a9">1</span>) {} <span style="color:#999;font-style:italic">/* And hang if main return */</span>
+}
+</code></pre></div><p>This work fine in all optimizations and across al cortex-m
+implementations, but is perfectible.</p>
+<h2 id="dissecting-the-generated-code">Dissecting the generated code.</h2>
+<p>We can play nice with the result code using the great godbolt
+online tools. You can see the result assembler code generated
+for a cortex-m3 by gcc 9 here:</p>
+<iframe width="100%" height="600px" src="https://godbolt.org/e?readOnly=false&hideEditorToolbars=false#z:OYLghAFBqd5QCxAYwPYBMCmBRdBLAF1QCcAaPECAM1QDsCBlZAQwBtMQBGABlICsupVs1qhkAUgBMAISnTSAZ0ztkBPHUqZa6AMKpWAVwC2tQVvQAZPLUwA5YwCNMxLgGZSAB1QLC62nsMTQS8fNTorG3sjJxdOdyUVMNoGAmZiAgDjU05FZUxVPxS0ggi7R2c3RVT0zKCchWqS6zLoiriASkVUA2JkDgByTAAPAmdaAGprAnGjZmsIADdUPHR28VdZbgBBcW3h0eIJg1ofYBt0SfpxgH10ZlTr1lRmO/R0YnXNrf2x8ePT86Xaa3e7MT67b4jX7/PBnTAXKY3eGg8F7KGHP4nWGAxHXBwKBSoyEHI5YuEIq7XTD4wkbCE/DEw8lAm7XayEa5pYjMACe1waxSJDNJAPhLOubNoHK5vKp2iJEIA9AAqcYAEUwVGa42Y4zQtAWWjURvGBB5Hkw4xoxD1zAaQMwwGc4w8BBtRCtxwKdBdbvGysVELNFqwVHGSxW4wgyqoXuuBHai2WqwV2wjF2ImCUBGuCBE6HYxCTKzW23EAHYvuNq5jRRTpsqFL0iTXa9ixYjlegGqmtq2VeM9B4eeM7qkrcRUEZxpPpx7udOAxDW03kON1mr15IAGwgh5PF4vd4tmvd6Ybre7sdgunbVsAdwQeHYUbP69cOkvVOv7XXleXrY1l2PYyHI76bo2zagaBt59jWFZqhCAHVgODCYNMHrcDqrCsJi7JqGweAAF5ite/qBnep72heUi7jSJ7Vo%2Bz6WhAb7rJ%2BtFUjSv4VlWgHVsBBByGBF7cAxf6IWWlEoaqOhsLh8njAK6QGB4nq0N6JzkchSm9OBX6StKxDcnyylCbBD5Pi%2BECru%2BHE7hK%2BGcsZsrmDx/7SYBUCxhp8btKuwkyImawWfB5aSXB1azPMIV8YxVmYBAnDubI4VIWl2z9J0rAgP0ACs/SkKY/TcIVqC5TogXSEp3S9JaUiuJwhUELlpXtJ0ADWIB5bwOX9AALIVxWlaQ5X9IVCggLwLUlVlpBwLASBoEYHjMWQFAQMtq2FiAaRGAAnJIORaqwByTRADitYVDjWGkPK5U1pDLUYRoAPK0Kw92zaQWCzKI7BXT9eCZgUhqTd9wz5AYowPYVUzKIDrB4A43LEDyehYLDpBungRiw50ND0EwbAcDw/CCMIogoFVQjI5NkCdKgrp%2BODAC0RjIB4Bgbmg6TDOzrjjOzBAII4E15JpmjaLU2SkOYpRRDEwTeL4dAy8roR%2BAr5SxLkiSFI06v1BLSRFOk2utLrZlG1UxQW0ryVdD0fRcNluUFUVgNjVsABKACy4zAMga77QAdJIoecFGtB0Jgv4QLghAkFujWkIOU7bc6DXJYOVXNVd7WkF1PVCLlg2e99Y0TVN2MF27/SSENXu5fns2F4axA%2BBo/VAA%3D%3D%3D"></iframe>
+<p>If you compare with <a href="https://github.com/STMicroelectronics/STM32CubeF1/blob/master/Projects/STM32F103RB-Nucleo/Templates/SW4STM32/startup_stm32f103xb.s#L61-L98">hand-made assembler code</a>,
+this is very poor optimized:</p>
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-asm" data-lang="asm">Reset_Handler:
+  <span style="color:#447fcf">movs</span> <span style="color:#40ffff">r1</span>, <span style="color:#999;font-style:italic">#0
+</span><span style="color:#999;font-style:italic"></span>  <span style="color:#40ffff">b</span> <span style="color:#40ffff">LoopCopyDataInit</span>
+CopyDataInit:
+  <span style="color:#447fcf">ldr</span> <span style="color:#40ffff">r3</span>, <span style="color:#a61717;background-color:#e3d2d2">=</span><span style="color:#40ffff">_sidata</span>
+  <span style="color:#447fcf">ldr</span> <span style="color:#40ffff">r3</span>, [<span style="color:#40ffff">r3</span>, <span style="color:#40ffff">r1</span>]
+  <span style="color:#447fcf">str</span> <span style="color:#40ffff">r3</span>, [<span style="color:#40ffff">r0</span>, <span style="color:#40ffff">r1</span>]
+  <span style="color:#447fcf">adds</span> <span style="color:#40ffff">r1</span>, <span style="color:#40ffff">r1</span>, <span style="color:#999;font-style:italic">#4
+</span><span style="color:#999;font-style:italic"></span><span style="color:#40ffff">LoopCopyDataInit</span>:
+  <span style="color:#447fcf">ldr</span> <span style="color:#40ffff">r0</span>, <span style="color:#a61717;background-color:#e3d2d2">=</span><span style="color:#40ffff">_sdata</span>
+  <span style="color:#447fcf">ldr</span> <span style="color:#40ffff">r3</span>, <span style="color:#a61717;background-color:#e3d2d2">=</span><span style="color:#40ffff">_edata</span>
+  <span style="color:#447fcf">adds</span> <span style="color:#40ffff">r2</span>, <span style="color:#40ffff">r0</span>, <span style="color:#40ffff">r1</span>
+  <span style="color:#447fcf">cmp</span> <span style="color:#40ffff">r2</span>, <span style="color:#40ffff">r3</span>
+  <span style="color:#447fcf">bcc</span> <span style="color:#40ffff">CopyDataInit</span>
+  <span style="color:#447fcf">ldr</span> <span style="color:#40ffff">r2</span>, <span style="color:#a61717;background-color:#e3d2d2">=</span><span style="color:#40ffff">_sbss</span>
+  <span style="color:#447fcf">b</span> <span style="color:#40ffff">LoopFillZerobss</span>
+FillZerobss:
+  <span style="color:#447fcf">movs</span> <span style="color:#40ffff">r3</span>, <span style="color:#999;font-style:italic">#0
+</span><span style="color:#999;font-style:italic"></span>  <span style="color:#40ffff">str</span> <span style="color:#40ffff">r3</span>, [<span style="color:#40ffff">r2</span>], <span style="color:#999;font-style:italic">#4
+</span><span style="color:#999;font-style:italic"></span><span style="color:#40ffff">LoopFillZerobss</span>:
+  <span style="color:#447fcf">ldr</span> <span style="color:#40ffff">r3</span>, <span style="color:#a61717;background-color:#e3d2d2">=</span> <span style="color:#40ffff">_ebss</span>
+  <span style="color:#447fcf">cmp</span> <span style="color:#40ffff">r2</span>, <span style="color:#40ffff">r3</span>
+  <span style="color:#447fcf">bcc</span> <span style="color:#40ffff">FillZerobss</span>
+  <span style="color:#447fcf">bl</span> <span style="color:#40ffff">__libc_init_array</span> 
+  <span style="color:#40ffff">bl</span> <span style="color:#40ffff">main</span>
+  <span style="color:#447fcf">bx</span> <span style="color:#40ffff">lr</span>
+Infinite_Loop:
+  <span style="color:#447fcf">b</span> <span style="color:#40ffff">Infinite_Loop</span>
+</code></pre></div><p>I intentionally omit the call of <code>SystemInit</code> because is not in my previous
+C example code but is only one line more. Additionally, the code above make
+some cheats calling <code>__libc_init_array</code> for trigger the constructor call but
+the code implied in this is much like the loops in the assembler.</p>
+<p>If you want your code to be on the same level as the manually generated one,
+you need to play around with the compilation parameters a bit.</p>
+<h3 id="play-the-game-of-compiler-optimization">Play the game&hellip; of compiler optimization</h3>
+<p>The first think when you saw &ldquo;optimization&rdquo; is go for all, enable all heavy
+optimization flags, all code tricks and see the result.</p>
+<p>In gcc this is says as <code>-O3</code> and the result is not disappoint:</p>
+<iframe width="100%" height="600px" src="https://godbolt.org/e#z:OYLghAFBqd5QCxAYwPYBMCmBRdBLAF1QCcAaPECAM1QDsCBlZAQwBtMQBGABlICsupVs1qhkAUgBMAISnTSAZ0ztkBPHUqZa6AMKpWAVwC2tQVvQAZPLUwA5YwCNMxLgGZSAB1QLC62nsMTQS8fNTorG3sjJxdOdyUVMNoGAmZiAgDjU05FZUxVPxS0ggi7R2c3RVT0zKCchWqS6zLoiriASkVUA2JkDgByTAAPAmdaAGprAnGjZmsIADdUPHR28VdZbgBBcW3h0eIJg1ofYBt0SfpxgH10ZlTr1lRmO/R0YnXNrf2x8ePT86Xaa3e7MT67b4jX7/PBnTAXKY3eGg8F7KGHP4nWGAxHXBwKBSoyEHI5YuEIq7XTD4wkbCE/DEw8lAm7XayEa5pYjMACe1waxSJDNJAPhLOubNoHK5vKp2iJEIA9AAqcYAEUwVGa42Y4zQtAWWjURvGBB5Hkw4xoxD1zAaQMwwGc4w8BBtRCtxwKdBdbvGysVELNFqwVHGSxW4wgyqoXuuBHai2WqwV2wjF2ImCUBGuCBE6HYxCTKzW23EAHYvuNq5jRRTpsqFL0iTXa9ixYjlegGqmtq2VeM9B4eeM7qkrcRUEZxpPpx7udOAxDW03kON1mr15IAGwgh5PF4vd4tmvd6Ybre7sdgunbVsAdwQeHYUbP69cOkvVOv7XXleXrY1l2PYyHI76bo2zagaBt59jWFZqhCAHVgODCYNMHrcDqrCsJi7JqGweAAF5ite/qBnep72heUi7jSJ7Vo%2Bz6WhAb7rJ%2BtFUjSv4VlWgHVsBBByGBF7cAxf6IWWlEoaqOhsLh8njAK6QGB4nq0N6JzkchSm9OBX6StKxDcnyylCbBD5Pi%2BECru%2BHE7hK%2BGcsZsrmDx/7SYBUCxhp8btKuwkyImawWfB5aSXB1azPMIV8YxVmYBAnDubI4VIWl2z9J0rAgP0ACs/SkKY/TcIVqC5TogXSEp3S9JaUiuJwhUELlpXtJ0ADWIB5bwOX9AALIVxWlaQ5X9IVCggLwLUlVlpBwLASBoEYHjMWQFAQMtq2FiAaRGAAnJIORaqwByTRADitYVDjWGkPK5U1pDLUYRoAPK0Kw92zaQWCzKI7BXT9eCZgUhqTd9wz5AYowPYVUzKIDrB4A43LEDyehYLDpBungRiw50ND0EwbAcDw/CCMIogoFVQjI5NkCdKgrp%2BODAC0RjIB4Bgbmg6TDOzrjjOzBAII4Quva4E15JpmjaLUpiSO45ilFEMTdZ43i%2BHQ8sgIrGuhH4KvlC4eW5IkhSNDresJPkSRFOkRutCbVTFFb8SNI7at5Z0Ci1X0XDZblBVFYDY1bAASgAsuMwDIGu%2B0AHSSAnnBRrQdCYL%2BEC4IQJBbo1pCDlO23Og1yWDlVzVXe1pBdT1Qi5YNIffWNE1Tdj1eB/0khDaHuVV7NNeGsQPgaP1QA%3D"></iframe>
+<p>But this is very different compared with the hand-made code:</p>
+<p>First of all you see a sentence like <code>push    {r3, r4, r5, lr}</code>. This is
+clobber register save because the compiler try to create a normal function
+callable by any code, but this function is special because is the first
+function called by the hardware&hellip; This disappoint is fixed adding a <code>naked</code>
+attribute to the function. From the gcc manual:</p>
+<blockquote>
+<p>Use this attribute on the ARM, AVR, MCORE, RX and SPU ports to indicate that
+the specified function does not need prologue/epilogue sequences generated
+by the compiler.</p>
+</blockquote>
+<p>Additionally, the same part of gcc documentation says that is not safe include
+any statement distinct of <code>asm</code> but for these purpose you can ignore this
+warning and go for all <code>¯\_(ツ)_/¯</code>. In clang, the compiler end with an error
+if your <code>naked</code> function try to use anything apart of <code>asm</code> statement.</p>
+<p>Another point is the requirement of <code>memcpy</code> and <code>memset</code> functions. Yeeees,
+these ar standard functions and may be provided by virtually any compiler or
+c library in the world, but in a freestanding environment (without OS or
+without runtime) this may be undesirable behavior&hellip;</p>
+<p>The rationale of this compiler decision is that:</p>
+<ul>
+<li><code>mem*</code> functions is hand made assembler optimized and potentially more
+efficient in large data move/set</li>
+<li>Maybe perform unaligned set/move faster than C hand-made function.</li>
+<li>Both functions is standard even if you infer freestanding environment</li>
+</ul>
+<p>If you are ok with this points, the <code>-O3</code> trick is really usefully, but in
+certain cases is not desirable:</p>
+<ul>
+<li>You may not need to link with libc or provide <code>mem*</code> implementation.</li>
+<li>Your <code>mem*</code> implementations really sucks.</li>
+<li>Your data and bss is tiny and the overhead in code and execution type
+for memcpy/memset is great than optimal.</li>
+<li>You are a friki of optimization and write articles with a lot of assembler
+on your blog in the weekends.</li>
+</ul>
+<h3 id="exploring-custom-optimizations">Exploring custom optimizations</h3>
+<p>All optimizations are a compromise, this is not a exception&hellip; if you find
+a binary code most like a hand-made code you need some points of anchor:</p>
+<ul>
+<li>The data and bss sections start and end word aligned.</li>
+<li>The most efficient way to move data using the processor is in word
+aligned manner. This implies the load-&gt;store pair of instruction
+take the best advantage of data bus bandwidth.</li>
+<li>The processor not have complex pipeline with advance superscalar
+architecture or out-of-order and speculative execution, and consequently
+all optimizations about the instruction pipe exploit is futile or less
+efficiently than little code.</li>
+<li>Small loops fit in execution buffer or similar structure and perform
+execution more efficient than linear execution in an speculative pipe</li>
+</ul>
+<p>All above assumptions is nearly true in the most common ARMv7M implementations
+like cortex-m0 to cortex-m7 and consequently, the best optimizations is not
+necessarily the same as for larger processors.</p>
+<p>In this scenario, a less aggressive optimization perform more efficiently than
+<code>-O3</code>. By example, is desirable that the machine code follows as closely as
+possible, the idea expressed in the source code, and the best way to do this
+in modern version of gcc and clang is the <code>-Og</code> optimization.</p>
+<p>You can check the code result of our startup code using <code>-Og</code> and <code>naked</code>
+attribute here:</p>
+<iframe width="800px" height="600px" src="https://godbolt.org/e#z:OYLghAFBqd5QCxAYwPYBMCmBRdBLAF1QCcAaPECAM1QDsCBlZAQwBtMQBGABlICsupVs1qhkAUgBMAISnTSAZ0ztkBPHUqZa6AMKpWAVwC2tQVvQAZPLUwA5YwCNMxLrwAOqBYXW09hk4IeXmp0Vjb2Rk4uPIrKmKo%2BDATMxAR%2BxqacsSohtEkpBGF2js6uismp6QFZChWF1sWRpTwAlIqoBsTIHADkmAAeBM60ANTWBCNGzNYQAG6oeOgt4gDMstwAguKbA0PEowa0XsA26GP0IwD66MzJl6yozDfo6MSr6xu7wyOHx6fnE2ut2Y722n0G31%2BeBOmDO4yusOBoJ2EP2PyO0P%2B8MuDgUCmR4L2BwxMLhF0umFx%2BLWYK%2BaKhpIBV0u1kIlxSxGYAE9LrUCgS6cS/rCmZcWbQ2RzuRTtASwQB6ABUIwAIpgqA0RswRmhaLMtGoDSMCFy3JgRjRiDrmLUAZhgM4Rm4CFaiBbDgk6E6XSNFfKwSazVgqCN5osRhBFVQPZcCC05gslnLNmLbi68A4DEMxVBaMwANawlrLTZhs7ETBKAiXBAidDsYgJxYlrYAdg%2BI076OFZImioUXQJXe7mJF8MV6FqyY2w6VIz0bi5IxuyQtxFQRhG683bs5m79YOHA%2BQI1WKtPkgAbEC7g8nk9XkOu5OJmeL9eVyCaZthwB3BB4OwEYvqeKw6O%2BFKfi0p7toew5dhOU4yHIoHnv2g7Ich34zl24itiqYJwZ2c4MJgExutwWqsKw6KsmobB4AAXiKn6%2Bv6P7Prab5SNeVJPp2/6AeaEAgas4E8RSVLQXhHbwZ2iEEHIKFvtw/EwQRmxESMc46GwNF6SMfKpAYbjurQnpHGxWnHqhEHipKxCcjyRmKdhf4AUBEA2WJdl0eyjnSuY0mwRxclQNG5mxi0x5KTI8bLG5uH4VpUwzAlskCR5mAQJwwWyMlmkFRsPRtKwIA9AArD0pCmD03DVag5U6LF0iGR0XTmlIKycNVBDlfVxakPmIAVbwZU9AALNVtX1aQjU9NVCggLwfV1SVpBwLASBoEYbhCWQFAQDte0NiAKRGAAnJIWQaqwexLRADj9dVDjWCkXLlT1pA7UYBoAPK0KwH1raQWBTKI7DPaDeAVgk%2BpLSDAzxFmvRfeMyhQ6wGacsQXJ6Fgn29cQeBGITbQ0PQTBsBwMQCFkwiiCgLVCBmS2QG0qDOj4CMALRGMgbgGGeaCpAMfMrCMfMEAgjiS39wCLXEFmaNoVSmJIvDmEUERRFwF2kEE3h0GrIAawbnhG7Q2slNE%2BtKDkiR1CbZv2/EuT5Kk1tNLb5QFM7vAuV7uucBdbQKO13RcKV5VVTVUPzRsABKACyIzAMgJ4XQAdJIWecBGtB0Jg0EQLghAkBe3WkPOG4nY6XW5fOLW9c9g3DaNQjlVNccg/Ni3LaQq0DdHPSSNN8flS3a2DfqxBeBoE1AA"></iframe>
+<p>Hey! this is more nearly to the hand-writes code but some things are weird:</p>
+<h4 id="reload-constants-in-every-loop">Reload constants in every loop</h4>
+<p>The bit of C code:</p>
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c">  src = &amp;_data_loadaddr;
+  dst = &amp;_data;
+  <span style="color:#6ab825;font-weight:bold">while</span> (dst &lt; &amp;_edata) {
+    *dst++ = *src++;
+  }
+</code></pre></div><p>Is translated into</p>
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-asm" data-lang="asm">        <span style="color:#447fcf">ldr</span>     <span style="color:#40ffff">r3</span>, <span style="color:#40ffff">.L9</span>    <span style="color:#999;font-style:italic">; dst = &amp;_data;
+</span><span style="color:#999;font-style:italic"></span>        <span style="color:#40ffff">ldr</span>     <span style="color:#40ffff">r2</span>, <span style="color:#40ffff">.L9</span><span style="color:#a61717;background-color:#e3d2d2">+</span><span style="color:#3677a9">4</span>  <span style="color:#999;font-style:italic">; src = &amp;_data_loadaddr;
+</span><span style="color:#999;font-style:italic"></span><span style="color:#40ffff">.L3</span>:
+        <span style="color:#447fcf">ldr</span>     <span style="color:#40ffff">r1</span>, <span style="color:#40ffff">.L9</span><span style="color:#a61717;background-color:#e3d2d2">+</span><span style="color:#3677a9">8</span>  <span style="color:#999;font-style:italic">; &amp;_edata
+</span><span style="color:#999;font-style:italic"></span>        <span style="color:#40ffff">cmp</span>     <span style="color:#40ffff">r3</span>, <span style="color:#40ffff">r1</span>     <span style="color:#999;font-style:italic">; dst &lt; $r1? &lt;- this load is performed in every loop
+</span><span style="color:#999;font-style:italic"></span>        <span style="color:#40ffff">bcs</span>     <span style="color:#40ffff">.L7</span>
+        <span style="color:#447fcf">ldr</span>     <span style="color:#40ffff">r1</span>, [<span style="color:#40ffff">r2</span>], <span style="color:#999;font-style:italic">#4
+</span><span style="color:#999;font-style:italic"></span>        <span style="color:#40ffff">str</span>     <span style="color:#40ffff">r1</span>, [<span style="color:#40ffff">r3</span>], <span style="color:#999;font-style:italic">#4
+</span><span style="color:#999;font-style:italic"></span>        <span style="color:#40ffff">b</span>       <span style="color:#40ffff">.L3</span>
+.L7:
+</code></pre></div><p>By default, the <code>-Og</code> optimization not enables loop invariant extraction.</p>
+<blockquote>
+<p>For know more:
+Loop invariant extraction is a technique to extract all non-changed data
+outsize of a loop. This perform better loop speed at cost of non perfect
+match of the final C code.</p>
+<p>See: <a href="https://en.wikipedia.org/wiki/Loop-invariant_code_motion">https://en.wikipedia.org/wiki/Loop-invariant_code_motion</a></p>
+</blockquote>
+<p>The not inclusion of loop invariant extraction from <code>-Og</code> is a philosophical
+debate but for this purpose the loop invariant optimization is very desirable
+in any case because maintain the behavior of source code and improve loop
+performance.</p>
+<p>For enable this, you need to use <code>-fmove-loop-invariants</code> flag added to <code>-Og</code>,
+and the complete result can <a href="https://godbolt.org/z/hzYGh8">see here</a></p>
+<p>Concretely, the chunk of code is compiled now like this:</p>
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-asm" data-lang="asm">        <span style="color:#447fcf">ldr</span>     <span style="color:#40ffff">r3</span>, <span style="color:#40ffff">.L9</span>   <span style="color:#999;font-style:italic">; dst = &amp;_data;
+</span><span style="color:#999;font-style:italic"></span>        <span style="color:#40ffff">ldr</span>     <span style="color:#40ffff">r2</span>, <span style="color:#40ffff">.L9</span><span style="color:#a61717;background-color:#e3d2d2">+</span><span style="color:#3677a9">4</span> <span style="color:#999;font-style:italic">; src = &amp;_data_loadaddr;
+</span><span style="color:#999;font-style:italic"></span>        <span style="color:#40ffff">ldr</span>     <span style="color:#40ffff">r1</span>, <span style="color:#40ffff">.L9</span><span style="color:#a61717;background-color:#e3d2d2">+</span><span style="color:#3677a9">8</span> <span style="color:#999;font-style:italic">; &amp;_edata
+</span><span style="color:#999;font-style:italic"></span><span style="color:#40ffff">.L3</span>:
+        <span style="color:#447fcf">cmp</span>     <span style="color:#40ffff">r3</span>, <span style="color:#40ffff">r1</span>    <span style="color:#999;font-style:italic">; dst &lt; &amp;_edata?
+</span><span style="color:#999;font-style:italic"></span>        <span style="color:#40ffff">bcs</span>     <span style="color:#40ffff">.L7</span>
+        <span style="color:#447fcf">ldr</span>     <span style="color:#40ffff">r0</span>, [<span style="color:#40ffff">r2</span>], <span style="color:#999;font-style:italic">#4 ; *src++;
+</span><span style="color:#999;font-style:italic"></span>        <span style="color:#40ffff">str</span>     <span style="color:#40ffff">r0</span>, [<span style="color:#40ffff">r3</span>], <span style="color:#999;font-style:italic">#4 ; *dst++ = ...
+</span><span style="color:#999;font-style:italic"></span>        <span style="color:#40ffff">b</span>       <span style="color:#40ffff">.L3</span>
+.L7:
+</code></pre></div><p>Very near to hand-write code. Same analysis can be made for zero fill bss code.</p>
+<h4 id="minor-fixes-with-reorder-code">Minor fixes with reorder code</h4>
+<p>If you examine the last piece of code before main call you can see
+that the compiler can do better:</p>
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c">    <span style="color:#999;font-style:italic">/* Call all startup functions */</span>
+    src = &amp;__init_array_start;
+    <span style="color:#6ab825;font-weight:bold">while</span> (src &lt; &amp;__init_array_end) {
+        ((func_t)src++)();
+    }
+</code></pre></div><p>Is translate as:</p>
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-asm" data-lang="asm">.L8:
+        <span style="color:#447fcf">ldr</span>     <span style="color:#40ffff">r3</span>, <span style="color:#40ffff">.L9</span><span style="color:#a61717;background-color:#e3d2d2">+</span><span style="color:#3677a9">20</span>  <span style="color:#999;font-style:italic">; $r3 is src &lt;= &amp;__init_array_start;
+</span><span style="color:#999;font-style:italic"></span>        <span style="color:#40ffff">ldr</span>     <span style="color:#40ffff">r4</span>, <span style="color:#40ffff">.L9</span><span style="color:#a61717;background-color:#e3d2d2">+</span><span style="color:#3677a9">24</span>  <span style="color:#999;font-style:italic">; $r4 &lt;= &amp;__init_array_end
+</span><span style="color:#999;font-style:italic"></span><span style="color:#40ffff">.L4</span>:
+        <span style="color:#447fcf">cmp</span>     <span style="color:#40ffff">r3</span>, <span style="color:#40ffff">r4</span>      <span style="color:#999;font-style:italic">; (src &lt; &amp;__init_array_end)?
+</span><span style="color:#999;font-style:italic"></span>        <span style="color:#40ffff">bcs</span>     <span style="color:#40ffff">.L5</span>
+        <span style="color:#999;font-style:italic">; Hey gcc! you can do this better...
+</span><span style="color:#999;font-style:italic"></span>        <span style="color:#447fcf">adds</span>    <span style="color:#40ffff">r5</span>, <span style="color:#40ffff">r3</span>, <span style="color:#999;font-style:italic">#4  ; $r5 &lt;= src++
+</span><span style="color:#999;font-style:italic"></span>        <span style="color:#40ffff">blx</span>     <span style="color:#40ffff">r3</span>          <span style="color:#999;font-style:italic">; jump to [$r5]
+</span><span style="color:#999;font-style:italic"></span>        <span style="color:#40ffff">mov</span>     <span style="color:#40ffff">r3</span>, <span style="color:#40ffff">r5</span>      <span style="color:#999;font-style:italic">; Restore $r3 with temporary $r5
+</span><span style="color:#999;font-style:italic"></span>        <span style="color:#40ffff">b</span>       <span style="color:#40ffff">.L4</span>
+</code></pre></div><p>The main reason to this behavior is the rule *<strong>as-is</strong>, in
+other word, gcc try to optimize the code maintain exactly the
+C code structure. If you analyze the centene <code>((func_t)ptr++)()</code> you
+can see that the code follow perfectly the code:</p>
+<ol>
+<li>Take the value of pointer <code>ptr</code></li>
+<li>Increment <code>ptr</code></li>
+<li>Call the function pointed by the value taken in the step 1</li>
+</ol>
+<p>The behavior is, first increment the pointer, and next call the function,
+other behavior is not the correct way to generate the code (at least in <code>-Og</code>)</p>
+<p>The simplest way to improve generated code is reorder the source in less
+fancy way:</p>
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c">    <span style="color:#6ab825;font-weight:bold">for</span> (<span style="color:#6ab825;font-weight:bold">unsigned</span> <span style="color:#6ab825;font-weight:bold">int</span> *src = &amp;__init_array_start; src &lt; &amp;__init_array_end; src++) {
+        ((func_t)src)();
+    }
+</code></pre></div><p>And the generated code is:</p>
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-asm" data-lang="asm">        <span style="color:#447fcf">ldr</span>     <span style="color:#40ffff">r4</span>, <span style="color:#40ffff">.L4</span>    <span style="color:#999;font-style:italic">; $r4 &lt;= &amp;__init_array_start
+</span><span style="color:#999;font-style:italic"></span>        <span style="color:#40ffff">ldr</span>     <span style="color:#40ffff">r5</span>, <span style="color:#40ffff">.L4</span><span style="color:#a61717;background-color:#e3d2d2">+</span><span style="color:#3677a9">4</span>  <span style="color:#999;font-style:italic">; $r5 &lt;= &amp;__init_array_end
+</span><span style="color:#999;font-style:italic"></span><span style="color:#40ffff">.L3</span>:                       <span style="color:#999;font-style:italic">; for(...) {
+</span><span style="color:#999;font-style:italic"></span>        <span style="color:#40ffff">cmp</span>     <span style="color:#40ffff">r4</span>, <span style="color:#40ffff">r5</span>     <span style="color:#999;font-style:italic">;   src &lt; &amp;__init_array_end?
+</span><span style="color:#999;font-style:italic"></span>        <span style="color:#40ffff">bcs</span>     <span style="color:#40ffff">.L1</span>
+        <span style="color:#447fcf">blx</span>     <span style="color:#40ffff">r4</span>         <span style="color:#999;font-style:italic">;     ((func_t)src)();
+</span><span style="color:#999;font-style:italic"></span>        <span style="color:#40ffff">adds</span>    <span style="color:#40ffff">r4</span>, <span style="color:#40ffff">r4</span>, <span style="color:#999;font-style:italic">#4 ;   src++
+</span><span style="color:#999;font-style:italic"></span>        <span style="color:#40ffff">b</span>       <span style="color:#40ffff">.L3</span>        <span style="color:#999;font-style:italic">; }
+</span><span style="color:#999;font-style:italic"></span><span style="color:#40ffff">.L1</span>:
+</code></pre></div><p>As rule of thumb, for is more optimizable than the equivalent
+forms in code because the compiler contains many techniques
+for detect cycles and perform transformations on that&hellip; Help
+the compiler, write in non-fancy/non-flamboyant manner.</p>
+<h4 id="living-with-old-compilers-without--og">Living with old compilers without <code>-Og</code></h4>
+<p>The debug friendly <code>-Og</code> is quite recent, and many old gcc versions
+not include this. The most near option in this case is the optimization
+for size, this optimization, not replace the <code>-Og</code> but perform a good
+balance between code elimination and code obfuscation.</p>
+<p>You can see the optimization result here:</p>
+<iframe width="100%" height="600px" src="https://godbolt.org/e#z:OYLghAFBqd5QCxAYwPYBMCmBRdBLAF1QCcAaPECAM1QDsCBlZAQwBtMQBGABlICsupVs1qhkAUgBMAISnTSAZ0ztkBPHUqZa6AMKpWAVwC2tQVvQAZPLUwA5YwCNMxEJIBspAA6oFhdbT1DE0FvXzU6Kxt7IycXd0VlTFV/BgJmYgJA41NOBJVw2lT0gki7R2dXDwU0jKzg3Ori0ujYyoBKRVQDYmQOAHJMAA8CZ1oAamsCMaNmawgAN1Q8dDbxAGZZbgBBcW2hkeJxg1pfYBt0CfoxgH10ZjTr1lRmO/R0YnXNrf3RsePT86XKa3e7MT67b7DX7/PBnTAXSY3eGg8F7KGHP4nWGAxHXBwKBSoyEHI5YuEIq7XTD4wkbCE/DEw8lAm7XayEa7pYjMACe10aGSJDNJAPhLOubNoHK5vKp2iJEIA9AAqMYAEUwVGsmDGzDGaFo8y0amNYwIPM8OpoxH1zGqQMwwGcY08BBtRDGVGOyToLrdY2Vioh5stWCoY0WyzGEGVXtoyGuBDaCyWKwV2wl9zdeAcBhGEqgtGYAGt4W1VttIxdiJglARrggROh2MQU8sKzsAOxfMa9zGiilTZUKHpEvv97FixHK9DVdNbccqsZ6Tw8sZ3NKe4ioIxjbe7j3c3eBiHjkfIMbrNWX9wgh5PF4vd5jvuzqZXm9uO9gunbccAdwQPB2GjN9LzWHRPypDdmDaS9u1Pcc%2BxnOcZDkcDr2HUc0LQ38Fz7cROzVCFEN7JcGEwKYPW4XVWFYTF2TUNg8AALzFGCAyDP9X3tD8pC/GkX17QDgJ1CAwPWSD%2BKpGk4MInskN7FCCDkdCP24IT4OI7ZSLGJcdDYejDLGAUCAMTxPW9AoFE43TrWjc8MKgyVpWIbk%2BVMz4TJ6cCpNvFz6xlPlzC889VJkOSEO4xSoDjBMk3PZNVjw8dCO0nZoumWZaAgZKvl0kT2AgThItkIiSPK7Y%2Bg6VgQD6ABWPpSFMPpuCa1A6p0cLpBMroeh1KQ1k4JqCDqtry1IYsQHq3har6AAWJqWra0gOr6JqFBAXhRta6rSDgWAkDQIxPFEsgKAgY7TpbEB0iMABOSRci1VgDk2iAHDGpqHGsdIeTq4bSGOoxjQAeVoVh/t20gsBmUR2C%2BmG8BrZIjU26GhiSPN%2BkByZlER1gc25YgeT0LAAZG4g8CMCmOhoegmDYDgeH4QRhFEFBuqEHNNsgDpUFdfx0YAWiMZBPAMK80AyIZRbWMZRYIBBHAV0GFA2xIfVMCBzDqUxJHu0hzGacoXEN0I/DoPXXHNnxLdoE2YgqQ2lHyFIakyfRshtvIkgKIoMkd1oXY962DcUD2g%2BdjoFD63ouBqurGuaxG1q2AAlABZMZgGQC97oAOkkAvOGjWg6EwOCIFwQgSBvIbSGXHdrudQaSuXbqRq%2BiappmoQ6sWlPobWjattIHbxsTvpJCW1O6q73aJqNYhfA0eagA%3D%3D"></iframe>
+<p>As you see, the compiler yet not need <code>-fmove-loop-invariants</code> because is implicit
+in <code>-Os</code>.</p>
+<p>If you not like this approach, you can take a compiler with <code>-Og</code> and
+try to compile an empty program with <code>-fverbose-asm</code> and <code>-S</code>:</p>
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#40ffff">CC</span>=<span style="color:#ed9d13">&#34;arm-none-eabi-gcc&#34;</span>
+<span style="color:#40ffff">FLAGS</span>=<span style="color:#ed9d13">&#34;-mcpu=cortex-m3 -mthumb -fdata-sections -ffunction-sections -fmove-loop-invariants -Og&#34;</span>
+<span style="color:#24909d">echo</span> <span style="color:#6ab825;font-weight:bold">$(</span><span style="color:#24909d">echo</span> <span style="color:#ed9d13">&#34;void f() {}&#34;</span> | 
+  <span style="color:#ed9d13">${</span><span style="color:#40ffff">CC</span><span style="color:#ed9d13">}</span> <span style="color:#ed9d13">${</span><span style="color:#40ffff">FLAGS</span><span style="color:#ed9d13">}</span> -S -fverbose-asm -x c - -o - |
+  grep -E <span style="color:#ed9d13">&#39;^\@&#39;</span> |
+  grep -E <span style="color:#ed9d13">&#39;options enabled:&#39;</span> -A <span style="color:#3677a9">100000</span> |
+  grep -oE <span style="color:#ed9d13">&#39;\-[fm]\S+&#39;</span><span style="color:#6ab825;font-weight:bold">)</span>
+</code></pre></div><p>This list the optimization enables in a compiler in <code>-Og</code> mode. Maybe some
+new optimizations can not be ported to your old compiler but you only need
+to remove the unsupported options according to your gcc version.</p>
+<p>In my compiler <code>9.2.1 20191025</code> the output for this command is:</p>
+<pre><code>-faggressive-loop-optimizations -fassume-phsa -fauto-inc-dec -fcombine-stack-adjustments -fcommon -fcompare-elim -fcprop-registers -fdata-sections -fdefer-pop -fdelete-null-pointer-checks -fdwarf2-cfi-asm -fearly-inlining -feliminate-unused-debug-types -fforward-propagate -ffp-int-builtin-inexact -ffunction-cse -ffunction-sections -fgcse-lm -fgnu-runtime -fgnu-unique -fguess-branch-probability -fident -finline -finline-atomics -fipa-profile -fipa-pure-const -fipa-reference -fipa-reference-addressable -fipa-stack-alignment -fira-hoist-pressure -fira-share-save-slots -fira-share-spill-slots -fivopts -fkeep-static-consts -fleading-underscore -flifetime-dse -flto-odr-type-merging -fmath-errno -fmerge-constants -fmerge-debug-strings -fmove-loop-invariants -fomit-frame-pointer -fpeephole -fplt -fprefetch-loop-arrays -freg-struct-return -freorder-blocks -fsched-critical-path-heuristic -fsched-dep-count-heuristic -fsched-group-heuristic -fsched-interblock -fsched-last-insn-heuristic -fsched-pressure -fsched-rank-heuristic -fsched-spec -fsched-spec-insn-heuristic -fsched-stalled-insns-dep -fsection-anchors -fsemantic-interposition -fshow-column -fshrink-wrap -fshrink-wrap-separate -fsigned-zeros -fsplit-ivs-in-unroller -fsplit-wide-types -fssa-backprop -fstdarg-opt -fstrict-volatile-bitfields -fsync-libcalls -ftoplevel-reorder -ftrapping-math -ftree-builtin-call-dce -ftree-ccp -ftree-ch -ftree-coalesce-vars -ftree-copy-prop -ftree-cselim -ftree-dce -ftree-dominator-opts -ftree-dse -ftree-forwprop -ftree-fre -ftree-loop-if-convert -ftree-loop-im -ftree-loop-ivcanon -ftree-loop-optimize -ftree-parallelize-loops= -ftree-phiprop -ftree-reassoc -ftree-scev-cprop -ftree-sink -ftree-slsr -ftree-ter -funit-at-a-time -fverbose-asm -fzero-initialized-in-bss -masm-syntax-unified -mbe32 -mfix-cortex-m3-ldrd -mlittle-endian -mpic-data-is-text-relative -msched-prolog -mthumb -munaligned-access -mvectorize-with-neon-quad
+</code></pre><h2 id="the-hex-of-scripts-linker-script">The hex of scripts: Linker script</h2>
+<p>As you have read, the startup code need to know some information
+about the memory layout, specifically, the start and end of
+data and bss sections, apart of the start of data initialized
+data in ROM.</p>
+<p>This information is provided by the linker when it combine all
+object files to produce the final binary. But the memory layout
+is very dependent of the platform&hellip; not all devices have the
+flash and RAM in the same space.</p>
+<p>The elegant way chosed by gcc and gnu tools to handle this is
+the linker scripts, a one or more text files describing the
+particularities of memory layout, section placement and other
+information (like symbol need to defined) required to produce
+the final executable.</p>
+<h3 id="a-fast-review">A fast review</h3>
+<p>The gnu toolchain build process is like this:</p>
+<p><img src="/img/articles/armv7m-boot/gnu-build-process.png" alt="gnu build process"></p>
+<ul>
+<li>All <code>*.c</code> files is build individually to an object file <code>*.o</code>. These files
+is a collection of sections containing binary data of diferet types:
+<ul>
+<li>The code of every C file generate <code>.text</code> section</li>
+<li>The read only data generate <code>.rodata</code> section</li>
+<li>The non zero initialized data generate <code>.data</code> section</li>
+<li>The zero initialized data generate <code>.bss</code> section</li>
+<li>The non initialzed data generate <code>COMMON</code> section and C
+standard mandate to initialize in 0 like <code>.bss</code> section.
+By this reason, some compilers only generate <code>.bss</code> section
+joining both sections.</li>
+</ul>
+</li>
+<li>The linker join individual object sections and put joined sections
+in specific address depending of the linker script layout.</li>
+<li>If you not provide linker script, the toolchain provide one by default.
+Normally, this script is not suitable to use in bare metal devices.</li>
+</ul>
+<p><img src="/img/articles/armv7m-boot/c-code-gen.png" alt="c code gen"></p>
+<p>The linker script consist in commands to describe the placement of the
+diferent sections in memory area.</p>
+<p>In the next code, you can see a complete functional linker script compatible
+with the startup exposed in last sections:</p>
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#999;font-style:italic">/* Start of section description layout */</span>
+SECTIONS
+{
+  . = <span style="color:#3677a9">0x08000000</span>; <span style="color:#999;font-style:italic">/* The dot is current address counter. */</span>
+
+  <span style="color:#999;font-style:italic">/* If you not specify any, start at 0 */</span>
+  .text : {
+    <span style="color:#999;font-style:italic">/* KEEP ensure that symbols is not discarded if the linker
+</span><span style="color:#999;font-style:italic">       is insturde to remove unised symbols. */</span>
+    KEEP(*(.vector_core*)) <span style="color:#999;font-style:italic">/* Place .vector_core at start of ROM */</span>
+    *(.text)   <span style="color:#999;font-style:italic">/* Place all symbols in &#34;.text&#34; section */</span>
+    *(.text.*)  <span style="color:#999;font-style:italic">/* Place all symbols start with section &#34;.text.&lt;any&gt;&#34; */</span>
+  }
+
+  <span style="color:#999;font-style:italic">/* In many platforms, the linker script put the rodata in text if
+</span><span style="color:#999;font-style:italic">     the corresponding section not exist */</span>
+  .rodata : {
+    . = ALIGN(<span style="color:#3677a9">4</span>); <span style="color:#999;font-style:italic">/* Ensure word aligment of sections */</span>
+    *(.rodata)
+    *(.rodata*)
+    . = ALIGN(<span style="color:#3677a9">4</span>); <span style="color:#999;font-style:italic">/* Ensure word aligment of sections */</span>
+  }
+
+  .init_array : {
+    . = ALIGN(<span style="color:#3677a9">4</span>); <span style="color:#999;font-style:italic">/* Ensure word aligment of sections */</span>
+    __init_array_start = .;
+    <span style="color:#999;font-style:italic">/* SORT function sort the symbols listed in alphabetical order.
+</span><span style="color:#999;font-style:italic">       This is required to meet with the initialization order.
+</span><span style="color:#999;font-style:italic">       All symbols is in the form of .init_array.0000_nameofsymbol
+</span><span style="color:#999;font-style:italic">       when 0000 is replaced by a priority number that can be specified
+</span><span style="color:#999;font-style:italic">       at compile time. */</span>
+    KEEP(*(SORT(.init_array.*)))
+    KEEP(*(.init_array))
+    . = ALIGN(<span style="color:#3677a9">4</span>); <span style="color:#999;font-style:italic">/* Ensure word aligment of sections */</span>
+    __init_array_end = .;
+  }
+
+  _etext = .; <span style="color:#999;font-style:italic">/* You can define symbols with any expression using dot */</span>
+
+  . = <span style="color:#3677a9">0x20000000</span>;
+  <span style="color:#999;font-style:italic">/* AT(expr) is used to specify load address */</span>
+  .data : AT(_etext) {
+    _data = .;
+    *(.data)
+    *(.data*)
+    . = ALIGN(<span style="color:#3677a9">4</span>);
+    _edata = .;
+  }
+
+  <span style="color:#999;font-style:italic">/* The function LOADADDR return the load address of specific section */</span>
+  _data_loadaddr = LOADADDR(.data);
+
+  .bss : {
+    . = ALIGN(<span style="color:#3677a9">4</span>); <span style="color:#999;font-style:italic">/* Ensure word aligment of sections */</span>
+    _bss = .;
+    *(.bss)
+    *(.bss*)
+    *(COMMON)
+    . = ALIGN(<span style="color:#3677a9">4</span>);
+    _ebss = .;
+  }
+
+  <span style="color:#999;font-style:italic">/* You use prefix like K for multiply by 1024 or M for multiply for 1048576 */</span>
+  _stack = <span style="color:#3677a9">0x20000000</span> + <span style="color:#3677a9">20</span>K; <span style="color:#999;font-style:italic">/* Put the stack at end of ram (20K in this exaple) */</span>
+}
+</code></pre></div><p>The only non-evident magic in this script is the <code>AT(_etext)</code> expression. This
+instrude the lenker to put the section in specific load address but for the
+program, this is mapped to current dot address. This is specifically designed
+to place initialize data in ROM and copy this to RAM at startup.</p>
+<p>this linker script supposes that the rom memory start of 0x08000000, the ram
+address start at 0x20000000 and end 8K later (the case for the common bluepill
+processor stm32f103cb)</p>
+<p>You can improve these script adding more user friendly constants:</p>
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c">ROM_BASE = <span style="color:#3677a9">0x08000000</span>;
+RAM_BASE = <span style="color:#3677a9">0x20000000</span>;
+RAM_SIZE = <span style="color:#3677a9">20</span>K;
+
+<span style="color:#999;font-style:italic">/* Start of section description layout */</span>
+SECTIONS
+{
+  . = ROM_BASE;
+  
+  ...
+
+  . = RAM_BASE;
+  <span style="color:#999;font-style:italic">/* AT(expr) is used to specify load address */</span>
+  .data : AT(_etext) {
+    _data = .;
+
+  ...
+
+  _stack = RAM_BASE + RAM_SIZE;
+}
+</code></pre></div><p>Or move this to another platform depend file:</p>
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c">INCLUDE(memory.ld)
+
+<span style="color:#999;font-style:italic">/* Start of section description layout */</span>
+SECTIONS
+{
+  . = ROM_BASE;
+  ...
+</code></pre></div><div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#999;font-style:italic">/* Platform dependent memory.ld */</span>
+ROM_BASE = <span style="color:#3677a9">0x08000000</span>;
+RAM_BASE = <span style="color:#3677a9">0x20000000</span>;
+RAM_SIZE = <span style="color:#3677a9">20</span>K;
+</code></pre></div><p>But the realy nice form to put diferent sections in memory areas is
+via <code>MEMORY</code> command. You can replace the content of <code>memory.ld</code> with:</p>
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c">MEMORY {
+  rom rx : ORIGIN <span style="color:#3677a9">0x08000000</span>, LENGTH = <span style="color:#3677a9">64</span>K
+  ram rwx : ORIGIN <span style="color:#3677a9">0x20000000</span>, LENGTH = <span style="color:#3677a9">20</span>K
+}
+</code></pre></div><p>And the new linker script need some changes to use the memory regions
+properly:</p>
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c">INCLUDE memory.ld
+
+SECTIONS
+{
+  .text : {
+    KEEP(*(.vector_core*))
+    *(.text)
+    *(.text.*)
+  } &gt; rom <span style="color:#999;font-style:italic">/* fill rom memory area with .text section */</span>
+
+  .rodata : {
+    . = ALIGN(<span style="color:#3677a9">4</span>);
+    *(.rodata)
+    *(.rodata*)
+    . = ALIGN(<span style="color:#3677a9">4</span>);
+  } &gt; rom <span style="color:#999;font-style:italic">/* the second &gt;rom append to previos block the current */</span>
+
+  .init_array : {
+    . = ALIGN(<span style="color:#3677a9">4</span>);
+    __init_array_start = .;
+    KEEP(*(SORT(.init_array.*)))
+    KEEP(*(.init_array))
+    . = ALIGN(<span style="color:#3677a9">4</span>);
+    __init_array_end = .;
+  } &gt; rom
+
+  .data : {
+    _data = .;
+    *(.data)
+    *(.data*)
+    . = ALIGN(<span style="color:#3677a9">4</span>);
+    _edata = .;
+  } &gt; ram AT&gt;rom <span style="color:#999;font-style:italic">/* AT&gt;section is to append in load memory address mode */</span>
+
+  _data_loadaddr = LOADADDR(.data);
+
+  .bss : {
+    . = ALIGN(<span style="color:#3677a9">4</span>);
+    _bss = .;
+    *(.bss)
+    *(.bss*)
+    *(COMMON)
+    . = ALIGN(<span style="color:#3677a9">4</span>);
+    _ebss = .;
+  } &gt; ram
+
+  <span style="color:#999;font-style:italic">/* ORIGIN(region) return the address of memory region, LENGTH return the length */</span>
+  _stack = ORIGIN(ram) + LENGTH(ram);
+}
+</code></pre></div><p>This trick have some advantages:</p>
+<ul>
+<li>The linker can check automatically when memory section is exausted and end with error</li>
+<li>You no need to care for maintain the dot pointer in the correct value</li>
+<li>The linker script explain autoamtically where is your code</li>
+<li>New versions of ld can display in user friendly manner compsumintion for all memory areas</li>
+</ul>
+<p>The last point is ilustrable with these command dump:</p>
+<pre><code>Memory region         Used Size  Region Size  %age Used
+             rom:         220 B        64 KB      0.34%
+             ram:          12 B        20 KB      0.06%
+</code></pre><p>The next step is put all togheter but this is for another episode of this series</p>
+                        </div>
+                        
+                        
+
+                    </div>
+                    
+
+                    
+
+                    
+
+                    <div class="col-md-3">
+
+                        
+
+                        
+
+<div class="panel panel-default sidebar-menu">
+
+    <div class="panel-heading">
+      <h3 class="panel-title">Search</h3>
+    </div>
+
+    <div class="panel-body">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" role="search">
+            <div class="input-group">
+                <input type="search" name="q" class="form-control" placeholder="Search">
+                <input type="hidden" name="sitesearch" value="https://ourembeddeds.github.io/">
+                <span class="input-group-btn">
+                    <button type="submit" class="btn btn-template-main"><i class="fas fa-search"></i></button>
+                </span>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+
+
+
+
+<div class="panel panel-default sidebar-menu">
+
+    <div class="panel-heading">
+        <h3 class="panel-title">Categories</h3>
+    </div>
+
+    <div class="panel-body">
+        <ul class="nav nav-pills nav-stacked">
+            
+            
+            <li>
+                <a href="/categories/arm">arm (2)</a>
+            </li>
+            
+            <li>
+                <a href="/categories/embedded">embedded (2)</a>
+            </li>
+            
+            <li>
+                <a href="/categories/institutional">institutional (1)</a>
+            </li>
+            
+            <li>
+                <a href="/categories/microcontrollers">microcontrollers (2)</a>
+            </li>
+            
+        </ul>
+    </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+                        
+
+                    </div>
+                    
+
+                    
+
+                </div>
+                
+
+            </div>
+            
+        </div>
+        
+
+        <footer id="footer">
+    <div class="container">
+
+        
+        <div class="col-md-4 col-sm-6">
+            <h4>About us</h4>
+
+            <p>Embedded developers professional group.</p>
+
+            <hr class="hidden-md hidden-lg hidden-sm">
+
+        </div>
+        
+        
+
+        <div class="col-md-4 col-sm-6">
+
+             
+            <h4>Recent posts</h4>
+
+            <div class="blog-entries">
+                
+                <div class="item same-height-row clearfix">
+                    <div class="image same-height-always">
+                        <a href="https://ourembeddeds.github.io/blog/2020/09/05/armv7m-startup/">
+                          
+                            <img src="/img/articles/armv7m-boot/baron-bootstrapping.jpg" class="img-responsive" alt="Armv7m Startup">
+                          
+                        </a>
+                    </div>
+                    <div class="name same-height-always">
+                        <h5><a href="https://ourembeddeds.github.io/blog/2020/09/05/armv7m-startup/">Armv7m Startup</a></h5>
+                    </div>
+                </div>
+                
+                <div class="item same-height-row clearfix">
+                    <div class="image same-height-always">
+                        <a href="https://ourembeddeds.github.io/blog/2020/08/16/elf-loader/">
+                          
+                            <img src="/img/Tomtebobarnen.jpg" class="img-responsive" alt="Elf Loader">
+                          
+                        </a>
+                    </div>
+                    <div class="name same-height-always">
+                        <h5><a href="https://ourembeddeds.github.io/blog/2020/08/16/elf-loader/">Elf Loader</a></h5>
+                    </div>
+                </div>
+                
+                <div class="item same-height-row clearfix">
+                    <div class="image same-height-always">
+                        <a href="https://ourembeddeds.github.io/blog/2020/08/06/first-post/">
+                          
+                            <img src="/img/ourembeddeds.png" class="img-responsive" alt="Welcome to our site">
+                          
+                        </a>
+                    </div>
+                    <div class="name same-height-always">
+                        <h5><a href="https://ourembeddeds.github.io/blog/2020/08/06/first-post/">Welcome to our site</a></h5>
+                    </div>
+                </div>
+                
+            </div>
+
+            <hr class="hidden-md hidden-lg">
+             
+
+        </div>
+        
+
+        
+        <div class="col-md-4 col-sm-6">
+
+          <h4>Contact</h4>
+
+            <p class="text-uppercase"><strong>Bariloche</strong>
+        <br>Vte O'Connor 647
+        <br>Floor 5, Box 2
+        <br>Rio Negro
+        <br>
+        <strong>Argentina</strong>
+      </p>
+      
+
+            <a href="/contact" class="btn btn-small btn-template-main">Go to contact page</a>
+
+            <hr class="hidden-md hidden-lg hidden-sm">
+
+        </div>
+        
+        
+
+    </div>
+    
+</footer>
+
+
+
+
+
+
+
+<div id="copyright">
+    <div class="container">
+        <div class="col-md-12">
+            
+            <p class="pull-left">Copyright (c) 2020, OurEmbeddeds; all rights reserved.</p>
+            
+            <p class="pull-right">
+              Template by <a href="https://bootstrapious.com/p/universal-business-e-commerce-template">Bootstrapious</a>.
+              
+
+              Ported to Hugo by <a href="https://github.com/devcows/hugo-universal-theme">DevCows</a>.
+            </p>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+    </div>
+    
+
+    
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-177396015-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+<script src="//code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/waypoints/4.0.1/jquery.waypoints.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/Counter-Up/1.0/jquery.counterup.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-parallax/1.1.3/jquery-parallax.js"></script>
+
+<script src="/js/front.js"></script>
+
+
+<script src="/js/owl.carousel.min.js"></script>
+
+
+
+  </body>
+</html>
