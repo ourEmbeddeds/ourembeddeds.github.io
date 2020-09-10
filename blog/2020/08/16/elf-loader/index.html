@@ -324,17 +324,17 @@ PLT and GOT is required in RAM, and change from program to program (this require
 <h6 id="global-offset-table-schema">Global offset table schema</h6>
 <p><img src="/img/articles/elf-loader/got-operation.png" alt="got-operation"></p>
 <h6 id="relocation-schema">Relocation schema</h6>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-as" data-lang="as"><span style="color:#75715e">// extern int f1(int, int, char);
-</span><span style="color:#75715e">// void func1() {
-</span><span style="color:#75715e">//   f1(0, 0xAA55AA55, 32);
-</span><span style="color:#75715e"></span>  <span style="color:#a6e22e">movs</span>    <span style="color:#a6e22e">r2</span><span style="color:#f92672">,</span> <span style="color:#960050;background-color:#1e0010">#</span><span style="color:#ae81ff">32</span>
-  <span style="color:#a6e22e">movs</span>    <span style="color:#a6e22e">r0</span><span style="color:#f92672">,</span> <span style="color:#960050;background-color:#1e0010">#</span><span style="color:#ae81ff">0</span>
-  <span style="color:#a6e22e">ldr</span>     <span style="color:#a6e22e">r1</span><span style="color:#f92672">,</span> [<span style="color:#a6e22e">pc</span><span style="color:#f92672">,</span> <span style="color:#960050;background-color:#1e0010">#</span><span style="color:#ae81ff">4</span>]    <span style="color:#75715e">// &lt;func1+0xc&gt;
-</span><span style="color:#75715e"></span>  <span style="color:#a6e22e">ldr</span>     <span style="color:#a6e22e">r3</span><span style="color:#f92672">,</span> [<span style="color:#a6e22e">pc</span><span style="color:#f92672">,</span> <span style="color:#960050;background-color:#1e0010">#</span><span style="color:#ae81ff">8</span>]    <span style="color:#75715e">// &lt;func1+0x10&gt;
-</span><span style="color:#75715e"></span>  <span style="color:#a6e22e">bx</span>      <span style="color:#a6e22e">r3</span>
-  <span style="color:#a6e22e">nop</span> <span style="color:#75715e">// Align instruction
-</span><span style="color:#75715e"></span>  .<span style="color:#a6e22e">word</span>   <span style="color:#ae81ff">0xaa55aa55</span>
-  .<span style="color:#a6e22e">word</span>   <span style="color:#ae81ff">0x00000000</span> <span style="color:#75715e">// &lt;f1&gt; replace with addr of symbol
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-as" data-lang="as"><span style="color:#999;font-style:italic">// extern int f1(int, int, char);
+</span><span style="color:#999;font-style:italic">// void func1() {
+</span><span style="color:#999;font-style:italic">//   f1(0, 0xAA55AA55, 32);
+</span><span style="color:#999;font-style:italic"></span>  movs    r2, <span style="color:#a61717;background-color:#e3d2d2">#</span><span style="color:#3677a9">32</span>
+  movs    r0, <span style="color:#a61717;background-color:#e3d2d2">#</span><span style="color:#3677a9">0</span>
+  ldr     r1, [pc, <span style="color:#a61717;background-color:#e3d2d2">#</span><span style="color:#3677a9">4</span>]    <span style="color:#999;font-style:italic">// &lt;func1+0xc&gt;
+</span><span style="color:#999;font-style:italic"></span>  ldr     r3, [pc, <span style="color:#a61717;background-color:#e3d2d2">#</span><span style="color:#3677a9">8</span>]    <span style="color:#999;font-style:italic">// &lt;func1+0x10&gt;
+</span><span style="color:#999;font-style:italic"></span>  bx      r3
+  nop <span style="color:#999;font-style:italic">// Align instruction
+</span><span style="color:#999;font-style:italic"></span>  .word   <span style="color:#3677a9">0xaa55aa55</span>
+  .word   <span style="color:#3677a9">0x00000000</span> <span style="color:#999;font-style:italic">// &lt;f1&gt; replace with addr of symbol
 </span></code></pre></div><h3 id="put-ya-guns-on">Put ya guns on!</h3>
 <p>Our preferred approach in embedded systems is to load the code and
 relocate individual references instead of GOT usage due to the
@@ -406,24 +406,24 @@ can be enabled in gcc using the <code>-nostartfiles</code> flag.</li>
 <p>Additionally, you can provide a linker script with your preferred
 memory layout, but the suggested minimum linker script layout looks
 like this:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c">ENTRY(_start)
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c">ENTRY(_start)
 SECTIONS
 {
-	.text <span style="color:#ae81ff">0x00000000</span> <span style="color:#f92672">:</span>
+	.text <span style="color:#3677a9">0x00000000</span> :
 	{
-		<span style="color:#f92672">*</span>(.text<span style="color:#f92672">*</span> .text.<span style="color:#f92672">*</span>)
+		*(.text* .text.*)
 	}
 	.rodata :
 	{
-		<span style="color:#f92672">*</span>(.rodata<span style="color:#f92672">*</span> .rodata.<span style="color:#f92672">*</span>)
+		*(.rodata* .rodata.*)
 	}
 	.data :
 	{
-		<span style="color:#f92672">*</span>(.data<span style="color:#f92672">*</span> .data.<span style="color:#f92672">*</span>)
+		*(.data* .data.*)
 	}
 	.bss :
 	{
-		<span style="color:#f92672">*</span>(.bss .bss.<span style="color:#f92672">*</span> .sbss .sbss.<span style="color:#f92672">*</span> COMMON)
+		*(.bss .bss.* .sbss .sbss.* COMMON)
 	}
 </code></pre></div><p>This places all sections in contiguous memory. If your architecture
 requires some align, you need to add &ldquo;<code>. = ALIGN(n);</code>&rdquo; statements
@@ -432,58 +432,58 @@ between sections.</p>
 <h4 id="initialize-it">Initialize it.</h4>
 <p>You need to define an environment variable for the new binary
 with:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#66d9ef">typedef</span> <span style="color:#66d9ef">struct</span> {
-   <span style="color:#66d9ef">const</span> ELFSymbol_t <span style="color:#f92672">*</span>exported;
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#6ab825;font-weight:bold">typedef</span> <span style="color:#6ab825;font-weight:bold">struct</span> {
+   <span style="color:#6ab825;font-weight:bold">const</span> ELFSymbol_t *exported;
    size_t exported_size;
 } ELFEnv_t;
 ...
-<span style="color:#66d9ef">const</span> ELFEnv_t elfEnv <span style="color:#f92672">=</span> {
+<span style="color:#6ab825;font-weight:bold">const</span> ELFEnv_t elfEnv = {
    symbolTable,
-   <span style="color:#66d9ef">sizeof</span>(symbolTable) <span style="color:#f92672">/</span> <span style="color:#66d9ef">sizeof</span>(ELFSymbol_t)
+   <span style="color:#6ab825;font-weight:bold">sizeof</span>(symbolTable) / <span style="color:#6ab825;font-weight:bold">sizeof</span>(ELFSymbol_t)
 };
 </code></pre></div><p>This contain a reference to an array of resolvable symbols
 and the number of the elements inside the array. The entries of
 this array contain the name and the pointer to be resolved:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#66d9ef">typedef</span> <span style="color:#66d9ef">struct</span> {
-  <span style="color:#66d9ef">const</span> <span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>name; <span style="color:#75715e">/*!&lt; Name of symbol */</span>
-  <span style="color:#66d9ef">void</span> <span style="color:#f92672">*</span>ptr; <span style="color:#75715e">/*!&lt; Pointer of symbol in memory */</span>
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#6ab825;font-weight:bold">typedef</span> <span style="color:#6ab825;font-weight:bold">struct</span> {
+  <span style="color:#6ab825;font-weight:bold">const</span> <span style="color:#6ab825;font-weight:bold">char</span> *name; <span style="color:#999;font-style:italic">/*!&lt; Name of symbol */</span>
+  <span style="color:#6ab825;font-weight:bold">void</span> *ptr; <span style="color:#999;font-style:italic">/*!&lt; Pointer of symbol in memory */</span>
 } ELFSymbol_t;
 ...
-<span style="color:#66d9ef">const</span> ELFSymbol_t symbolTable[] <span style="color:#f92672">=</span> {
-   { <span style="color:#e6db74">&#34;printf&#34;</span>, (<span style="color:#66d9ef">void</span><span style="color:#f92672">*</span>) printf },
-   { <span style="color:#e6db74">&#34;scanf&#34;</span>, (<span style="color:#66d9ef">void</span><span style="color:#f92672">*</span>) scanf },
-   { <span style="color:#e6db74">&#34;strstr&#34;</span>, (<span style="color:#66d9ef">void</span><span style="color:#f92672">*</span>) strstr },
-   { <span style="color:#e6db74">&#34;fctrl&#34;</span>, (<span style="color:#66d9ef">void</span><span style="color:#f92672">*</span>) fctrl },
+<span style="color:#6ab825;font-weight:bold">const</span> ELFSymbol_t symbolTable[] = {
+   { <span style="color:#ed9d13">&#34;printf&#34;</span>, (<span style="color:#6ab825;font-weight:bold">void</span>*) printf },
+   { <span style="color:#ed9d13">&#34;scanf&#34;</span>, (<span style="color:#6ab825;font-weight:bold">void</span>*) scanf },
+   { <span style="color:#ed9d13">&#34;strstr&#34;</span>, (<span style="color:#6ab825;font-weight:bold">void</span>*) strstr },
+   { <span style="color:#ed9d13">&#34;fctrl&#34;</span>, (<span style="color:#6ab825;font-weight:bold">void</span>*) fctrl },
 };
 </code></pre></div><p>Additionally, you need to create an object of type
 <code>loader_env_t</code> and set the symbol table inside this struct.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c">ELFExec_t <span style="color:#f92672">*</span>exec;
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c">ELFExec_t *exec;
 loader_env_t loader_env;
-loader_env.env <span style="color:#f92672">=</span> env;
+loader_env.env = env;
 </code></pre></div><p>In the next phase, you need to call <code>load_elf</code> with the PATH of
 the binary, the environment and a reference to the pointer of
 <code>ELFExec_t</code>:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c">load_elf(<span style="color:#e6db74">&#34;/flash/bin/test1.elf&#34;</span>, loader_env, <span style="color:#f92672">&amp;</span>exec);
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c">load_elf(<span style="color:#ed9d13">&#34;/flash/bin/test1.elf&#34;</span>, loader_env, &amp;exec);
 </code></pre></div><p>If the operation ends successfully, the return status is <code>0</code>. In
 case of an error, it will return negative number indicating the specific error.</p>
 <p>In this point, you have the binary loaded and allocated in the
 memory, and you can jump into start entry point or request the
 address of specific symbols:</p>
 <p>In the first case, you need to call the function like this:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#66d9ef">int</span> ret <span style="color:#f92672">=</span> jumpTo(exec);
-<span style="color:#66d9ef">if</span> (ret...
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#6ab825;font-weight:bold">int</span> ret = jumpTo(exec);
+<span style="color:#6ab825;font-weight:bold">if</span> (ret...
 </code></pre></div><p>If the program ends successfully, the function returns 0, otherwise
 it will return a negative number depending to the error.</p>
 <p>If you need to request an specific function pointer you can use</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#66d9ef">void</span> <span style="color:#f92672">*</span>symbolPtr <span style="color:#f92672">=</span> get_func(<span style="color:#e6db74">&#34;myFunction&#34;</span>, exec);
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#6ab825;font-weight:bold">void</span> *symbolPtr = get_func(<span style="color:#ed9d13">&#34;myFunction&#34;</span>, exec);
 </code></pre></div><p>This returns a pointer to the function start or <code>NULL</code> if the object
 is not found.</p>
 <p>If you need an arbitrary pointer to other symbol (variable,
 constant or whatever) you can use:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#66d9ef">void</span> <span style="color:#f92672">*</span>symbolPtr <span style="color:#f92672">=</span> get_obj(<span style="color:#e6db74">&#34;myVar&#34;</span>, exec);
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#6ab825;font-weight:bold">void</span> *symbolPtr = get_obj(<span style="color:#ed9d13">&#34;myVar&#34;</span>, exec);
 </code></pre></div><p>After all, you can free all allocated memory for the binary and
 the metadata of the ELF file with:</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c">unload_elf(exec);
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c">unload_elf(exec);
 </code></pre></div><h3 id="system-interface">System interface</h3>
 <p>In order to be flexible in the implementation, the library leaves
 undefined some API of low level access for port to any system.</p>
