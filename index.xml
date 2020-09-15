@@ -17,17 +17,16 @@
       <pubDate>Sat, 05 Sep 2020 12:19:37 -0300</pubDate>
       
       <guid>https://ourembeddeds.github.io/blog/2020/09/05/armv7m-startup/</guid>
-      <description>&lt;p&gt;One of the most successful families microcontrollers has been
-the cortex-m in its various versions (m0, m0+, m3, m4, m7,
-m33, etc), and one of the reason of these success is the
-simplest boot process. In this article, we travel around the
-magic of code writing and see the different implementations
-across some vendors and propose a vendor-neutral startup
+      <description>&lt;p&gt;One of the most successful families of microcontrollers has been
+the cortex-m in its different versions (m0, m0+, m3, m4, m7,
+m33, etc), and one of the main reasons of its success is its
+simple boot process. In this article, we will travel through the
+magical land of code writing and look around the different implementations
+across some vendors, culminating with a proposed vendor-neutral startup
 schema with many advantages for your projects.&lt;/p&gt;
-&lt;p&gt;In this series of articles I try to explain the tricks around
-code compilation, linker scripts and build systems, proposing,
-additionally, a vendor neutral startup system for your cortex-m
-project.&lt;/p&gt;</description>
+&lt;p&gt;In this series of articles I will try to explain the tricks around
+code compilation, linker scripts and build systems, proposing
+a vendor neutral startup system for your cortex-m project.&lt;/p&gt;</description>
     </item>
     
     <item>

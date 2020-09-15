@@ -201,23 +201,22 @@
                         
 
                         <div id="post-content">
-                          <p>One of the most successful families microcontrollers has been
-the cortex-m in its various versions (m0, m0+, m3, m4, m7,
-m33, etc), and one of the reason of these success is the
-simplest boot process. In this article, we travel around the
-magic of code writing and see the different implementations
-across some vendors and propose a vendor-neutral startup
+                          <p>One of the most successful families of microcontrollers has been
+the cortex-m in its different versions (m0, m0+, m3, m4, m7,
+m33, etc), and one of the main reasons of its success is its
+simple boot process. In this article, we will travel through the
+magical land of code writing and look around the different implementations
+across some vendors, culminating with a proposed vendor-neutral startup
 schema with many advantages for your projects.</p>
-<p>In this series of articles I try to explain the tricks around
-code compilation, linker scripts and build systems, proposing,
-additionally, a vendor neutral startup system for your cortex-m
-project.</p>
+<p>In this series of articles I will try to explain the tricks around
+code compilation, linker scripts and build systems, proposing
+a vendor neutral startup system for your cortex-m project.</p>
 <div class="toc">
     <nav id="TableOfContents">
   <ul>
-    <li><a href="#in-the-way-of-universal-cortex-m-bootstrap">In the way of universal cortex-m bootstrap</a>
+    <li><a href="#in-the-search-of-an-universal-cortex-m-bootstrap">In the search of an universal cortex-m bootstrap</a>
       <ul>
-        <li><a href="#writing-simple-startup">Writing simple startup&hellip;</a></li>
+        <li><a href="#writing-a-simple-startup">Writing a simple startup&hellip;</a></li>
       </ul>
     </li>
     <li><a href="#dissecting-the-generated-code">Dissecting the generated code.</a>
@@ -234,37 +233,37 @@ project.</p>
   </ul>
 </nav>
 </div>
-<h2 id="in-the-way-of-universal-cortex-m-bootstrap">In the way of universal cortex-m bootstrap</h2>
-<p>The boot process for the cortex-m series is straight forward:</p>
+<h2 id="in-the-search-of-an-universal-cortex-m-bootstrap">In the search of an universal cortex-m bootstrap</h2>
+<p>The boot process for the cortex-m series is quite straight forward:</p>
 <ul>
-<li>On the reset, the processor take the value of the special
-memory-mapped register <code>VTOR</code> and use this as a pointer
+<li>On reset, the processor takes the value of the special
+memory-mapped register <code>VTOR</code> and uses this as a pointer
 to &ldquo;interrupt table&rdquo;.</li>
-<li>The first 32 bits of this table is loaded in the register
-SP for point the processor stack</li>
-<li>The second 32 bits is loaded in register PC and point to
-start of the user code.</li>
-<li>The processor start executing the instruction pointed by
+<li>The first 32 bits of this table are loaded in the register
+SP to point at the processor stack</li>
+<li>The second 32 bits are loaded in the register PC and point to
+the start of the user code.</li>
+<li>The processor starts executing the instructions pointed by
 the current PC (the value previously loaded from VTOR+4 table)</li>
 </ul>
-<p>This schema, is really simple but powerful, this enables the user
-code to be writes entirely in C following the binary interface of
-ARM processors (AAPCS standard) followed by virtually any compiler
+<p>This is a really simple but powerful schema that enables the user
+code to be written entirely in C following the binary interface of
+ARM processors (AAPCS standard), followed by virtually any compiler
 for this architecture.</p>
 <p><img src="/img/articles/armv7m-boot/armv7m-reset.png" alt="armv7m reset schema"></p>
-<p>In contrast, the bast majority of firmware uses assembler routine
-for the main startup sequence for simplicity and control. in fact,
-this speak about the trust in the compiler that the chip vendor
-have. The main reason for this is to provide a consistent boot code
+<p>In contrast, the vast majority of firmwares use assembler routines
+for the main startup sequence for simplicity and control. In fact,
+this speaks about the trust that chip vendors have in the compiler.
+The main reason is to provide a consistent boot code
 across different compilation parameters and optimizations, because
-some compiler bugs in the past break the startup routine in weird
-manners. At this time, the serious compilers like gcc or clang
-(and the arm tunned version: armcc6) have a regression test battery
-as part of continuos integration process and the weird bugs in
-common code is really rare.</p>
-<h3 id="writing-simple-startup">Writing simple startup&hellip;</h3>
+some compiler bugs in the past have broken the startup routine in weird
+manners. Nowadays, serious compilers like gcc or clang
+(and the arm tuned version: armcc6) have a regression test battery
+as part of their continuous integration process and the weird bugs in
+common code are really rare.</p>
+<h3 id="writing-a-simple-startup">Writing a simple startup&hellip;</h3>
 <p>First of all, you need a vector with pointers to exception handlers,
-reset handler and the initial stack pointer:</p>
+a reset handler and a initial stack pointer:</p>
 <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#6ab825;font-weight:bold">extern</span> <span style="color:#6ab825;font-weight:bold">unsigned</span> <span style="color:#6ab825;font-weight:bold">int</span> _stack; <span style="color:#999;font-style:italic">/* Defined by the linker */</span>
 
 <span style="color:#999;font-style:italic">/* Function prototype, defined after */</span>
@@ -293,28 +292,28 @@ reset handler and the initial stack pointer:</p>
     (<span style="color:#6ab825;font-weight:bold">void</span>*) pass_isr, <span style="color:#999;font-style:italic">/* Pend Supervisor Call */</span>
     (<span style="color:#6ab825;font-weight:bold">void</span>*) pass_isr, <span style="color:#999;font-style:italic">/* SysTick */</span>
 };
-</code></pre></div><p>This vector is marked to belong into a code section called &ldquo;.vector_core&rdquo;,
+</code></pre></div><p>This vector is marked as pertaining to a code section called &ldquo;.vector_core&rdquo;,
 the linker (via linking scripts) will ensure to place it in the reset
 vector of the chip, either the one identified by the manufacturer or the
-one specified by ARM default.</p>
-<p>In fact, the vector table is more big than this common entries but the
-rest of vectors is vendor specific and need to handle more robust.
-In all implementations, the vector table is a big array with the first 16
-entries common of all cortex-m parts (ARMv7M specifications).</p>
-<p>The hang action take on severe condition ISR is to halt the processor and
-is very simple, an infinite loop.</p>
+one specified by ARM defaults.</p>
+<p>The vector table is actually bigger than this common entries, but the
+rest of vectors are vendor specific and need to be handled with care.
+In all implementations, the vector table is a huge array with the first 16
+entries being common to all cortex-m parts (ARMv7M specifications).</p>
+<p>In the presence of a severe condition ISR, the course of action is to halt the processor.
+This can be implemented as easily as an infinite loop, or as complex as your ego can handle.</p>
 <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#6ab825;font-weight:bold">void</span> <span style="color:#447fcf">hang_isr</span>(<span style="color:#6ab825;font-weight:bold">void</span>)
 {
     <span style="color:#6ab825;font-weight:bold">while</span> (<span style="color:#3677a9">1</span>) {} <span style="color:#999;font-style:italic">/* Or if you love code obfuscation try this: for(;;); */</span>
 }
-</code></pre></div><p>The <em>do-nothing</em> handler is only an empty function</p>
+</code></pre></div><p>The <em>do-nothing</em> handler is an empty function</p>
 <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#6ab825;font-weight:bold">void</span> <span style="color:#447fcf">pass_isr</span>(<span style="color:#6ab825;font-weight:bold">void</span>)
 {
 }
-</code></pre></div><p>Ideally you be provide an individual function for all of exception type
-and store this in your own file (one for hard fault, one for mem fault,
-one for systick, etc) but, for the example, this is a valid approach.</p>
-<p>Finally, the reset handler is the start point of your program:</p>
+</code></pre></div><p>Ideally you will provide an individual function for each exception type
+and store them in your own file (one for hard fault, one for mem fault,
+one for systick, etc), but for the example this is a valid approach.</p>
+<p>Finally, the reset handler is the start point for your program:</p>
 <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#6ab825;font-weight:bold">void</span> <span style="color:#447fcf">reset_handler</span>(<span style="color:#6ab825;font-weight:bold">void</span>)
 {
     <span style="color:#999;font-style:italic">/* Your program here */</span>
@@ -322,22 +321,22 @@ one for systick, etc) but, for the example, this is a valid approach.</p>
 
     }
 }
-</code></pre></div><p>Ideally, at this point, you can execute any C code, but some extra work
-is required due to provide a perfect standard-fits C environment.</p>
-<p>In the reset_handler function some thinks is not compliance:</p>
+</code></pre></div><p>At this point you can execute any C code, but some extra work
+is required to provide a perfect standard-fit C environment.</p>
+<p>In the reset_handler function the following are considered not compliance:</p>
 <ul>
-<li>The C language specify that all uninitialized data must be zeroed
+<li>The C language specifies that all uninitialized data must be zeroed
 by the startup code or OS before main function. This is called BSS
 section.</li>
-<li>Uninitialized data has not been copied from ROM to RAM. These
+<li>Uninitialized data has not been copied from ROM to RAM. This
 operation must be done before main. This is called DATA section.</li>
 <li>Some C constructions emit initialization code that requires manually
-executed before main function. These code must need to called in this point.
-This is essential for C++ compatibility, virtually all constructors of
-static class is called here.</li>
+execution before the main function. This code must be called at this point.
+This is essential for C++ compatibility, as virtually all constructors of
+static class are called here.</li>
 </ul>
-<p>In order to complete the pre-main code, the compiler need some help of the
-linker script to find these memory address:</p>
+<p>In order to complete the pre-main code, the compiler needs some help from the
+linker script to find the following memory addresses:</p>
 <ul>
 <li>Start of initialized data in RAM: <code>_data</code></li>
 <li>End of initialized data in RAM: <code>_edata</code></li>
@@ -347,10 +346,10 @@ linker script to find these memory address:</p>
 <li>Start of array with initialization function pointers <code>__init_array_start</code>;</li>
 <li>End of array with initialization function pointers <code>__init_array_end</code>;</li>
 </ul>
-<p>These symbols must be provided by the linker script and, for the C compiler,
+<p>These symbols must be provided by the linker script, while for the C compiler
 this is viewed as an &ldquo;extern defined unsigned integer&rdquo;. The real type of these
-symbols may be anything, but <code>unsigned int</code> is usefully to work with the
-natural type of data (in cortex-m, int match the register size)</p>
+symbols may be anything, but <code>unsigned int</code> is useful to work with the
+natural type of data (in cortex-m, int matches the register size)</p>
 <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#6ab825;font-weight:bold">extern</span> <span style="color:#6ab825;font-weight:bold">unsigned</span> <span style="color:#6ab825;font-weight:bold">int</span> _data_loadaddr;
 <span style="color:#6ab825;font-weight:bold">extern</span> <span style="color:#6ab825;font-weight:bold">unsigned</span> <span style="color:#6ab825;font-weight:bold">int</span> _data;
 <span style="color:#6ab825;font-weight:bold">extern</span> <span style="color:#6ab825;font-weight:bold">unsigned</span> <span style="color:#6ab825;font-weight:bold">int</span> _edata;
@@ -358,9 +357,9 @@ natural type of data (in cortex-m, int match the register size)</p>
 <span style="color:#6ab825;font-weight:bold">extern</span> <span style="color:#6ab825;font-weight:bold">unsigned</span> <span style="color:#6ab825;font-weight:bold">int</span> _ebss;
 <span style="color:#6ab825;font-weight:bold">extern</span> <span style="color:#6ab825;font-weight:bold">unsigned</span> <span style="color:#6ab825;font-weight:bold">int</span> __init_array_start;
 <span style="color:#6ab825;font-weight:bold">extern</span> <span style="color:#6ab825;font-weight:bold">unsigned</span> <span style="color:#6ab825;font-weight:bold">int</span> __init_array_end;
-</code></pre></div><p>With these data defined in the linker script you can process to all task
-for prepare to main:</p>
-<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#999;font-style:italic">/* Define a convenient type for cast integer ptr to function ptr */</span>
+</code></pre></div><p>With these data defined in the linker script you can process all tasks
+in order to prepare for main:</p>
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#999;font-style:italic">/* Define a convenient type for casting integer ptr to function ptr */</span>
 <span style="color:#6ab825;font-weight:bold">typedef</span> <span style="color:#447fcf">void</span> (*func_t)(<span style="color:#6ab825;font-weight:bold">void</span>);
 
 <span style="color:#999;font-style:italic">/* Prototype of main function */</span>
