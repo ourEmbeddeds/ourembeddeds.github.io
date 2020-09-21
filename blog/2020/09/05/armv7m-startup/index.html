@@ -394,15 +394,15 @@ in order to prepare for main:</p>
 
     <span style="color:#6ab825;font-weight:bold">while</span> (<span style="color:#3677a9">1</span>) {} <span style="color:#999;font-style:italic">/* And hang if main return */</span>
 }
-</code></pre></div><p>This work fine in all optimizations and across al cortex-m
-implementations, but is perfectible.</p>
+</code></pre></div><p>This works fine in all optimizations and across all cortex-m
+implementations, but can be improved.</p>
 <h2 id="dissecting-the-generated-code">Dissecting the generated code.</h2>
-<p>We can play nice with the result code using the great godbolt
-online tools. You can see the result assembler code generated
+<p>We can play nice with the resulting code using the great godbolt
+online tools. You can see the final assembler code generated
 for a cortex-m3 by gcc 9 here:</p>
 <iframe width="100%" height="600px" src="https://godbolt.org/e?readOnly=false&hideEditorToolbars=false#z:OYLghAFBqd5QCxAYwPYBMCmBRdBLAF1QCcAaPECAM1QDsCBlZAQwBtMQBGABlICsupVs1qhkAUgBMAISnTSAZ0ztkBPHUqZa6AMKpWAVwC2tQVvQAZPLUwA5YwCNMxLgGZSAB1QLC62nsMTQS8fNTorG3sjJxdOdyUVMNoGAmZiAgDjU05FZUxVPxS0ggi7R2c3RVT0zKCchWqS6zLoiriASkVUA2JkDgByTAAPAmdaAGprAnGjZmsIADdUPHR28VdZbgBBcW3h0eIJg1ofYBt0SfpxgH10ZlTr1lRmO/R0YnXNrf2x8ePT86Xaa3e7MT67b4jX7/PBnTAXKY3eGg8F7KGHP4nWGAxHXBwKBSoyEHI5YuEIq7XTD4wkbCE/DEw8lAm7XayEa5pYjMACe1waxSJDNJAPhLOubNoHK5vKp2iJEIA9AAqcYAEUwVGa42Y4zQtAWWjURvGBB5Hkw4xoxD1zAaQMwwGc4w8BBtRCtxwKdBdbvGysVELNFqwVHGSxW4wgyqoXuuBHai2WqwV2wjF2ImCUBGuCBE6HYxCTKzW23EAHYvuNq5jRRTpsqFL0iTXa9ixYjlegGqmtq2VeM9B4eeM7qkrcRUEZxpPpx7udOAxDW03kON1mr15IAGwgh5PF4vd4tmvd6Ybre7sdgunbVsAdwQeHYUbP69cOkvVOv7XXleXrY1l2PYyHI76bo2zagaBt59jWFZqhCAHVgODCYNMHrcDqrCsJi7JqGweAAF5ite/qBnep72heUi7jSJ7Vo%2Bz6WhAb7rJ%2BtFUjSv4VlWgHVsBBByGBF7cAxf6IWWlEoaqOhsLh8njAK6QGB4nq0N6JzkchSm9OBX6StKxDcnyylCbBD5Pi%2BECru%2BHE7hK%2BGcsZsrmDx/7SYBUCxhp8btKuwkyImawWfB5aSXB1azPMIV8YxVmYBAnDubI4VIWl2z9J0rAgP0ACs/SkKY/TcIVqC5TogXSEp3S9JaUiuJwhUELlpXtJ0ADWIB5bwOX9AALIVxWlaQ5X9IVCggLwLUlVlpBwLASBoEYHjMWQFAQMtq2FiAaRGAAnJIORaqwByTRADitYVDjWGkPK5U1pDLUYRoAPK0Kw92zaQWCzKI7BXT9eCZgUhqTd9wz5AYowPYVUzKIDrB4A43LEDyehYLDpBungRiw50ND0EwbAcDw/CCMIogoFVQjI5NkCdKgrp%2BODAC0RjIB4Bgbmg6TDOzrjjOzBAII4E15JpmjaLU2SkOYpRRDEwTeL4dAy8roR%2BAr5SxLkiSFI06v1BLSRFOk2utLrZlG1UxQW0ryVdD0fRcNluUFUVgNjVsABKACy4zAMga77QAdJIoecFGtB0Jgv4QLghAkFujWkIOU7bc6DXJYOVXNVd7WkF1PVCLlg2e99Y0TVN2MF27/SSENXu5fns2F4axA%2BBo/VAA%3D%3D%3D"></iframe>
-<p>If you compare with <a href="https://github.com/STMicroelectronics/STM32CubeF1/blob/master/Projects/STM32F103RB-Nucleo/Templates/SW4STM32/startup_stm32f103xb.s#L61-L98">hand-made assembler code</a>,
-this is very poor optimized:</p>
+<p>If you compare it with <a href="https://github.com/STMicroelectronics/STM32CubeF1/blob/master/Projects/STM32F103RB-Nucleo/Templates/SW4STM32/startup_stm32f103xb.s#L61-L98">hand-made assembler code</a>,
+it looks poorly optimized:</p>
 <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-asm" data-lang="asm">Reset_Handler:
   <span style="color:#447fcf">movs</span> <span style="color:#40ffff">r1</span>, <span style="color:#999;font-style:italic">#0
 </span><span style="color:#999;font-style:italic"></span>  <span style="color:#40ffff">b</span> <span style="color:#40ffff">LoopCopyDataInit</span>
@@ -431,81 +431,81 @@ FillZerobss:
   <span style="color:#447fcf">bx</span> <span style="color:#40ffff">lr</span>
 Infinite_Loop:
   <span style="color:#447fcf">b</span> <span style="color:#40ffff">Infinite_Loop</span>
-</code></pre></div><p>I intentionally omit the call of <code>SystemInit</code> because is not in my previous
-C example code but is only one line more. Additionally, the code above make
-some cheats calling <code>__libc_init_array</code> for trigger the constructor call but
-the code implied in this is much like the loops in the assembler.</p>
+</code></pre></div><p>I intentionally omitted the call to <code>SystemInit</code> because it was not present in the previous
+C example code as it only adds one more line. Additionally, the code above cheats
+by calling <code>__libc_init_array</code> to trigger the constructor&rsquo;s call, but
+the code implied in this looks more like the loops in the assembler.</p>
 <p>If you want your code to be on the same level as the manually generated one,
 you need to play around with the compilation parameters a bit.</p>
 <h3 id="play-the-game-of-compiler-optimization">Play the game&hellip; of compiler optimization</h3>
-<p>The first think when you saw &ldquo;optimization&rdquo; is go for all, enable all heavy
-optimization flags, all code tricks and see the result.</p>
-<p>In gcc this is says as <code>-O3</code> and the result is not disappoint:</p>
+<p>The first thing that comes to your mind when you think about &ldquo;optimization&rdquo; is
+to go for all, enable all heavy optimization flags, all code tricks and watch the results.</p>
+<p>In gcc this is called <code>-O3</code> and the result does not disappoint at all:</p>
 <iframe width="100%" height="600px" src="https://godbolt.org/e#z:OYLghAFBqd5QCxAYwPYBMCmBRdBLAF1QCcAaPECAM1QDsCBlZAQwBtMQBGABlICsupVs1qhkAUgBMAISnTSAZ0ztkBPHUqZa6AMKpWAVwC2tQVvQAZPLUwA5YwCNMxLgGZSAB1QLC62nsMTQS8fNTorG3sjJxdOdyUVMNoGAmZiAgDjU05FZUxVPxS0ggi7R2c3RVT0zKCchWqS6zLoiriASkVUA2JkDgByTAAPAmdaAGprAnGjZmsIADdUPHR28VdZbgBBcW3h0eIJg1ofYBt0SfpxgH10ZlTr1lRmO/R0YnXNrf2x8ePT86Xaa3e7MT67b4jX7/PBnTAXKY3eGg8F7KGHP4nWGAxHXBwKBSoyEHI5YuEIq7XTD4wkbCE/DEw8lAm7XayEa5pYjMACe1waxSJDNJAPhLOubNoHK5vKp2iJEIA9AAqcYAEUwVGa42Y4zQtAWWjURvGBB5Hkw4xoxD1zAaQMwwGc4w8BBtRCtxwKdBdbvGysVELNFqwVHGSxW4wgyqoXuuBHai2WqwV2wjF2ImCUBGuCBE6HYxCTKzW23EAHYvuNq5jRRTpsqFL0iTXa9ixYjlegGqmtq2VeM9B4eeM7qkrcRUEZxpPpx7udOAxDW03kON1mr15IAGwgh5PF4vd4tmvd6Ybre7sdgunbVsAdwQeHYUbP69cOkvVOv7XXleXrY1l2PYyHI76bo2zagaBt59jWFZqhCAHVgODCYNMHrcDqrCsJi7JqGweAAF5ite/qBnep72heUi7jSJ7Vo%2Bz6WhAb7rJ%2BtFUjSv4VlWgHVsBBByGBF7cAxf6IWWlEoaqOhsLh8njAK6QGB4nq0N6JzkchSm9OBX6StKxDcnyylCbBD5Pi%2BECru%2BHE7hK%2BGcsZsrmDx/7SYBUCxhp8btKuwkyImawWfB5aSXB1azPMIV8YxVmYBAnDubI4VIWl2z9J0rAgP0ACs/SkKY/TcIVqC5TogXSEp3S9JaUiuJwhUELlpXtJ0ADWIB5bwOX9AALIVxWlaQ5X9IVCggLwLUlVlpBwLASBoEYHjMWQFAQMtq2FiAaRGAAnJIORaqwByTRADitYVDjWGkPK5U1pDLUYRoAPK0Kw92zaQWCzKI7BXT9eCZgUhqTd9wz5AYowPYVUzKIDrB4A43LEDyehYLDpBungRiw50ND0EwbAcDw/CCMIogoFVQjI5NkCdKgrp%2BODAC0RjIB4Bgbmg6TDOzrjjOzBAII4Quva4E15JpmjaLUpiSO45ilFEMTdZ43i%2BHQ8sgIrGuhH4KvlC4eW5IkhSNDresJPkSRFOkRutCbVTFFb8SNI7at5Z0Ci1X0XDZblBVFYDY1bAASgAsuMwDIGu%2B0AHSSAnnBRrQdCYL%2BEC4IQJBbo1pCDlO23Og1yWDlVzVXe1pBdT1Qi5YNIffWNE1Tdj1eB/0khDaHuVV7NNeGsQPgaP1QA%3D"></iframe>
-<p>But this is very different compared with the hand-made code:</p>
-<p>First of all you see a sentence like <code>push    {r3, r4, r5, lr}</code>. This is
-clobber register save because the compiler try to create a normal function
-callable by any code, but this function is special because is the first
-function called by the hardware&hellip; This disappoint is fixed adding a <code>naked</code>
+<p>But this looks very different when compared with the hand-made code:</p>
+<p>First of all you&rsquo;ll see a sentence that looks like <code>push    {r3, r4, r5, lr}</code>. This is
+a clobber register save because the compiler tries to create a regular function
+callable by any code, but this function is special because it is the first
+function called by the hardware&hellip; This weird code is fixed aby dding a <code>naked</code>
 attribute to the function. From the gcc manual:</p>
 <blockquote>
 <p>Use this attribute on the ARM, AVR, MCORE, RX and SPU ports to indicate that
 the specified function does not need prologue/epilogue sequences generated
 by the compiler.</p>
 </blockquote>
-<p>Additionally, the same part of gcc documentation says that is not safe include
-any statement distinct of <code>asm</code> but for these purpose you can ignore this
-warning and go for all <code>¯\_(ツ)_/¯</code>. In clang, the compiler end with an error
-if your <code>naked</code> function try to use anything apart of <code>asm</code> statement.</p>
+<p>Additionally, the same part of gcc documentation mentions that is not safe to include
+any statements distinct of <code>asm</code>. You can ignore this warning for the purpose of this
+course and go for all <code>¯\_(ツ)_/¯</code>. In clang, the compiler ends with an error
+if your <code>naked</code> function tries to use anything apart of an <code>asm</code> statement.</p>
 <p>Another point is the requirement of <code>memcpy</code> and <code>memset</code> functions. Yeeees,
-these ar standard functions and may be provided by virtually any compiler or
+these are standard functions and may be provided by virtually any compiler or
 c library in the world, but in a freestanding environment (without OS or
-without runtime) this may be undesirable behavior&hellip;</p>
-<p>The rationale of this compiler decision is that:</p>
+without runtime) this may be an undesirable behavior&hellip;</p>
+<p>The rationale of this compiler decision is the following:</p>
 <ul>
-<li><code>mem*</code> functions is hand made assembler optimized and potentially more
+<li><code>mem*</code> functions are hand made to be assembler optimized and potentially more
 efficient in large data move/set</li>
-<li>Maybe perform unaligned set/move faster than C hand-made function.</li>
-<li>Both functions is standard even if you infer freestanding environment</li>
+<li>Probably perform unaligned set/move faster than C hand-made function.</li>
+<li>Both functions are standard even if you infer freestanding environment</li>
 </ul>
-<p>If you are ok with this points, the <code>-O3</code> trick is really usefully, but in
-certain cases is not desirable:</p>
+<p>If you are ok with the previous statements, the <code>-O3</code> trick is really usefully,
+but can become undesirable in certain cases:</p>
 <ul>
-<li>You may not need to link with libc or provide <code>mem*</code> implementation.</li>
-<li>Your <code>mem*</code> implementations really sucks.</li>
-<li>Your data and bss is tiny and the overhead in code and execution type
-for memcpy/memset is great than optimal.</li>
-<li>You are a friki of optimization and write articles with a lot of assembler
-on your blog in the weekends.</li>
+<li>You may not need to link with libc or provide a <code>mem*</code> implementation.</li>
+<li>Your <code>mem*</code> implementations really suck.</li>
+<li>Your data and bss are tiny and the overhead in code and execution type
+for memcpy/memset is greater than optimal.</li>
+<li>You are a freak of optimization and write articles with a lot of assembler
+code on your blog in the weekends.</li>
 </ul>
 <h3 id="exploring-custom-optimizations">Exploring custom optimizations</h3>
-<p>All optimizations are a compromise, this is not a exception&hellip; if you find
-a binary code most like a hand-made code you need some points of anchor:</p>
+<p>All optimizations are a compromise, and our case it&rsquo;s not an exception. If you want your
+generated code to look as streamlined as a hand-made one, I suggest following these guidelines:</p>
 <ul>
-<li>The data and bss sections start and end word aligned.</li>
-<li>The most efficient way to move data using the processor is in word
-aligned manner. This implies the load-&gt;store pair of instruction
-take the best advantage of data bus bandwidth.</li>
-<li>The processor not have complex pipeline with advance superscalar
-architecture or out-of-order and speculative execution, and consequently
-all optimizations about the instruction pipe exploit is futile or less
-efficiently than little code.</li>
-<li>Small loops fit in execution buffer or similar structure and perform
-execution more efficient than linear execution in an speculative pipe</li>
+<li>The data and bss sections should start and end word aligned.</li>
+<li>The most efficient way to move data using the processor is in a word
+aligned manner. This implies that the load-&gt;store pair of instructions
+harness the most bandwidth of the data bus.</li>
+<li>The processor does not have a complex pipeline with advance superscalar
+architecture or out-of-order and speculative execution. Consequently
+all optimizations about the instruction pipe exploit are futile or less
+efficient than just standard code.</li>
+<li>Small loops fit in execution buffer or similar structures and their
+execution performs more efficient than a linear execution in an speculative pipe.</li>
 </ul>
-<p>All above assumptions is nearly true in the most common ARMv7M implementations
-like cortex-m0 to cortex-m7 and consequently, the best optimizations is not
-necessarily the same as for larger processors.</p>
-<p>In this scenario, a less aggressive optimization perform more efficiently than
-<code>-O3</code>. By example, is desirable that the machine code follows as closely as
-possible, the idea expressed in the source code, and the best way to do this
-in modern version of gcc and clang is the <code>-Og</code> optimization.</p>
-<p>You can check the code result of our startup code using <code>-Og</code> and <code>naked</code>
+<p>All above assumptions are nearly true in the most common ARMv7M implementations
+like cortex-m0 to cortex-m7. Therefore the best optimizations are not
+necessarily the same as those made for bigger processors.</p>
+<p>In this scenario, a less aggressive optimization performs more efficiently than
+<code>-O3</code>. For example, it may be desirable for the machine code to follow as closely as
+possible the idea expressed in the source code, and the best way to do this
+in modern versions of gcc and clang is the <code>-Og</code> optimization.</p>
+<p>You can check the result of compiling our startup code using <code>-Og</code> and <code>naked</code>
 attribute here:</p>
 <iframe width="800px" height="600px" src="https://godbolt.org/e#z:OYLghAFBqd5QCxAYwPYBMCmBRdBLAF1QCcAaPECAM1QDsCBlZAQwBtMQBGABlICsupVs1qhkAUgBMAISnTSAZ0ztkBPHUqZa6AMKpWAVwC2tQVvQAZPLUwA5YwCNMxLrwAOqBYXW09hk4IeXmp0Vjb2Rk4uPIrKmKo%2BDATMxAR%2BxqacsSohtEkpBGF2js6uismp6QFZChWF1sWRpTwAlIqoBsTIHADkmAAeBM60ANTWBCNGzNYQAG6oeOgt4gDMstwAguKbA0PEowa0XsA26GP0IwD66MzJl6yozDfo6MSr6xu7wyOHx6fnE2ut2Y722n0G31%2BeBOmDO4yusOBoJ2EP2PyO0P%2B8MuDgUCmR4L2BwxMLhF0umFx%2BLWYK%2BaKhpIBV0u1kIlxSxGYAE9LrUCgS6cS/rCmZcWbQ2RzuRTtASwQB6ABUIwAIpgqA0RswRmhaLMtGoDSMCFy3JgRjRiDrmLUAZhgM4Rm4CFaiBbDgk6E6XSNFfKwSazVgqCN5osRhBFVQPZcCC05gslnLNmLbi68A4DEMxVBaMwANawlrLTZhs7ETBKAiXBAidDsYgJxYlrYAdg%2BI076OFZImioUXQJXe7mJF8MV6FqyY2w6VIz0bi5IxuyQtxFQRhG683bs5m79YOHA%2BQI1WKtPkgAbEC7g8nk9XkOu5OJmeL9eVyCaZthwB3BB4OwEYvqeKw6O%2BFKfi0p7toew5dhOU4yHIoHnv2g7Ich34zl24itiqYJwZ2c4MJgExutwWqsKw6KsmobB4AAXiKn6%2Bv6P7Prab5SNeVJPp2/6AeaEAgas4E8RSVLQXhHbwZ2iEEHIKFvtw/EwQRmxESMc46GwNF6SMfKpAYbjurQnpHGxWnHqhEHipKxCcjyRmKdhf4AUBEA2WJdl0eyjnSuY0mwRxclQNG5mxi0x5KTI8bLG5uH4VpUwzAlskCR5mAQJwwWyMlmkFRsPRtKwIA9AArD0pCmD03DVag5U6LF0iGR0XTmlIKycNVBDlfVxakPmIAVbwZU9AALNVtX1aQjU9NVCggLwfV1SVpBwLASBoEYbhCWQFAQDte0NiAKRGAAnJIWQaqwexLRADj9dVDjWCkXLlT1pA7UYBoAPK0KwH1raQWBTKI7DPaDeAVgk%2BpLSDAzxFmvRfeMyhQ6wGacsQXJ6Fgn29cQeBGITbQ0PQTBsBwMQCFkwiiCgLVCBmS2QG0qDOj4CMALRGMgbgGGeaCpAMfMrCMfMEAgjiS39wCLXEFmaNoVSmJIvDmEUERRFwF2kEE3h0GrIAawbnhG7Q2slNE%2BtKDkiR1CbZv2/EuT5Kk1tNLb5QFM7vAuV7uucBdbQKO13RcKV5VVTVUPzRsABKACyIzAMgJ4XQAdJIWecBGtB0Jg0EQLghAkBe3WkPOG4nY6XW5fOLW9c9g3DaNQjlVNccg/Ni3LaQq0DdHPSSNN8flS3a2DfqxBeBoE1AA"></iframe>
-<p>Hey! this is more nearly to the hand-writes code but some things are weird:</p>
-<h4 id="reload-constants-in-every-loop">Reload constants in every loop</h4>
-<p>The bit of C code:</p>
+<p>Hey! this looks closer to a hand-written code than before, but some things still seem weird:</p>
+<h4 id="loop-invariant-extraction">Loop invariant extraction</h4>
+<p>This bit of C code:</p>
 <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c">  src = &amp;_data_loadaddr;
   dst = &amp;_data;
   <span style="color:#6ab825;font-weight:bold">while</span> (dst &lt; &amp;_edata) {
@@ -522,21 +522,20 @@ attribute here:</p>
 </span><span style="color:#999;font-style:italic"></span>        <span style="color:#40ffff">str</span>     <span style="color:#40ffff">r1</span>, [<span style="color:#40ffff">r3</span>], <span style="color:#999;font-style:italic">#4
 </span><span style="color:#999;font-style:italic"></span>        <span style="color:#40ffff">b</span>       <span style="color:#40ffff">.L3</span>
 .L7:
-</code></pre></div><p>By default, the <code>-Og</code> optimization not enables loop invariant extraction.</p>
+</code></pre></div><p>By default, the <code>-Og</code> optimization does not enable loop invariant extraction.</p>
 <blockquote>
-<p>For know more:
-Loop invariant extraction is a technique to extract all non-changed data
-outsize of a loop. This perform better loop speed at cost of non perfect
+<p>Loop invariant extraction is a technique that extracts all non-changed data
+outside of a loop. This results in better loop speed at the cost of non perfect
 match of the final C code.</p>
 <p>See: <a href="https://en.wikipedia.org/wiki/Loop-invariant_code_motion">https://en.wikipedia.org/wiki/Loop-invariant_code_motion</a></p>
 </blockquote>
-<p>The not inclusion of loop invariant extraction from <code>-Og</code> is a philosophical
-debate but for this purpose the loop invariant optimization is very desirable
-in any case because maintain the behavior of source code and improve loop
+<p>The exclusion of loop invariant extraction from <code>-Og</code> is a philosophical
+debate, but for our goals loop invariant optimization is very desirable
+in any case, as it maintains the behavior of source code and improves loop
 performance.</p>
-<p>For enable this, you need to use <code>-fmove-loop-invariants</code> flag added to <code>-Og</code>,
-and the complete result can <a href="https://godbolt.org/z/hzYGh8">see here</a></p>
-<p>Concretely, the chunk of code is compiled now like this:</p>
+<p>To enable this loop invariant extraction, you need to add the <code>-fmove-loop-invariants</code> flag
+to <code>-Og</code>. You can see the final result of loop variant extraction <a href="https://godbolt.org/z/hzYGh8">here</a></p>
+<p>Once compiled, the previous code looks like this:</p>
 <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-asm" data-lang="asm">        <span style="color:#447fcf">ldr</span>     <span style="color:#40ffff">r3</span>, <span style="color:#40ffff">.L9</span>   <span style="color:#999;font-style:italic">; dst = &amp;_data;
 </span><span style="color:#999;font-style:italic"></span>        <span style="color:#40ffff">ldr</span>     <span style="color:#40ffff">r2</span>, <span style="color:#40ffff">.L9</span><span style="color:#a61717;background-color:#e3d2d2">+</span><span style="color:#3677a9">4</span> <span style="color:#999;font-style:italic">; src = &amp;_data_loadaddr;
 </span><span style="color:#999;font-style:italic"></span>        <span style="color:#40ffff">ldr</span>     <span style="color:#40ffff">r1</span>, <span style="color:#40ffff">.L9</span><span style="color:#a61717;background-color:#e3d2d2">+</span><span style="color:#3677a9">8</span> <span style="color:#999;font-style:italic">; &amp;_edata
@@ -547,16 +546,16 @@ and the complete result can <a href="https://godbolt.org/z/hzYGh8">see here</a><
 </span><span style="color:#999;font-style:italic"></span>        <span style="color:#40ffff">str</span>     <span style="color:#40ffff">r0</span>, [<span style="color:#40ffff">r3</span>], <span style="color:#999;font-style:italic">#4 ; *dst++ = ...
 </span><span style="color:#999;font-style:italic"></span>        <span style="color:#40ffff">b</span>       <span style="color:#40ffff">.L3</span>
 .L7:
-</code></pre></div><p>Very near to hand-write code. Same analysis can be made for zero fill bss code.</p>
-<h4 id="minor-fixes-with-reorder-code">Minor fixes with reorder code</h4>
-<p>If you examine the last piece of code before main call you can see
+</code></pre></div><p>It looks quite close to hand-written code. Same analysis can be made for zero fill bss code.</p>
+<h4 id="minor-fixes-with-code-rearrangement">Minor fixes with code rearrangement</h4>
+<p>If you examine the last piece of code before main call you will see
 that the compiler can do better:</p>
 <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c">    <span style="color:#999;font-style:italic">/* Call all startup functions */</span>
     src = &amp;__init_array_start;
     <span style="color:#6ab825;font-weight:bold">while</span> (src &lt; &amp;__init_array_end) {
         ((func_t)src++)();
     }
-</code></pre></div><p>Is translate as:</p>
+</code></pre></div><p>Is translated to:</p>
 <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-asm" data-lang="asm">.L8:
         <span style="color:#447fcf">ldr</span>     <span style="color:#40ffff">r3</span>, <span style="color:#40ffff">.L9</span><span style="color:#a61717;background-color:#e3d2d2">+</span><span style="color:#3677a9">20</span>  <span style="color:#999;font-style:italic">; $r3 is src &lt;= &amp;__init_array_start;
 </span><span style="color:#999;font-style:italic"></span>        <span style="color:#40ffff">ldr</span>     <span style="color:#40ffff">r4</span>, <span style="color:#40ffff">.L9</span><span style="color:#a61717;background-color:#e3d2d2">+</span><span style="color:#3677a9">24</span>  <span style="color:#999;font-style:italic">; $r4 &lt;= &amp;__init_array_end
@@ -568,23 +567,23 @@ that the compiler can do better:</p>
 </span><span style="color:#999;font-style:italic"></span>        <span style="color:#40ffff">blx</span>     <span style="color:#40ffff">r3</span>          <span style="color:#999;font-style:italic">; jump to [$r5]
 </span><span style="color:#999;font-style:italic"></span>        <span style="color:#40ffff">mov</span>     <span style="color:#40ffff">r3</span>, <span style="color:#40ffff">r5</span>      <span style="color:#999;font-style:italic">; Restore $r3 with temporary $r5
 </span><span style="color:#999;font-style:italic"></span>        <span style="color:#40ffff">b</span>       <span style="color:#40ffff">.L4</span>
-</code></pre></div><p>The main reason to this behavior is the rule *<strong>as-is</strong>, in
-other word, gcc try to optimize the code maintain exactly the
-C code structure. If you analyze the centene <code>((func_t)ptr++)()</code> you
-can see that the code follow perfectly the code:</p>
+</code></pre></div><p>The main reason of this behavior is the rule *<strong>as-is</strong>. In
+other words, gcc tries to optimize the code while maintaining the
+C code structure. If you analyze the expression <code>((func_t)ptr++)()</code> you
+will see that the machine code generated follows the C code structure:</p>
 <ol>
 <li>Take the value of pointer <code>ptr</code></li>
 <li>Increment <code>ptr</code></li>
-<li>Call the function pointed by the value taken in the step 1</li>
+<li>Call the function pointed by the value taken in step 1</li>
 </ol>
-<p>The behavior is, first increment the pointer, and next call the function,
-other behavior is not the correct way to generate the code (at least in <code>-Og</code>)</p>
-<p>The simplest way to improve generated code is reorder the source in less
+<p>The generated code behavior should be: first increment the pointer, and next call the function.
+Any other behavior is not the correct way to generate code (at least with <code>-Og</code>)</p>
+<p>The simplest way to improve the generated code is to rearrange the source code in a less
 fancy way:</p>
 <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c">    <span style="color:#6ab825;font-weight:bold">for</span> (<span style="color:#6ab825;font-weight:bold">unsigned</span> <span style="color:#6ab825;font-weight:bold">int</span> *src = &amp;__init_array_start; src &lt; &amp;__init_array_end; src++) {
         ((func_t)src)();
     }
-</code></pre></div><p>And the generated code is:</p>
+</code></pre></div><p>Now the generated code is:</p>
 <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-asm" data-lang="asm">        <span style="color:#447fcf">ldr</span>     <span style="color:#40ffff">r4</span>, <span style="color:#40ffff">.L4</span>    <span style="color:#999;font-style:italic">; $r4 &lt;= &amp;__init_array_start
 </span><span style="color:#999;font-style:italic"></span>        <span style="color:#40ffff">ldr</span>     <span style="color:#40ffff">r5</span>, <span style="color:#40ffff">.L4</span><span style="color:#a61717;background-color:#e3d2d2">+</span><span style="color:#3677a9">4</span>  <span style="color:#999;font-style:italic">; $r5 &lt;= &amp;__init_array_end
 </span><span style="color:#999;font-style:italic"></span><span style="color:#40ffff">.L3</span>:                       <span style="color:#999;font-style:italic">; for(...) {
@@ -594,20 +593,20 @@ fancy way:</p>
 </span><span style="color:#999;font-style:italic"></span>        <span style="color:#40ffff">adds</span>    <span style="color:#40ffff">r4</span>, <span style="color:#40ffff">r4</span>, <span style="color:#999;font-style:italic">#4 ;   src++
 </span><span style="color:#999;font-style:italic"></span>        <span style="color:#40ffff">b</span>       <span style="color:#40ffff">.L3</span>        <span style="color:#999;font-style:italic">; }
 </span><span style="color:#999;font-style:italic"></span><span style="color:#40ffff">.L1</span>:
-</code></pre></div><p>As rule of thumb, for is more optimizable than the equivalent
-forms in code because the compiler contains many techniques
-for detect cycles and perform transformations on that&hellip; Help
+</code></pre></div><p>As rule of thumb, the <strong>for</strong> statement is more optimizable than its
+alternatives, as the compiler contains many techniques
+to detect cycles and perform conversions on that&hellip; Help
 the compiler, write in non-fancy/non-flamboyant manner.</p>
 <h4 id="living-with-old-compilers-without--og">Living with old compilers without <code>-Og</code></h4>
-<p>The debug friendly <code>-Og</code> is quite recent, and many old gcc versions
-not include this. The most near option in this case is the optimization
-for size, this optimization, not replace the <code>-Og</code> but perform a good
+<p>The debug friendly <code>-Og</code> is a quite recent addition, and many old gcc versions
+do not include it. The closest option in this case is the optimization
+for size <code>-Os</code>. This optimization does not replace <code>-Og</code>, but it performs a good
 balance between code elimination and code obfuscation.</p>
 <p>You can see the optimization result here:</p>
 <iframe width="100%" height="600px" src="https://godbolt.org/e#z:OYLghAFBqd5QCxAYwPYBMCmBRdBLAF1QCcAaPECAM1QDsCBlZAQwBtMQBGABlICsupVs1qhkAUgBMAISnTSAZ0ztkBPHUqZa6AMKpWAVwC2tQVvQAZPLUwA5YwCNMxEJIBspAA6oFhdbT1DE0FvXzU6Kxt7IycXd0VlTFV/BgJmYgJA41NOBJVw2lT0gki7R2dXDwU0jKzg3Ori0ujYyoBKRVQDYmQOAHJMAA8CZ1oAamsCMaNmawgAN1Q8dDbxAGZZbgBBcW2hkeJxg1pfYBt0CfoxgH10ZjTr1lRmO/R0YnXNrf3RsePT86XKa3e7MT67b7DX7/PBnTAXSY3eGg8F7KGHP4nWGAxHXBwKBSoyEHI5YuEIq7XTD4wkbCE/DEw8lAm7XayEa7pYjMACe10aGSJDNJAPhLOubNoHK5vKp2iJEIA9AAqMYAEUwVGsmDGzDGaFo8y0amNYwIPM8OpoxH1zGqQMwwGcY08BBtRDGVGOyToLrdY2Vioh5stWCoY0WyzGEGVXtoyGuBDaCyWKwV2wl9zdeAcBhGEqgtGYAGt4W1VttIxdiJglARrggROh2MQU8sKzsAOxfMa9zGiilTZUKHpEvv97FixHK9DVdNbccqsZ6Tw8sZ3NKe4ioIxjbe7j3c3eBiHjkfIMbrNWX9wgh5PF4vd5jvuzqZXm9uO9gunbccAdwQPB2GjN9LzWHRPypDdmDaS9u1Pcc%2BxnOcZDkcDr2HUc0LQ38Fz7cROzVCFEN7JcGEwKYPW4XVWFYTF2TUNg8AALzFGCAyDP9X3tD8pC/GkX17QDgJ1CAwPWSD%2BKpGk4MInskN7FCCDkdCP24IT4OI7ZSLGJcdDYejDLGAUCAMTxPW9AoFE43TrWjc8MKgyVpWIbk%2BVMz4TJ6cCpNvFz6xlPlzC889VJkOSEO4xSoDjBMk3PZNVjw8dCO0nZoumWZaAgZKvl0kT2AgThItkIiSPK7Y%2Bg6VgQD6ABWPpSFMPpuCa1A6p0cLpBMroeh1KQ1k4JqCDqtry1IYsQHq3har6AAWJqWra0gOr6JqFBAXhRta6rSDgWAkDQIxPFEsgKAgY7TpbEB0iMABOSRci1VgDk2iAHDGpqHGsdIeTq4bSGOoxjQAeVoVh/t20gsBmUR2C%2BmG8BrZIjU26GhiSPN%2BkByZlER1gc25YgeT0LAAZG4g8CMCmOhoegmDYDgeH4QRhFEFBuqEHNNsgDpUFdfx0YAWiMZBPAMK80AyIZRbWMZRYIBBHAV0GFA2xIfVMCBzDqUxJHu0hzGacoXEN0I/DoPXXHNnxLdoE2YgqQ2lHyFIakyfRshtvIkgKIoMkd1oXY962DcUD2g%2BdjoFD63ouBqurGuaxG1q2AAlABZMZgGQC97oAOkkAvOGjWg6EwOCIFwQgSBvIbSGXHdrudQaSuXbqRq%2BiappmoQ6sWlPobWjattIHbxsTvpJCW1O6q73aJqNYhfA0eagA%3D%3D"></iframe>
-<p>As you see, the compiler yet not need <code>-fmove-loop-invariants</code> because is implicit
+<p>As you see, the compiler does not need <code>-fmove-loop-invariants</code> because it is implicit
 in <code>-Os</code>.</p>
-<p>If you not like this approach, you can take a compiler with <code>-Og</code> and
+<p>If you do not like this approach, you can take a compiler with <code>-Og</code> and
 try to compile an empty program with <code>-fverbose-asm</code> and <code>-S</code>:</p>
 <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash"><span style="color:#40ffff">CC</span>=<span style="color:#ed9d13">&#34;arm-none-eabi-gcc&#34;</span>
 <span style="color:#40ffff">FLAGS</span>=<span style="color:#ed9d13">&#34;-mcpu=cortex-m3 -mthumb -fdata-sections -ffunction-sections -fmove-loop-invariants -Og&#34;</span>
@@ -616,7 +615,7 @@ try to compile an empty program with <code>-fverbose-asm</code> and <code>-S</co
   grep -E <span style="color:#ed9d13">&#39;^\@&#39;</span> |
   grep -E <span style="color:#ed9d13">&#39;options enabled:&#39;</span> -A <span style="color:#3677a9">100000</span> |
   grep -oE <span style="color:#ed9d13">&#39;\-[fm]\S+&#39;</span><span style="color:#6ab825;font-weight:bold">)</span>
-</code></pre></div><p>This list the optimization enables in a compiler in <code>-Og</code> mode. Maybe some
+</code></pre></div><p>This lists the optimization enabled in a compiler in <code>-Og</code> mode. Maybe some
 new optimizations can not be ported to your old compiler but you only need
 to remove the unsupported options according to your gcc version.</p>
 <p>In my compiler <code>9.2.1 20191025</code> the output for this command is:</p>
