@@ -6,10 +6,25 @@
     <description>Recent content on Our Embeddeds</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 05 Sep 2020 12:19:37 -0300</lastBuildDate>
+    <lastBuildDate>Mon, 21 Sep 2020 12:19:37 -0300</lastBuildDate>
     
 	<atom:link href="https://ourembeddeds.github.io/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Armv7m Startup (2) - Linker script</title>
+      <link>https://ourembeddeds.github.io/blog/2020/09/21/arm7m-startup-ldscript/</link>
+      <pubDate>Mon, 21 Sep 2020 12:19:37 -0300</pubDate>
+      
+      <guid>https://ourembeddeds.github.io/blog/2020/09/21/arm7m-startup-ldscript/</guid>
+      <description>&lt;p&gt;In the previous article, you had learned how to write an efficient
+startup code, and play with the options of compiler to produce
+the desired code from C, but it is still necessary to put the code
+in the correct memory positions to produce an executable suitable
+for the cortex-m&lt;/p&gt;
+&lt;p&gt;In the present article, you work with the linker script to join all
+code in a single well formed executable.&lt;/p&gt;</description>
+    </item>
     
     <item>
       <title>Armv7m Startup</title>

@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+  <head>
+  <meta charset="utf-8">
+  <meta name="robots" content="all,follow">
+  <meta name="googlebot" content="index,follow,snippet,archive">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <title>Armv7m Startup (2) - Linker script</title>
+  <meta name="author" content="Martin Ribelotta" />
+  
+  
+  
+  
+  <meta name="keywords" content="embedded, electronics, iot, Cortex-m, Microcontroller, ELF, ARM, Liner, Compiler">
+  
+  
+  <meta name="description" content="ourEmbeddeds main site">
+
+  <meta name="generator" content="Hugo 0.74.3" />
+
+  
+  <link href='//fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,500,700,800' rel='stylesheet' type='text/css'>
+
+  
+  <link rel="stylesheet" href="//use.fontawesome.com/releases/v5.11.2/css/all.css">
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+  
+  <link href="/css/animate.css" rel="stylesheet">
+
+  
+  
+    <link href="/css/style.blue.css" rel="stylesheet" id="theme-stylesheet">
+  
+
+  
+  <link href="/css/custom.css" rel="stylesheet">
+
+  
+  
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  
+
+  
+  <link rel="shortcut icon" href="/img/favicon.ico" type="image/x-icon" />
+  <link rel="apple-touch-icon" href="/img/apple-touch-icon.png" />
+
+  
+  <link href="/css/owl.carousel.css" rel="stylesheet">
+  <link href="/css/owl.theme.css" rel="stylesheet">
+
+  
+  <link rel="alternate" href="https://ourembeddeds.github.io/index.xml" type="application/rss+xml" title="Our Embeddeds">
+
+  
+  
+  
+  
+  
+  
+  
+  <meta property="og:locale" content="en_us">
+  <meta property="og:site_name" content="Our Embeddeds">
+  <meta property="og:title" content="Armv7m Startup (2) - Linker script">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://ourembeddeds.github.io/blog/2020/09/21/arm7m-startup-ldscript/" />
+  <meta property="og:description" content="ourEmbeddeds main site">
+  <meta property="og:image" content="https://ourembeddeds.github.io/img/articles/armv7m-boot/chinece-ancient-kanji.png">
+  <meta property="og:image:type" content="image/png">
+  
+  
+  
+    <meta property="og:image:width" content="409">
+    <meta property="og:image:height" content="396">
+  
+  
+  <meta property="og:updated_time" content="2020-09-21T12:19:37-0300">
+  
+    
+    
+    <meta property="article:section" content="Embedded">
+    
+    
+    <meta property="article:published_time" content="2020-09-21T12:19:37-0300">
+    <meta property="article:modified_time" content="2020-09-21T12:19:37-0300">
+  
+
+  
+  <meta name="twitter:card" content="summary_large_image">
+  
+  <meta name="twitter:title" content="Armv7m Startup (2) - Linker script">
+  
+  <meta name="twitter:image" content="https://ourembeddeds.github.io/img/articles/armv7m-boot/chinece-ancient-kanji.png">
+  
+  <meta name="twitter:description" content="ourEmbeddeds main site">
+  
+
+</head>
+
+
+  <body>
+
+    <div id="all">
+
+        <header class="navbar-affixed-top" data-spy="affix" data-offset-top="62">
+    <div class="navbar navbar-default yamm" role="navigation" id="navbar">    
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand home" href="/">
+                    <img src="/img/ourembeddeds-banner.png" alt="Armv7m Startup (2) - Linker script logo" class="hidden-xs hidden-sm">
+                    <img src="/img/logo-small.png" alt="Armv7m Startup (2) - Linker script logo" class="visible-xs visible-sm">
+                    <span class="sr-only">Armv7m Startup (2) - Linker script - go to homepage</span>
+                </a>
+                <div class="navbar-buttons">
+                    <button type="button" class="navbar-toggle btn-template-main" data-toggle="collapse" data-target="#navigation">
+                      <span class="sr-only">Toggle Navigation</span>
+                        <i class="fas fa-align-justify"></i>
+                    </button>
+                </div>
+            </div>
+            
+
+            <div class="navbar-collapse collapse" id="navigation">
+                <ul class="nav navbar-nav navbar-right">
+                  
+                  
+                  
+                  <li class="dropdown">
+                    
+                    <a href="/">Home</a>
+                    
+                  </li>
+                  
+                  
+                  <li class="dropdown active">
+                    
+                    <a href="/blog/">Blog</a>
+                    
+                  </li>
+                  
+                  
+                  <li class="dropdown">
+                    
+                    <a href="/contact/">Contact</a>
+                    
+                  </li>
+                  
+                </ul>
+            </div>
+            
+
+            <div class="collapse clearfix" id="search">    
+                <form class="navbar-form" role="search">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Search">
+                        <span class="input-group-btn">
+                    <button type="submit" class="btn btn-template-main"><i class="fas fa-search"></i></button>
+                </span>
+                    </div>
+                </form>
+            </div>
+            
+        </div>
+    </div>
+</header>
+
+
+
+
+        <div id="heading-breadcrumbs">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h1>Armv7m Startup (2) - Linker script</h1>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+        <div id="content">
+            <div class="container">
+
+                <div class="row">
+
+                    
+
+                    <div class="col-md-9" id="blog-post">
+
+                        
+                          <p class="text-muted text-uppercase mb-small text-right">
+                            By <a href="#">Martin Ribelotta</a>
+                             | 
+                            September 21, 2020
+                          </p>
+                        
+
+                        <div id="post-content">
+                          <p>In the previous article, you had learned how to write an efficient
+startup code, and play with the options of compiler to produce
+the desired code from C, but it is still necessary to put the code
+in the correct memory positions to produce an executable suitable
+for the cortex-m</p>
+<p>In the present article, you work with the linker script to join all
+code in a single well formed executable.</p>
+<div class="toc">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#the-hex-of-scripts-linker-script">The hex of scripts: Linker script</a>
+      <ul>
+        <li><a href="#a-fast-review">A fast review</a></li>
+        <li><a href="#basic-linker-script">Basic linker script</a></li>
+        <li><a href="#improving-these-script-with-syntax-sugar">Improving these script with syntax sugar</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+</div>
+<h2 id="the-hex-of-scripts-linker-script">The hex of scripts: Linker script</h2>
+<p>As you have read, the startup code need to know some information
+about the memory layout, specifically, the start and end of
+data and bss sections, apart of the start of data initialized
+data in ROM.</p>
+<p>This information is provided by the linker when it combine all
+object files to produce the final binary. But the memory layout
+is very dependent of the platform&hellip; not all devices have the
+flash and RAM in the same space.</p>
+<p>The elegant way chosed by gcc and gnu tools to handle this is
+the linker scripts, a one or more text files describing the
+particularities of memory layout, section placement and other
+information (like symbol need to defined) required to produce
+the final executable.</p>
+<h3 id="a-fast-review">A fast review</h3>
+<p>The gnu toolchain build process is like this:</p>
+<p><img src="/img/articles/armv7m-boot/gnu-build-process.png" alt="gnu build process"></p>
+<ul>
+<li>All <code>*.c</code> files is build individually to an object file <code>*.o</code>. These files
+is a collection of sections containing binary data of diferet types:
+<ul>
+<li>The code of every C file generate <code>.text</code> section</li>
+<li>The read only data generate <code>.rodata</code> section</li>
+<li>The non zero initialized data generate <code>.data</code> section</li>
+<li>The zero initialized data generate <code>.bss</code> section</li>
+<li>The non initialzed data generate <code>COMMON</code> section and C
+standard mandate to initialize in 0 like <code>.bss</code> section.
+By this reason, some compilers only generate <code>.bss</code> section
+joining both sections.</li>
+</ul>
+</li>
+<li>The linker join individual object sections and put joined sections
+in specific address depending of the linker script layout.</li>
+<li>If you not provide linker script, the toolchain provide one by default.
+Normally, this script is not suitable to use in bare metal devices.</li>
+</ul>
+<p><img src="/img/articles/armv7m-boot/c-code-gen.png" alt="c code gen"></p>
+<p>The linker script consist in commands to describe the placement of the
+diferent sections in memory area.</p>
+<h3 id="basic-linker-script">Basic linker script</h3>
+<p>In the next code, you can see a complete functional linker script compatible
+with the startup exposed in last sections:</p>
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#999;font-style:italic">/* Start of section description layout */</span>
+SECTIONS
+{
+  . = <span style="color:#3677a9">0x08000000</span>; <span style="color:#999;font-style:italic">/* The dot is current address counter. */</span>
+
+  <span style="color:#999;font-style:italic">/* If you not specify any, start at 0 */</span>
+  .text : {
+    <span style="color:#999;font-style:italic">/* KEEP ensure that symbols is not discarded if the linker
+</span><span style="color:#999;font-style:italic">       is insturde to remove unised symbols. */</span>
+    KEEP(*(.vector_core*)) <span style="color:#999;font-style:italic">/* Place .vector_core at start of ROM */</span>
+    *(.text)   <span style="color:#999;font-style:italic">/* Place all symbols in &#34;.text&#34; section */</span>
+    *(.text.*)  <span style="color:#999;font-style:italic">/* Place all symbols start with section &#34;.text.&lt;any&gt;&#34; */</span>
+  }
+
+  <span style="color:#999;font-style:italic">/* In many platforms, the linker script put the rodata in text if
+</span><span style="color:#999;font-style:italic">     the corresponding section not exist */</span>
+  .rodata : {
+    . = ALIGN(<span style="color:#3677a9">4</span>); <span style="color:#999;font-style:italic">/* Ensure word aligment of sections */</span>
+    *(.rodata)
+    *(.rodata*)
+    . = ALIGN(<span style="color:#3677a9">4</span>); <span style="color:#999;font-style:italic">/* Ensure word aligment of sections */</span>
+  }
+
+  .init_array : {
+    . = ALIGN(<span style="color:#3677a9">4</span>); <span style="color:#999;font-style:italic">/* Ensure word aligment of sections */</span>
+    __init_array_start = .;
+    <span style="color:#999;font-style:italic">/* SORT function sort the symbols listed in alphabetical order.
+</span><span style="color:#999;font-style:italic">       This is required to meet with the initialization order.
+</span><span style="color:#999;font-style:italic">       All symbols is in the form of .init_array.0000_nameofsymbol
+</span><span style="color:#999;font-style:italic">       when 0000 is replaced by a priority number that can be specified
+</span><span style="color:#999;font-style:italic">       at compile time. */</span>
+    KEEP(*(SORT(.init_array.*)))
+    KEEP(*(.init_array))
+    . = ALIGN(<span style="color:#3677a9">4</span>); <span style="color:#999;font-style:italic">/* Ensure word aligment of sections */</span>
+    __init_array_end = .;
+  }
+
+  _etext = .; <span style="color:#999;font-style:italic">/* You can define symbols with any expression using dot */</span>
+
+  . = <span style="color:#3677a9">0x20000000</span>;
+  <span style="color:#999;font-style:italic">/* AT(expr) is used to specify load address */</span>
+  .data : AT(_etext) {
+    _data = .;
+    *(.data)
+    *(.data*)
+    . = ALIGN(<span style="color:#3677a9">4</span>);
+    _edata = .;
+  }
+
+  <span style="color:#999;font-style:italic">/* The function LOADADDR return the load address of specific section */</span>
+  _data_loadaddr = LOADADDR(.data);
+
+  .bss : {
+    . = ALIGN(<span style="color:#3677a9">4</span>); <span style="color:#999;font-style:italic">/* Ensure word aligment of sections */</span>
+    _bss = .;
+    *(.bss)
+    *(.bss*)
+    *(COMMON)
+    . = ALIGN(<span style="color:#3677a9">4</span>);
+    _ebss = .;
+  }
+
+  <span style="color:#999;font-style:italic">/* You use prefix like K for multiply by 1024 or M for multiply for 1048576 */</span>
+  _stack = <span style="color:#3677a9">0x20000000</span> + <span style="color:#3677a9">20</span>K; <span style="color:#999;font-style:italic">/* Put the stack at end of ram (20K in this exaple) */</span>
+}
+</code></pre></div><p>The only non-evident magic in this script is the <code>AT(_etext)</code> expression. This
+instrude the lenker to put the section in specific load address but for the
+program, this is mapped to current dot address. This is specifically designed
+to place initialize data in ROM and copy this to RAM at startup.</p>
+<p>This linker script supposes that the rom memory start of 0x08000000, the ram
+address start at 0x20000000 and end 8K later (the case for the common bluepill
+processor stm32f103cb)</p>
+<h3 id="improving-these-script-with-syntax-sugar">Improving these script with syntax sugar</h3>
+<p>You can improve these script adding more user friendly constants:</p>
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c">ROM_BASE = <span style="color:#3677a9">0x08000000</span>;
+RAM_BASE = <span style="color:#3677a9">0x20000000</span>;
+RAM_SIZE = <span style="color:#3677a9">20</span>K;
+
+<span style="color:#999;font-style:italic">/* Start of section description layout */</span>
+SECTIONS
+{
+  . = ROM_BASE;
+  
+  ...
+
+  . = RAM_BASE;
+  <span style="color:#999;font-style:italic">/* AT(expr) is used to specify load address */</span>
+  .data : AT(_etext) {
+    _data = .;
+
+  ...
+
+  _stack = RAM_BASE + RAM_SIZE;
+}
+</code></pre></div><p>Or move this to another platform depend file:</p>
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c">INCLUDE(memory.ld)
+
+<span style="color:#999;font-style:italic">/* Start of section description layout */</span>
+SECTIONS
+{
+  . = ROM_BASE;
+  ...
+</code></pre></div><div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#999;font-style:italic">/* Platform dependent memory.ld */</span>
+ROM_BASE = <span style="color:#3677a9">0x08000000</span>;
+RAM_BASE = <span style="color:#3677a9">0x20000000</span>;
+RAM_SIZE = <span style="color:#3677a9">20</span>K;
+</code></pre></div><p>But the realy nice form to put diferent sections in memory areas is
+via <code>MEMORY</code> command. You can replace the content of <code>memory.ld</code> with:</p>
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c">MEMORY {
+  rom rx : ORIGIN <span style="color:#3677a9">0x08000000</span>, LENGTH = <span style="color:#3677a9">64</span>K
+  ram rwx : ORIGIN <span style="color:#3677a9">0x20000000</span>, LENGTH = <span style="color:#3677a9">20</span>K
+}
+</code></pre></div><p>And the new linker script need some changes to use the memory regions
+properly:</p>
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c">INCLUDE memory.ld
+
+SECTIONS
+{
+  .text : {
+    KEEP(*(.vector_core*))
+    *(.text)
+    *(.text.*)
+  } &gt; rom <span style="color:#999;font-style:italic">/* fill rom memory area with .text section */</span>
+
+  .rodata : {
+    . = ALIGN(<span style="color:#3677a9">4</span>);
+    *(.rodata)
+    *(.rodata*)
+    . = ALIGN(<span style="color:#3677a9">4</span>);
+  } &gt; rom <span style="color:#999;font-style:italic">/* the second &gt;rom append to previos block the current */</span>
+
+  .init_array : {
+    . = ALIGN(<span style="color:#3677a9">4</span>);
+    __init_array_start = .;
+    KEEP(*(SORT(.init_array.*)))
+    KEEP(*(.init_array))
+    . = ALIGN(<span style="color:#3677a9">4</span>);
+    __init_array_end = .;
+  } &gt; rom
+
+  .data : {
+    _data = .;
+    *(.data)
+    *(.data*)
+    . = ALIGN(<span style="color:#3677a9">4</span>);
+    _edata = .;
+  } &gt; ram AT&gt;rom <span style="color:#999;font-style:italic">/* AT&gt;section is to append in load memory address mode */</span>
+
+  _data_loadaddr = LOADADDR(.data);
+
+  .bss : {
+    . = ALIGN(<span style="color:#3677a9">4</span>);
+    _bss = .;
+    *(.bss)
+    *(.bss*)
+    *(COMMON)
+    . = ALIGN(<span style="color:#3677a9">4</span>);
+    _ebss = .;
+  } &gt; ram
+
+  <span style="color:#999;font-style:italic">/* ORIGIN(region) return the address of memory region, LENGTH return the length */</span>
+  _stack = ORIGIN(ram) + LENGTH(ram);
+}
+</code></pre></div><p>This trick have some advantages:</p>
+<ul>
+<li>The linker can check automatically when memory section is exhausted and end with error</li>
+<li>You no need to care for maintain the dot pointer in the correct value</li>
+<li>The linker script explain automatically where is your code</li>
+<li>New versions of ld can display in user friendly manner compsumintion for all memory areas</li>
+</ul>
+<p>The last point is ilustrable with these command dump:</p>
+<pre><code>Memory region         Used Size  Region Size  %age Used
+             rom:         220 B        64 KB      0.34%
+             ram:          12 B        20 KB      0.06%
+</code></pre><p>The next step is build all with Makefile scripts and produce the final
+executable really suitable to send it to the ROM memory&hellip;</p>
+                        </div>
+                        
+                        
+
+                    </div>
+                    
+
+                    
+
+                    
+
+                    <div class="col-md-3">
+
+                        
+
+                        
+
+<div class="panel panel-default sidebar-menu">
+
+    <div class="panel-heading">
+      <h3 class="panel-title">Search</h3>
+    </div>
+
+    <div class="panel-body">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" role="search">
+            <div class="input-group">
+                <input type="search" name="q" class="form-control" placeholder="Search">
+                <input type="hidden" name="sitesearch" value="https://ourembeddeds.github.io/">
+                <span class="input-group-btn">
+                    <button type="submit" class="btn btn-template-main"><i class="fas fa-search"></i></button>
+                </span>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+
+
+
+
+<div class="panel panel-default sidebar-menu">
+
+    <div class="panel-heading">
+        <h3 class="panel-title">Categories</h3>
+    </div>
+
+    <div class="panel-body">
+        <ul class="nav nav-pills nav-stacked">
+            
+            
+            <li>
+                <a href="/categories/arm">arm (3)</a>
+            </li>
+            
+            <li>
+                <a href="/categories/embedded">embedded (3)</a>
+            </li>
+            
+            <li>
+                <a href="/categories/institutional">institutional (1)</a>
+            </li>
+            
+            <li>
+                <a href="/categories/microcontrollers">microcontrollers (3)</a>
+            </li>
+            
+        </ul>
+    </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+                        
+
+                    </div>
+                    
+
+                    
+
+                </div>
+                
+
+            </div>
+            
+        </div>
+        
+
+        <footer id="footer">
+    <div class="container">
+
+        
+        <div class="col-md-4 col-sm-6">
+            <h4>About us</h4>
+
+            <p>Embedded developers professional group.</p>
+
+            <hr class="hidden-md hidden-lg hidden-sm">
+
+        </div>
+        
+        
+
+        <div class="col-md-4 col-sm-6">
+
+             
+            <h4>Recent posts</h4>
+
+            <div class="blog-entries">
+                
+                <div class="item same-height-row clearfix">
+                    <div class="image same-height-always">
+                        <a href="https://ourembeddeds.github.io/blog/2020/09/21/arm7m-startup-ldscript/">
+                          
+                            <img src="/img/articles/armv7m-boot/chinece-ancient-kanji.png" class="img-responsive" alt="Armv7m Startup (2) - Linker script">
+                          
+                        </a>
+                    </div>
+                    <div class="name same-height-always">
+                        <h5><a href="https://ourembeddeds.github.io/blog/2020/09/21/arm7m-startup-ldscript/">Armv7m Startup (2) - Linker script</a></h5>
+                    </div>
+                </div>
+                
+                <div class="item same-height-row clearfix">
+                    <div class="image same-height-always">
+                        <a href="https://ourembeddeds.github.io/blog/2020/09/05/armv7m-startup/">
+                          
+                            <img src="/img/articles/armv7m-boot/baron-bootstrapping.jpg" class="img-responsive" alt="Armv7m Startup">
+                          
+                        </a>
+                    </div>
+                    <div class="name same-height-always">
+                        <h5><a href="https://ourembeddeds.github.io/blog/2020/09/05/armv7m-startup/">Armv7m Startup</a></h5>
+                    </div>
+                </div>
+                
+                <div class="item same-height-row clearfix">
+                    <div class="image same-height-always">
+                        <a href="https://ourembeddeds.github.io/blog/2020/08/16/elf-loader/">
+                          
+                            <img src="/img/Tomtebobarnen.jpg" class="img-responsive" alt="Elf Loader">
+                          
+                        </a>
+                    </div>
+                    <div class="name same-height-always">
+                        <h5><a href="https://ourembeddeds.github.io/blog/2020/08/16/elf-loader/">Elf Loader</a></h5>
+                    </div>
+                </div>
+                
+            </div>
+
+            <hr class="hidden-md hidden-lg">
+             
+
+        </div>
+        
+
+        
+        <div class="col-md-4 col-sm-6">
+
+          <h4>Contact</h4>
+
+            <p class="text-uppercase"><strong>Bariloche</strong>
+        <br>Vte O'Connor 647
+        <br>Floor 5, Box 2
+        <br>Rio Negro
+        <br>
+        <strong>Argentina</strong>
+      </p>
+      
+
+            <a href="/contact" class="btn btn-small btn-template-main">Go to contact page</a>
+
+            <hr class="hidden-md hidden-lg hidden-sm">
+
+        </div>
+        
+        
+
+    </div>
+    
+</footer>
+
+
+
+
+
+
+
+<div id="copyright">
+    <div class="container">
+        <div class="col-md-12">
+            
+            <p class="pull-left">Copyright (c) 2020, OurEmbeddeds; all rights reserved.</p>
+            
+            <p class="pull-right">
+              Template by <a href="https://bootstrapious.com/p/universal-business-e-commerce-template">Bootstrapious</a>.
+              
+
+              Ported to Hugo by <a href="https://github.com/devcows/hugo-universal-theme">DevCows</a>.
+            </p>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+    </div>
+    
+
+    
+<script type="application/javascript">
+var doNotTrack = false;
+if (!doNotTrack) {
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-177396015-1', 'auto');
+	
+	ga('send', 'pageview');
+}
+</script>
+
+<script src="//code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/waypoints/4.0.1/jquery.waypoints.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/Counter-Up/1.0/jquery.counterup.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery-parallax/1.1.3/jquery-parallax.js"></script>
+
+<script src="/js/front.js"></script>
+
+
+<script src="/js/owl.carousel.min.js"></script>
+
+
+
+  </body>
+</html>
