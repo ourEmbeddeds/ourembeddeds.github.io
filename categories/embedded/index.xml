@@ -6,22 +6,10 @@
     <description>Recent content in Embedded on Our Embeddeds</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 30 Sep 2020 22:00:00 -0300</lastBuildDate>
+    <lastBuildDate>Mon, 21 Sep 2020 12:19:37 -0300</lastBuildDate>
     
 	<atom:link href="https://ourembeddeds.github.io/categories/embedded/index.xml" rel="self" type="application/rss+xml" />
     
-    
-    <item>
-      <title>Armv7m Startup (3) - Make and build process</title>
-      <link>https://ourembeddeds.github.io/blog/2020/09/30/armv7m-startup-make/</link>
-      <pubDate>Wed, 30 Sep 2020 22:00:00 -0300</pubDate>
-      
-      <guid>https://ourembeddeds.github.io/blog/2020/09/30/armv7m-startup-make/</guid>
-      <description>&lt;p&gt;In the previous articles, you learned how to write initialization code and put
-it in the correct place in the processor memory.
-Now you will learn how to generate the proper binary for send to ROM and will
-see various tricks to simplify your live with gnu make and Makefile.&lt;/p&gt;</description>
-    </item>
     
     <item>
       <title>Armv7m Startup (2) - Linker script</title>
