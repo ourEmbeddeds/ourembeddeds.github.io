@@ -798,14 +798,13 @@ openocd name (this enable to change the openocd executable from command line)
 like this:</p>
 <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Makefile" data-lang="Makefile"><span style="color:#40ffff">OOCD</span>=openocd
 
-<span style="color:#40ffff">PROGRAM_SCRIPTS</span>:=interface/stlink target/stm32f1x
-<span style="color:#40ffff">PROGRAM_COMMANDS</span>:=<span style="color:#ed9d13">&#34;init&#34;</span>
-<span style="color:#40ffff">PROGRAM_COMMANDS</span>+=<span style="color:#ed9d13">&#34;reset halt&#34;</span>
-<span style="color:#40ffff">PROGRAM_COMMANDS</span>+=<span style="color:#ed9d13">&#34;program </span><span style="color:#6ab825;font-weight:bold">$(</span>TARGET_ELF<span style="color:#6ab825;font-weight:bold">)</span><span style="color:#ed9d13"> verify reset exit&#34;</span>
+<span style="color:#40ffff">OOCD_FLAGS</span>:=-f interface/stlink.cfg -f target/stm32f1x.cfg
+<span style="color:#40ffff">OOCD_CMDS</span>:=-c <span style="color:#ed9d13">&#34;init&#34;</span>
+<span style="color:#40ffff">OOCD_CMDS</span>+=-c <span style="color:#ed9d13">&#34;reset halt&#34;</span>
+<span style="color:#40ffff">OOCD_CMDS</span>+=-c <span style="color:#ed9d13">&#34;program </span><span style="color:#6ab825;font-weight:bold">$(</span>TARGET_ELF<span style="color:#6ab825;font-weight:bold">)</span><span style="color:#ed9d13"> verify reset exit&#34;</span>
 
 <span style="color:#447fcf">program</span>: <span style="color:#6ab825;font-weight:bold">$(</span><span style="color:#40ffff">TARGET_ELF</span><span style="color:#6ab825;font-weight:bold">)</span>
-	<span style="color:#6ab825;font-weight:bold">$(</span>Q<span style="color:#6ab825;font-weight:bold">)$(</span>OOCD<span style="color:#6ab825;font-weight:bold">)</span> <span style="color:#6ab825;font-weight:bold">$(</span>addsuffix .cfg, <span style="color:#6ab825;font-weight:bold">$(</span>addprefix -f, <span style="color:#6ab825;font-weight:bold">$(</span>PROGRAM_SCRIPTS<span style="color:#6ab825;font-weight:bold">)))</span> <span style="color:#ed9d13">\
-</span><span style="color:#ed9d13"></span>				<span style="color:#6ab825;font-weight:bold">$(</span>addprefix -c <span style="color:#6ab825;font-weight:bold">$(</span>PROGRAM_COMMANDS<span style="color:#6ab825;font-weight:bold">))</span>
+	<span style="color:#6ab825;font-weight:bold">$(</span>Q<span style="color:#6ab825;font-weight:bold">)$(</span>OOCD<span style="color:#6ab825;font-weight:bold">)</span> <span style="color:#6ab825;font-weight:bold">$(</span>OOCD_FLAGS<span style="color:#6ab825;font-weight:bold">)</span> <span style="color:#6ab825;font-weight:bold">$(</span>OOCD_CMDS<span style="color:#6ab825;font-weight:bold">)</span>
 </code></pre></div><p>But is only suggar for more confortable Makefile functionalities <code>¯\_(ツ)_/¯</code>,
 the real thing to do next is put a real work in our main program!!!</p>
 <p>See you next week!</p>
