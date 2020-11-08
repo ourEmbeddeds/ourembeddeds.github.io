@@ -18,7 +18,7 @@
   
   <meta name="description" content="ourEmbeddeds main site">
 
-  <meta name="generator" content="Hugo 0.74.3" />
+  <meta name="generator" content="Hugo 0.78.1" />
 
   
   <link href='//fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,500,700,800' rel='stylesheet' type='text/css'>
@@ -201,13 +201,13 @@
                         
 
                         <div id="post-content">
-                          <p>In the previous article, you had learned how to write an efficient
-startup code, and play with the options of compiler to produce
+                          <p>In the previous article, we learned how to write an efficient
+startup code and play with the options of the compiler to produce
 the desired code from C, but it is still necessary to put the code
-in the correct memory positions to produce an executable suitable
-for the cortex-m</p>
-<p>In the present article, you work with the linker script to join all
-code in a single well formed executable.</p>
+in the correct memory locations to produce an executable suitable
+for the cortex-m.</p>
+<p>In the present article, we will work with the linker script to join all
+our code into a single well structured executable.</p>
 <div class="toc">
     <nav id="TableOfContents">
   <ul>
@@ -215,88 +215,87 @@ code in a single well formed executable.</p>
       <ul>
         <li><a href="#a-fast-review">A fast review</a></li>
         <li><a href="#basic-linker-script">Basic linker script</a></li>
-        <li><a href="#improving-these-script-with-syntax-sugar">Improving these script with syntax sugar</a></li>
+        <li><a href="#improving-the-scripts-with-syntax-sugar">Improving the scripts with syntax sugar</a></li>
       </ul>
     </li>
   </ul>
 </nav>
 </div>
 <h2 id="the-hex-of-scripts-linker-script">The hex of scripts: Linker script</h2>
-<p>As you have read, the startup code need to know some information
-about the memory layout, specifically, the start and end of
-data and bss sections, apart of the start of data initialized
+<p>As we have previously read, the startup code needs to know some information
+about the memory layout, specifically the start and end of
+data and bss sections, and the start of initialized
 data in ROM.</p>
-<p>This information is provided by the linker when it combine all
+<p>This information is provided by the linker when it combines all
 object files to produce the final binary. But the memory layout
-is very dependent of the platform&hellip; not all devices have the
-flash and RAM in the same space.</p>
-<p>The elegant way chosed by gcc and gnu tools to handle this is
-the linker scripts, a one or more text files describing the
+is very dependent of the platform, as not all devices have the
+flash and RAM in the same locations.</p>
+<p>The elegant way chosen by gcc and gnu tools to handle this is
+through linker scripts; one or more text files describing the
 particularities of memory layout, section placement and other
-information (like symbol need to defined) required to produce
-the final executable.</p>
+information required to produce the final executable.</p>
 <h3 id="a-fast-review">A fast review</h3>
-<p>The gnu toolchain build process is like this:</p>
+<p>The gnu toolchain build process is as follows:</p>
 <p><img src="/img/articles/armv7m-boot/gnu-build-process.png" alt="gnu build process"></p>
 <ul>
-<li>All <code>*.c</code> files is build individually to an object file <code>*.o</code>. These files
-is a collection of sections containing binary data of diferet types:
+<li>All <code>*.c</code> files are built individually to an object file <code>*.o</code>. These files
+are a collection of sections containing binary data of diferent types:
 <ul>
-<li>The code of every C file generate <code>.text</code> section</li>
-<li>The read only data generate <code>.rodata</code> section</li>
-<li>The non zero initialized data generate <code>.data</code> section</li>
-<li>The zero initialized data generate <code>.bss</code> section</li>
-<li>The non initialzed data generate <code>COMMON</code> section and C
-standard mandate to initialize in 0 like <code>.bss</code> section.
-By this reason, some compilers only generate <code>.bss</code> section
-joining both sections.</li>
+<li>The code of every C file generates the  <code>.text</code> section</li>
+<li>The read only data generates the <code>.rodata</code> section</li>
+<li>The non zero initialized data generates the <code>.data</code> section</li>
+<li>The zero initialized data generates the <code>.bss</code> section</li>
+<li>The non initialzed data generates the <code>COMMON</code> section. C
+standard mandates for it to be initialized as 0 like <code>.bss</code> section.
+Because of this, some compilers only generate a <code>.bss</code> section
+joining both <code>.bss</code> and <code>COMMON</code> sections.</li>
 </ul>
 </li>
-<li>The linker join individual object sections and put joined sections
-in specific address depending of the linker script layout.</li>
-<li>If you not provide linker script, the toolchain provide one by default.
+<li>The linker joins individual objects sections and puts joined sections
+in specific addresses depending on the linker script layout.</li>
+<li>If we do not provide a linker script, the toolchain provides one by default.
 Normally, this script is not suitable to use in bare metal devices.</li>
 </ul>
 <p><img src="/img/articles/armv7m-boot/c-code-gen.png" alt="c code gen"></p>
-<p>The linker script consist in commands to describe the placement of the
+<p>The linker script consists of commands to describe the placement of the
 diferent sections in memory area.</p>
 <h3 id="basic-linker-script">Basic linker script</h3>
-<p>In the next code, you can see a complete functional linker script compatible
-with the startup exposed in last sections:</p>
+<p>In the next code, we can see a complete functional linker script compatible
+with the startup exposed in the last sections:</p>
 <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#999;font-style:italic">/* Start of section description layout */</span>
 SECTIONS
 {
   . = <span style="color:#3677a9">0x08000000</span>; <span style="color:#999;font-style:italic">/* The dot is current address counter. */</span>
 
-  <span style="color:#999;font-style:italic">/* If you not specify any, start at 0 */</span>
+  <span style="color:#999;font-style:italic">/* If you do not specify any, start at 0 */</span>
   .text : {
-    <span style="color:#999;font-style:italic">/* KEEP ensure that symbols is not discarded if the linker
-</span><span style="color:#999;font-style:italic">       is insturde to remove unised symbols. */</span>
+    <span style="color:#999;font-style:italic">/* KEEP keyword is used to  ensure that symbols are not discarded if the 
+</span><span style="color:#999;font-style:italic">       linker is instructed to remove unused symbols. */</span>
     KEEP(*(.vector_core*)) <span style="color:#999;font-style:italic">/* Place .vector_core at start of ROM */</span>
     *(.text)   <span style="color:#999;font-style:italic">/* Place all symbols in &#34;.text&#34; section */</span>
-    *(.text.*)  <span style="color:#999;font-style:italic">/* Place all symbols start with section &#34;.text.&lt;any&gt;&#34; */</span>
+    *(.text.*)  <span style="color:#999;font-style:italic">/* Place all symbols that start with section &#34;.text.&lt;any&gt;&#34; */</span>
   }
 
-  <span style="color:#999;font-style:italic">/* In many platforms, the linker script put the rodata in text if
-</span><span style="color:#999;font-style:italic">     the corresponding section not exist */</span>
+  <span style="color:#999;font-style:italic">/* In many platforms, the linker script puts the .rodata in .text if
+</span><span style="color:#999;font-style:italic">     the corresponding section does not exist */</span>
   .rodata : {
-    . = ALIGN(<span style="color:#3677a9">4</span>); <span style="color:#999;font-style:italic">/* Ensure word aligment of sections */</span>
+    . = ALIGN(<span style="color:#3677a9">4</span>); <span style="color:#999;font-style:italic">/* Ensure word alignment of sections */</span>
     *(.rodata)
     *(.rodata*)
-    . = ALIGN(<span style="color:#3677a9">4</span>); <span style="color:#999;font-style:italic">/* Ensure word aligment of sections */</span>
+    . = ALIGN(<span style="color:#3677a9">4</span>); <span style="color:#999;font-style:italic">/* Ensure word alignment of sections */</span>
   }
 
   .init_array : {
-    . = ALIGN(<span style="color:#3677a9">4</span>); <span style="color:#999;font-style:italic">/* Ensure word aligment of sections */</span>
+    . = ALIGN(<span style="color:#3677a9">4</span>); <span style="color:#999;font-style:italic">/* Ensure word alignment of sections */</span>
     __init_array_start = .;
-    <span style="color:#999;font-style:italic">/* SORT function sort the symbols listed in alphabetical order.
+    <span style="color:#999;font-style:italic">/* SORT function sorts the symbols listed in alphabetical order.
 </span><span style="color:#999;font-style:italic">       This is required to meet with the initialization order.
-</span><span style="color:#999;font-style:italic">       All symbols is in the form of .init_array.0000_nameofsymbol
+</span><span style="color:#999;font-style:italic">       All symbols are in the form of .init_array.0000_nameofsymbol
 </span><span style="color:#999;font-style:italic">       when 0000 is replaced by a priority number that can be specified
 </span><span style="color:#999;font-style:italic">       at compile time. */</span>
     KEEP(*(SORT(.init_array.*)))
     KEEP(*(.init_array))
-    . = ALIGN(<span style="color:#3677a9">4</span>); <span style="color:#999;font-style:italic">/* Ensure word aligment of sections */</span>
+    . = ALIGN(<span style="color:#3677a9">4</span>); <span style="color:#999;font-style:italic">/* Ensure word alignment of sections */</span>
     __init_array_end = .;
   }
 
@@ -312,11 +311,11 @@ SECTIONS
     _edata = .;
   }
 
-  <span style="color:#999;font-style:italic">/* The function LOADADDR return the load address of specific section */</span>
+  <span style="color:#999;font-style:italic">/* The function LOADADDR returns the load address of a specific section */</span>
   _data_loadaddr = LOADADDR(.data);
 
   .bss : {
-    . = ALIGN(<span style="color:#3677a9">4</span>); <span style="color:#999;font-style:italic">/* Ensure word aligment of sections */</span>
+    . = ALIGN(<span style="color:#3677a9">4</span>); <span style="color:#999;font-style:italic">/* Ensure word alignment of sections */</span>
     _bss = .;
     *(.bss)
     *(.bss*)
@@ -325,18 +324,18 @@ SECTIONS
     _ebss = .;
   }
 
-  <span style="color:#999;font-style:italic">/* You use prefix like K for multiply by 1024 or M for multiply for 1048576 */</span>
-  _stack = <span style="color:#3677a9">0x20000000</span> + <span style="color:#3677a9">20</span>K; <span style="color:#999;font-style:italic">/* Put the stack at end of ram (20K in this exaple) */</span>
+  <span style="color:#999;font-style:italic">/* You use prefixes like K to multiply by 1024 or M to multiply for 1048576 */</span>
+  _stack = <span style="color:#3677a9">0x20000000</span> + <span style="color:#3677a9">20</span>K; <span style="color:#999;font-style:italic">/* Put the stack at end of ram (20K in this example) */</span>
 }
 </code></pre></div><p>The only non-evident magic in this script is the <code>AT(_etext)</code> expression. This
-instrude the lenker to put the section in specific load address but for the
-program, this is mapped to current dot address. This is specifically designed
-to place initialize data in ROM and copy this to RAM at startup.</p>
-<p>This linker script supposes that the rom memory start of 0x08000000, the ram
-address start at 0x20000000 and end 8K later (the case for the common bluepill
+instructs the linker to put the section in a specific load address, but for the
+program this is mapped to current dot address. This is specifically designed
+to place initialized data in ROM and copy this data to RAM at startup.</p>
+<p>This linker script supposes that the rom memory starts at 0x08000000 and the ram
+address starts at 0x20000000 and ends 8K later (the most common case being the bluepill
 processor stm32f103cb)</p>
-<h3 id="improving-these-script-with-syntax-sugar">Improving these script with syntax sugar</h3>
-<p>You can improve these script adding more user friendly constants:</p>
+<h3 id="improving-the-scripts-with-syntax-sugar">Improving the scripts with syntax sugar</h3>
+<p>We can improve the script adding more user friendly constants:</p>
 <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c">ROM_BASE = <span style="color:#3677a9">0x08000000</span>;
 RAM_BASE = <span style="color:#3677a9">0x20000000</span>;
 RAM_SIZE = <span style="color:#3677a9">20</span>K;
@@ -369,13 +368,13 @@ SECTIONS
 ROM_BASE = <span style="color:#3677a9">0x08000000</span>;
 RAM_BASE = <span style="color:#3677a9">0x20000000</span>;
 RAM_SIZE = <span style="color:#3677a9">20</span>K;
-</code></pre></div><p>But the realy nice form to put diferent sections in memory areas is
-via <code>MEMORY</code> command. You can replace the content of <code>memory.ld</code> with:</p>
+</code></pre></div><p>But the really nice way to put diferent sections in memory areas is
+via the <code>MEMORY</code> command. You can replace the content of <code>memory.ld</code> with:</p>
 <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c">MEMORY {
   rom rx : ORIGIN <span style="color:#3677a9">0x08000000</span>, LENGTH = <span style="color:#3677a9">64</span>K
   ram rwx : ORIGIN <span style="color:#3677a9">0x20000000</span>, LENGTH = <span style="color:#3677a9">20</span>K
 }
-</code></pre></div><p>And the new linker script need some changes to use the memory regions
+</code></pre></div><p>Now the linker script needs some changes to use the memory regions
 properly:</p>
 <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c">INCLUDE memory.ld
 
@@ -392,7 +391,7 @@ SECTIONS
     *(.rodata)
     *(.rodata*)
     . = ALIGN(<span style="color:#3677a9">4</span>);
-  } &gt; rom <span style="color:#999;font-style:italic">/* the second &gt;rom append to previos block the current */</span>
+  } &gt; rom <span style="color:#999;font-style:italic">/* the second &gt;rom appends the current block to previous block */</span>
 
   .init_array : {
     . = ALIGN(<span style="color:#3677a9">4</span>);
@@ -423,22 +422,22 @@ SECTIONS
     _ebss = .;
   } &gt; ram
 
-  <span style="color:#999;font-style:italic">/* ORIGIN(region) return the address of memory region, LENGTH return the length */</span>
+  <span style="color:#999;font-style:italic">/* ORIGIN(region) returns the address of memory region, LENGTH returns the length */</span>
   _stack = ORIGIN(ram) + LENGTH(ram);
 }
-</code></pre></div><p>This trick have some advantages:</p>
+</code></pre></div><p>This trick has some advantages:</p>
 <ul>
-<li>The linker can check automatically when memory section is exhausted and end with error</li>
-<li>You no need to care for maintain the dot pointer in the correct value</li>
+<li>The linker can check automatically when a memory section is exhausted and end with an error</li>
+<li>We don&rsquo;t need to maintain the dot pointer at the correct value</li>
 <li>The linker script explain automatically where is your code</li>
-<li>New versions of ld can display in user friendly manner compsumintion for all memory areas</li>
+<li>New versions of ld can display memory consumption for all memory areas in a user friendly manner</li>
 </ul>
-<p>The last point is ilustrable with these command dump:</p>
+<p>The last point can be illustrated with the followin command dump:</p>
 <pre><code>Memory region         Used Size  Region Size  %age Used
              rom:         220 B        64 KB      0.34%
              ram:          12 B        20 KB      0.06%
-</code></pre><p>The next step is build all with Makefile scripts and produce the final
-executable really suitable to send it to the ROM memory&hellip;</p>
+</code></pre><p>The next step is to build all with a Makefile script and produce the final
+executable, suitable to be sent to the ROM memory&hellip;</p>
                         </div>
                         
                         
@@ -492,11 +491,11 @@ executable really suitable to send it to the ROM memory&hellip;</p>
             
             
             <li>
-                <a href="/categories/arm">arm (4)</a>
+                <a href="/categories/arm">arm (3)</a>
             </li>
             
             <li>
-                <a href="/categories/embedded">embedded (4)</a>
+                <a href="/categories/embedded">embedded (3)</a>
             </li>
             
             <li>
@@ -504,11 +503,7 @@ executable really suitable to send it to the ROM memory&hellip;</p>
             </li>
             
             <li>
-                <a href="/categories/make">make (1)</a>
-            </li>
-            
-            <li>
-                <a href="/categories/microcontrollers">microcontrollers (4)</a>
+                <a href="/categories/microcontrollers">microcontrollers (3)</a>
             </li>
             
         </ul>
@@ -567,19 +562,6 @@ executable really suitable to send it to the ROM memory&hellip;</p>
                 
                 <div class="item same-height-row clearfix">
                     <div class="image same-height-always">
-                        <a href="https://ourembeddeds.github.io/blog/2020/09/30/armv7m-startup-make/">
-                          
-                            <img src="/img/articles/armv7m-boot-3/self-made-man.png" class="img-responsive" alt="Armv7m Startup (3) - Make and build process">
-                          
-                        </a>
-                    </div>
-                    <div class="name same-height-always">
-                        <h5><a href="https://ourembeddeds.github.io/blog/2020/09/30/armv7m-startup-make/">Armv7m Startup (3) - Make and build process</a></h5>
-                    </div>
-                </div>
-                
-                <div class="item same-height-row clearfix">
-                    <div class="image same-height-always">
                         <a href="https://ourembeddeds.github.io/blog/2020/09/21/arm7m-startup-ldscript/">
                           
                             <img src="/img/articles/armv7m-boot/chinece-ancient-kanji.png" class="img-responsive" alt="Armv7m Startup (2) - Linker script">
@@ -601,6 +583,19 @@ executable really suitable to send it to the ROM memory&hellip;</p>
                     </div>
                     <div class="name same-height-always">
                         <h5><a href="https://ourembeddeds.github.io/blog/2020/09/05/armv7m-startup/">Armv7m Startup</a></h5>
+                    </div>
+                </div>
+                
+                <div class="item same-height-row clearfix">
+                    <div class="image same-height-always">
+                        <a href="https://ourembeddeds.github.io/blog/2020/08/16/elf-loader/">
+                          
+                            <img src="/img/Tomtebobarnen.jpg" class="img-responsive" alt="Elf Loader">
+                          
+                        </a>
+                    </div>
+                    <div class="name same-height-always">
+                        <h5><a href="https://ourembeddeds.github.io/blog/2020/08/16/elf-loader/">Elf Loader</a></h5>
                     </div>
                 </div>
                 
