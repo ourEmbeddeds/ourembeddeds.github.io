@@ -224,6 +224,7 @@ IO (console, filesystem, shell execution) remotely from our embedded device.</p>
         <li><a href="#using-previous-make-script">Using previous make script</a></li>
         <li><a href="#some-utilities-for-debugging">Some utilities for debugging</a></li>
         <li><a href="#some-security-warns">Some security warns</a></li>
+        <li><a href="#last-idea-hardware-in-the-loop-verification">Last idea, hardware in the loop verification</a></li>
       </ul>
     </li>
   </ul>
@@ -618,6 +619,25 @@ If you wanna put <code>/tmp/</code> is a secure place to do, and more scure is u
 </ul>
 <p>All of these errors may be avoided executing openocd with correct permissions
 but this is not possible in all operating systems.</p>
+<h3 id="last-idea-hardware-in-the-loop-verification">Last idea, hardware in the loop verification</h3>
+<p>Embedded design and testing is hard, varios order of magnitude more hard than
+an entire PC based software, because the behavior is dependent on many external
+conditions and generate varios external observable events.</p>
+<p>During the development process, you may require to prove your engine with the
+real board connected to the system generating specific events in the input and
+sensing specific behavior in the output.</p>
+<p>Normally, this process invole some technical equipment and one or more humans
+due to run the procedure manually. This is expensive and error prone, in vast
+majority of cases via human errors.</p>
+<p>The ideal way of co-verification of software-firmware-hardware is an automated
+test with an special mount using debugger PC, signal generators, data
+adquisition systems and some scripts to automatize the process.</p>
+<p>In this scenario, the semihosting can help too much controlling entire process
+via the firmware in the device.</p>
+<p><img src="/img/articles/arm7m-semihosting/hw-in-the-loop.png" alt="hardware in the loop"></p>
+<p>This technique is quite amplious and require own article, but the idea is very
+powerfull and enables continuous integration for complex hardware.</p>
+<p>We read in the following article</p>
                         </div>
                         
                         
