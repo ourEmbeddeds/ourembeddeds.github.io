@@ -6,10 +6,21 @@
     <description>Recent content in Make on Our Embeddeds</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 30 Sep 2020 22:00:00 -0300</lastBuildDate>
+    <lastBuildDate>Mon, 02 Nov 2020 13:25:55 -0300</lastBuildDate>
     
 	<atom:link href="https://ourembeddeds.github.io/categories/make/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Armv7m Startup (3) - Remote control via semihosting</title>
+      <link>https://ourembeddeds.github.io/blog/2020/11/02/armv7m-semihosting/</link>
+      <pubDate>Mon, 02 Nov 2020 13:25:55 -0300</pubDate>
+      
+      <guid>https://ourembeddeds.github.io/blog/2020/11/02/armv7m-semihosting/</guid>
+      <description>&lt;p&gt;In this article, we communicate our embedded cortex-m with the PC during debug
+session using a trick called semihosting. This trick provides access to host
+IO (console, filesystem, shell execution) remotely from our embedded device.&lt;/p&gt;</description>
+    </item>
     
     <item>
       <title>Armv7m Startup (3) - Make and build process</title>

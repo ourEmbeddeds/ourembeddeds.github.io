@@ -4,36 +4,56 @@
   
   <url>
     <loc>https://ourembeddeds.github.io/categories/arm/</loc>
-    <lastmod>2020-09-21T12:19:37-03:00</lastmod>
+    <lastmod>2020-11-02T13:25:55-03:00</lastmod>
   </url>
   
   <url>
-    <loc>https://ourembeddeds.github.io/blog/2020/09/21/arm7m-startup-ldscript/</loc>
-    <lastmod>2020-09-21T12:19:37-03:00</lastmod>
+    <loc>https://ourembeddeds.github.io/blog/2020/11/02/armv7m-semihosting/</loc>
+    <lastmod>2020-11-02T13:25:55-03:00</lastmod>
   </url>
   
   <url>
     <loc>https://ourembeddeds.github.io/blog/</loc>
-    <lastmod>2020-09-21T12:19:37-03:00</lastmod>
+    <lastmod>2020-11-02T13:25:55-03:00</lastmod>
   </url>
   
   <url>
     <loc>https://ourembeddeds.github.io/categories/</loc>
-    <lastmod>2020-09-21T12:19:37-03:00</lastmod>
+    <lastmod>2020-11-02T13:25:55-03:00</lastmod>
   </url>
   
   <url>
     <loc>https://ourembeddeds.github.io/categories/embedded/</loc>
-    <lastmod>2020-09-21T12:19:37-03:00</lastmod>
+    <lastmod>2020-11-02T13:25:55-03:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://ourembeddeds.github.io/categories/make/</loc>
+    <lastmod>2020-11-02T13:25:55-03:00</lastmod>
   </url>
   
   <url>
     <loc>https://ourembeddeds.github.io/categories/microcontrollers/</loc>
-    <lastmod>2020-09-21T12:19:37-03:00</lastmod>
+    <lastmod>2020-11-02T13:25:55-03:00</lastmod>
   </url>
   
   <url>
     <loc>https://ourembeddeds.github.io/</loc>
+    <lastmod>2020-11-02T13:25:55-03:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://ourembeddeds.github.io/categories/semihosting/</loc>
+    <lastmod>2020-11-02T13:25:55-03:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://ourembeddeds.github.io/blog/2020/09/30/armv7m-startup-make/</loc>
+    <lastmod>2020-09-30T22:00:00-03:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://ourembeddeds.github.io/blog/2020/09/21/arm7m-startup-ldscript/</loc>
     <lastmod>2020-09-21T12:19:37-03:00</lastmod>
   </url>
   

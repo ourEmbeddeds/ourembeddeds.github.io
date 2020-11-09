@@ -6,11 +6,15 @@
     <description>Recent content in Categories on Our Embeddeds</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 21 Sep 2020 12:19:37 -0300</lastBuildDate><atom:link href="https://ourembeddeds.github.io/categories/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 02 Nov 2020 13:25:55 -0300</lastBuildDate>
+    
+	<atom:link href="https://ourembeddeds.github.io/categories/index.xml" rel="self" type="application/rss+xml" />
+    
+    
     <item>
       <title>ARM</title>
       <link>https://ourembeddeds.github.io/categories/arm/</link>
-      <pubDate>Mon, 21 Sep 2020 12:19:37 -0300</pubDate>
+      <pubDate>Mon, 02 Nov 2020 13:25:55 -0300</pubDate>
       
       <guid>https://ourembeddeds.github.io/categories/arm/</guid>
       <description></description>
@@ -19,18 +23,36 @@
     <item>
       <title>Embedded</title>
       <link>https://ourembeddeds.github.io/categories/embedded/</link>
-      <pubDate>Mon, 21 Sep 2020 12:19:37 -0300</pubDate>
+      <pubDate>Mon, 02 Nov 2020 13:25:55 -0300</pubDate>
       
       <guid>https://ourembeddeds.github.io/categories/embedded/</guid>
       <description></description>
     </item>
     
     <item>
+      <title>Make</title>
+      <link>https://ourembeddeds.github.io/categories/make/</link>
+      <pubDate>Mon, 02 Nov 2020 13:25:55 -0300</pubDate>
+      
+      <guid>https://ourembeddeds.github.io/categories/make/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>Microcontrollers</title>
       <link>https://ourembeddeds.github.io/categories/microcontrollers/</link>
-      <pubDate>Mon, 21 Sep 2020 12:19:37 -0300</pubDate>
+      <pubDate>Mon, 02 Nov 2020 13:25:55 -0300</pubDate>
       
       <guid>https://ourembeddeds.github.io/categories/microcontrollers/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>semihosting</title>
+      <link>https://ourembeddeds.github.io/categories/semihosting/</link>
+      <pubDate>Mon, 02 Nov 2020 13:25:55 -0300</pubDate>
+      
+      <guid>https://ourembeddeds.github.io/categories/semihosting/</guid>
       <description></description>
     </item>
     

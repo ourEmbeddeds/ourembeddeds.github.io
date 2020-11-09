@@ -222,6 +222,7 @@ see various tricks to simplify your live with gnu make and Makefile.</p>
         <li><a href="#integrating-in-makefile">Integrating in Makefile</a></li>
       </ul>
     </li>
+    <li><a href="#apendix-clean-maded-makefile">Apendix. Clean maded Makefile</a></li>
   </ul>
 </nav>
 </div>
@@ -808,6 +809,84 @@ like this:</p>
 </code></pre></div><p>But is only suggar for more confortable Makefile functionalities <code>¯\_(ツ)_/¯</code>,
 the real thing to do next is put a real work in our main program!!!</p>
 <p>See you next week!</p>
+<h2 id="apendix-clean-maded-makefile">Apendix. Clean maded Makefile</h2>
+<p>With comments&hellip;</p>
+<div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-Makefile" data-lang="Makefile"><span style="color:#999;font-style:italic"># Use this name to select the final filename of your *.elf, *.bin, *.hex etc
+</span><span style="color:#999;font-style:italic"></span><span style="color:#40ffff">TARGET</span>=firmware
+<span style="color:#999;font-style:italic"># Add your source files using wildcard or directly putting the file path
+</span><span style="color:#999;font-style:italic"></span><span style="color:#40ffff">SOURCES</span>=<span style="color:#6ab825;font-weight:bold">$(</span>wildcard src/*.c<span style="color:#6ab825;font-weight:bold">)</span>
+<span style="color:#999;font-style:italic"># Add library path for find *.ld and *.a files
+</span><span style="color:#999;font-style:italic"></span><span style="color:#40ffff">LIBPATH</span>=lib
+<span style="color:#999;font-style:italic"># Add libraries (in any library path location) or compiler bundled library
+</span><span style="color:#999;font-style:italic"></span><span style="color:#40ffff">LIBS</span>=nosys
+<span style="color:#999;font-style:italic"># Specify your linker script here
+</span><span style="color:#999;font-style:italic"></span><span style="color:#40ffff">LDSCRIPTS</span>=link.ld
+<span style="color:#999;font-style:italic"># And the output directory of your object files
+</span><span style="color:#999;font-style:italic"></span><span style="color:#40ffff">OUT</span>=out
+
+<span style="color:#999;font-style:italic"># translate all *.c in $(OUT)/*.o
+</span><span style="color:#999;font-style:italic"></span><span style="color:#40ffff">OBJECTS</span>=<span style="color:#6ab825;font-weight:bold">$(</span>addprefix <span style="color:#6ab825;font-weight:bold">$(</span>OUT<span style="color:#6ab825;font-weight:bold">)</span>/, <span style="color:#6ab825;font-weight:bold">$(</span>patsubst %.c, %.o, <span style="color:#6ab825;font-weight:bold">$(</span>SOURCES<span style="color:#6ab825;font-weight:bold">)))</span>
+<span style="color:#999;font-style:italic"># Compose final ELF file name
+</span><span style="color:#999;font-style:italic"></span><span style="color:#40ffff">TARGET_ELF</span>=<span style="color:#6ab825;font-weight:bold">$(</span>addsuffix .elf, <span style="color:#6ab825;font-weight:bold">$(</span>addprefix <span style="color:#6ab825;font-weight:bold">$(</span>OUT<span style="color:#6ab825;font-weight:bold">)</span>/, <span style="color:#6ab825;font-weight:bold">$(</span>TARGET<span style="color:#6ab825;font-weight:bold">)))</span>
+
+<span style="color:#999;font-style:italic"># CROSS provides flexibility to select your toolchain prefix
+</span><span style="color:#999;font-style:italic"></span><span style="color:#40ffff">CROSS</span>=arm-none-eabi-
+<span style="color:#40ffff">CC</span>=<span style="color:#6ab825;font-weight:bold">$(</span>CROSS<span style="color:#6ab825;font-weight:bold">)</span>gcc
+<span style="color:#40ffff">LD</span>=<span style="color:#6ab825;font-weight:bold">$(</span>CROSS<span style="color:#6ab825;font-weight:bold">)</span>gcc
+
+<span style="color:#999;font-style:italic"># Add the architecture dependent flags here
+</span><span style="color:#999;font-style:italic"></span><span style="color:#40ffff">ARCH_FLAGS</span>=-mcpu=cortex-m3 -mthumb
+
+<span style="color:#999;font-style:italic"># And other C compiler flags here
+</span><span style="color:#999;font-style:italic"></span><span style="color:#40ffff">CFLAGS</span>=<span style="color:#6ab825;font-weight:bold">$(</span>ARCH_FLAGS<span style="color:#6ab825;font-weight:bold">)</span> -Og -g3
+
+<span style="color:#999;font-style:italic"># Build linker flags using $(ARCH_FLAGS) first
+</span><span style="color:#999;font-style:italic"></span><span style="color:#40ffff">LDFLAGS</span>=<span style="color:#6ab825;font-weight:bold">$(</span>ARCH_FLAGS<span style="color:#6ab825;font-weight:bold">)</span>
+<span style="color:#999;font-style:italic"># Prevent the use of compiler provided start files. You provide user initialization
+</span><span style="color:#999;font-style:italic"></span><span style="color:#40ffff">LDFLAGS</span>+=-nostartfiles
+<span style="color:#999;font-style:italic"># Extra library path
+</span><span style="color:#999;font-style:italic"></span><span style="color:#40ffff">LDFLAGS</span>+=<span style="color:#6ab825;font-weight:bold">$(</span>addprefix -L, <span style="color:#6ab825;font-weight:bold">$(</span>LIBPATH<span style="color:#6ab825;font-weight:bold">))</span>
+<span style="color:#999;font-style:italic"># Build extra flags with contents of LIBS LIBPATH and LDSCRIPTS variables
+</span><span style="color:#999;font-style:italic"></span><span style="color:#40ffff">LDFLAGS</span>+=<span style="color:#6ab825;font-weight:bold">$(</span>addprefix -l, <span style="color:#6ab825;font-weight:bold">$(</span>LIBS<span style="color:#6ab825;font-weight:bold">))</span>
+<span style="color:#999;font-style:italic"># Linker scripts
+</span><span style="color:#999;font-style:italic"></span><span style="color:#40ffff">LDFLAGS</span>+=<span style="color:#6ab825;font-weight:bold">$(</span>addprefix -T, <span style="color:#6ab825;font-weight:bold">$(</span>LDSCRIPTS<span style="color:#6ab825;font-weight:bold">))</span>
+
+<span style="color:#999;font-style:italic"># Use verbose or quiet build
+</span><span style="color:#999;font-style:italic"></span><span style="color:#a61717;background-color:#e3d2d2">ifeq</span> <span style="color:#a61717;background-color:#e3d2d2">(</span><span style="color:#6ab825;font-weight:bold">$(</span><span style="color:#40ffff">VERBOSE</span><span style="color:#6ab825;font-weight:bold">)</span><span style="color:#a61717;background-color:#e3d2d2">,y)</span>
+<span style="color:#40ffff">Q</span>=
+<span style="color:#a61717;background-color:#e3d2d2">else</span>
+<span style="color:#40ffff">Q</span>=@
+<span style="color:#a61717;background-color:#e3d2d2">endif</span>
+
+<span style="color:#447fcf">all</span>: <span style="color:#6ab825;font-weight:bold">$(</span><span style="color:#40ffff">TARGET_ELF</span><span style="color:#6ab825;font-weight:bold">)</span>
+
+<span style="color:#447fcf">$(OUT)/%.o</span>: %.c
+	@echo CC $&lt;
+	@mkdir -p <span style="color:#6ab825;font-weight:bold">$(</span>dir <span style="color:#40ffff">$@</span><span style="color:#6ab825;font-weight:bold">)</span>
+	<span style="color:#6ab825;font-weight:bold">$(</span>Q<span style="color:#6ab825;font-weight:bold">)$(</span>CC<span style="color:#6ab825;font-weight:bold">)</span> <span style="color:#6ab825;font-weight:bold">$(</span>CFLAGS<span style="color:#6ab825;font-weight:bold">)</span> -o <span style="color:#40ffff">$@</span> -c $&lt;
+
+<span style="color:#447fcf">$(TARGET_ELF)</span>: <span style="color:#6ab825;font-weight:bold">$(</span><span style="color:#40ffff">OBJECTS</span><span style="color:#6ab825;font-weight:bold">)</span>
+	@echo LD <span style="color:#40ffff">$@</span>
+	@mkdir -p <span style="color:#6ab825;font-weight:bold">$(</span>dir <span style="color:#40ffff">$@</span><span style="color:#6ab825;font-weight:bold">)</span>
+	<span style="color:#6ab825;font-weight:bold">$(</span>Q<span style="color:#6ab825;font-weight:bold">)$(</span>LD<span style="color:#6ab825;font-weight:bold">)</span> -o <span style="color:#40ffff">$@</span> $^ <span style="color:#6ab825;font-weight:bold">$(</span>LDFLAGS<span style="color:#6ab825;font-weight:bold">)</span>
+
+<span style="color:#447fcf">clean</span>:
+	@echo CLEAN
+	<span style="color:#6ab825;font-weight:bold">$(</span>Q<span style="color:#6ab825;font-weight:bold">)</span>rm -fr <span style="color:#6ab825;font-weight:bold">$(</span>OUT<span style="color:#6ab825;font-weight:bold">)</span>
+
+<span style="color:#447fcf">.PHONY</span>: all clean
+
+<span style="color:#40ffff">OOCD</span>=openocd
+
+<span style="color:#40ffff">OOCD_FLAGS</span>:=-f interface/stlink.cfg -f target/stm32f1x.cfg
+<span style="color:#40ffff">OOCD_CMDS</span>:=-c <span style="color:#ed9d13">&#34;init&#34;</span>
+<span style="color:#40ffff">OOCD_CMDS</span>+=-c <span style="color:#ed9d13">&#34;reset halt&#34;</span>
+<span style="color:#40ffff">OOCD_CMDS</span>+=-c <span style="color:#ed9d13">&#34;program </span><span style="color:#6ab825;font-weight:bold">$(</span>TARGET_ELF<span style="color:#6ab825;font-weight:bold">)</span><span style="color:#ed9d13"> verify reset exit&#34;</span>
+
+<span style="color:#447fcf">program</span>: <span style="color:#6ab825;font-weight:bold">$(</span><span style="color:#40ffff">TARGET_ELF</span><span style="color:#6ab825;font-weight:bold">)</span>
+	<span style="color:#6ab825;font-weight:bold">$(</span>Q<span style="color:#6ab825;font-weight:bold">)$(</span>OOCD<span style="color:#6ab825;font-weight:bold">)</span> <span style="color:#6ab825;font-weight:bold">$(</span>OOCD_FLAGS<span style="color:#6ab825;font-weight:bold">)</span> <span style="color:#6ab825;font-weight:bold">$(</span>OOCD_CMDS<span style="color:#6ab825;font-weight:bold">)</span>
+
+</code></pre></div>
                         </div>
                         
                         
@@ -861,11 +940,11 @@ the real thing to do next is put a real work in our main program!!!</p>
             
             
             <li>
-                <a href="/categories/arm">arm (4)</a>
+                <a href="/categories/arm">arm (5)</a>
             </li>
             
             <li>
-                <a href="/categories/embedded">embedded (4)</a>
+                <a href="/categories/embedded">embedded (5)</a>
             </li>
             
             <li>
@@ -873,11 +952,15 @@ the real thing to do next is put a real work in our main program!!!</p>
             </li>
             
             <li>
-                <a href="/categories/make">make (1)</a>
+                <a href="/categories/make">make (2)</a>
             </li>
             
             <li>
-                <a href="/categories/microcontrollers">microcontrollers (4)</a>
+                <a href="/categories/microcontrollers">microcontrollers (5)</a>
+            </li>
+            
+            <li>
+                <a href="/categories/semihosting">semihosting (1)</a>
             </li>
             
         </ul>
@@ -936,6 +1019,19 @@ the real thing to do next is put a real work in our main program!!!</p>
                 
                 <div class="item same-height-row clearfix">
                     <div class="image same-height-always">
+                        <a href="https://ourembeddeds.github.io/blog/2020/11/02/armv7m-semihosting/">
+                          
+                            <img src="/img/articles/arm7m-semihosting/banner.jpg" class="img-responsive" alt="Armv7m Startup (3) - Remote control via semihosting">
+                          
+                        </a>
+                    </div>
+                    <div class="name same-height-always">
+                        <h5><a href="https://ourembeddeds.github.io/blog/2020/11/02/armv7m-semihosting/">Armv7m Startup (3) - Remote control via semihosting</a></h5>
+                    </div>
+                </div>
+                
+                <div class="item same-height-row clearfix">
+                    <div class="image same-height-always">
                         <a href="https://ourembeddeds.github.io/blog/2020/09/30/armv7m-startup-make/">
                           
                             <img src="/img/articles/armv7m-boot-3/self-made-man.png" class="img-responsive" alt="Armv7m Startup (3) - Make and build process">
@@ -957,19 +1053,6 @@ the real thing to do next is put a real work in our main program!!!</p>
                     </div>
                     <div class="name same-height-always">
                         <h5><a href="https://ourembeddeds.github.io/blog/2020/09/21/arm7m-startup-ldscript/">Armv7m Startup (2) - Linker script</a></h5>
-                    </div>
-                </div>
-                
-                <div class="item same-height-row clearfix">
-                    <div class="image same-height-always">
-                        <a href="https://ourembeddeds.github.io/blog/2020/09/05/armv7m-startup/">
-                          
-                            <img src="/img/articles/armv7m-boot/baron-bootstrapping.jpg" class="img-responsive" alt="Armv7m Startup">
-                          
-                        </a>
-                    </div>
-                    <div class="name same-height-always">
-                        <h5><a href="https://ourembeddeds.github.io/blog/2020/09/05/armv7m-startup/">Armv7m Startup</a></h5>
                     </div>
                 </div>
                 
@@ -1037,19 +1120,6 @@ the real thing to do next is put a real work in our main program!!!</p>
     
 
     
-<script type="application/javascript">
-var doNotTrack = false;
-if (!doNotTrack) {
-	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-	})(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-	ga('create', 'UA-177396015-1', 'auto');
-	
-	ga('send', 'pageview');
-}
-</script>
-
 <script src="//code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
