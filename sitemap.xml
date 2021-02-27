@@ -8,11 +8,6 @@
   </url>
   
   <url>
-    <loc>https://ourembeddeds.github.io/blog/2020/11/02/armv7m-semihosting/</loc>
-    <lastmod>2020-11-02T13:25:55-03:00</lastmod>
-  </url>
-  
-  <url>
     <loc>https://ourembeddeds.github.io/blog/</loc>
     <lastmod>2020-11-02T13:25:55-03:00</lastmod>
   </url>
@@ -39,6 +34,11 @@
   
   <url>
     <loc>https://ourembeddeds.github.io/</loc>
+    <lastmod>2020-11-02T13:25:55-03:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://ourembeddeds.github.io/blog/2020/11/02/armv7m-semihosting/</loc>
     <lastmod>2020-11-02T13:25:55-03:00</lastmod>
   </url>
   
