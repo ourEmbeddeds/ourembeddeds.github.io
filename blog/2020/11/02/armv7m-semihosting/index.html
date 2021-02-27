@@ -242,14 +242,25 @@ is very limited. In contrast, the resource consumption is quite small.</p>
 show data from one or more pins. This need a logic analyzer and special
 software to decode the signals.</p>
 <p><img src="/img/articles/arm7m-semihosting/pv_decoders_2.png" alt="signal-debug"></p>
+<p>In many cases, this is the preferred way to debug behavior of our system
+because this is the less invasive way to detect the dynamic status of
+involved signals and is universal of all scenarios.</p>
+<p>The big issue of this method is the need to provide some physical access
+to required signals that may be not possible in many cases (Imagine the
+physical challenge to connect around 33 data signals of parallel bus with
+your clock to an external debug probe)</p>
 <h3 id="serial-output">Serial output</h3>
-<p>Is an evolution of pin move. This technique move the pin in serial comm port
-friendly way understandable for a common serial interface. This enable to send
-any type of data. Normally, we wanna send an ascii plain text in human
-readable way but we can implement some compression and use an special program
-in the receiver side to show in human readable way. This is more expensive in
-hardware (or programming if we decide emulate the serial in software) than the
-simple pin movement but provides a more sophisticate interface.</p>
+<p>Is an evolution of pin move. This technique move the debug pin as a serial
+port output, in suitable form to connect directly to an UART into PC or an
+serial to usb converter. This can be achieved using a hardware serial port
+in the MCU or via software emulation using timers, interrupts or DMA streams.</p>
+<p>This enable to send any type of data. Normally we want to send a text in ascii
+format in a human readable way but we can implement some compression and use
+an special program in the receiver side to show in a terminal program or some
+like this.</p>
+<p>This is more expensive in hardware (or cpu time if we decide emulate the serial
+in software) than the simple pin movement but provides a more sophisticated
+interface.</p>
 <p><img src="/img/articles/arm7m-semihosting/UART_Frame.svg" alt="uart-frame"></p>
 <h3 id="debug-channel-facilities">Debug channel facilities</h3>
 <p>Some debugger systems offer facilities to inspect memory and present the
@@ -264,14 +275,14 @@ breakpoint, like MIPS, RISC-V, AVR, xtensa, nios, xcore, and virtually all
 recently cores with integrated debugger</p>
 <p>Semihosting technique have many advantages over other methods:</p>
 <ul>
-<li>we can use only one cable (the debugger cable)</li>
-<li>we have access to many functions not only console print and write. Also,
+<li>We can use only one cable (the debugger cable)</li>
+<li>We have access to many functions not only console print and write. Also,
 using semihosting we can write and read files from your filesystem (with
 permission from the user that actually runs the corresponding debug bridge
 like openocd) or execute host binaries via <code>system</code> call</li>
 <li>The interface and hardware involved is common to all platform independent
-of your vendor (at least in cortex-m and risc-v). With cares, we can run the
-same semihosting code in any cortex-m platform.</li>
+of your vendor (at least in cortex-m and risc-v). Programming this with cares,
+we can run the same semihosting code in any cortex-m platform.</li>
 </ul>
 <p>But not all is good, some disadvantages appear if we chose this as debug
 engine:</p>
@@ -282,36 +293,37 @@ dependant, may break your debug experience too much.</li>
 <li>The call consume variable time depending of the power of host, the operation
 requested and (firstly) the debug interface speed. Again, the call latency may
 broke the system and invalidate your debug experience.</li>
-<li>The amount of ram is quite small but normally, the semihosting is implemented
-using libc like newlib or picolibc and these libraries may consume more than
-simple led blinking.</li>
-<li>we need a host connected to the device when your software is running.</li>
+<li>The amount of ram is quite small but normally, the semihosting is
+implemented using c libraries like newlib or picolibc and these libraries may
+consume more than  simple led blinking.</li>
+<li>We need a host connected to the device when your software is running.</li>
 </ul>
 <p>Having said that, the semihosting debug techniques is powerfully in many cases
 and the potential problems can be avoided or mitigated with a careful debug
 planning.</p>
 <h2 id="semihosting-technical-background">Semihosting technical background</h2>
 <p>The magic beside of semihosting is only the ability to inform to the debugger
-in the host when the processor suffer a software interrupt enables to catch
-using the hardware debugging system (half inner the CPU chip, half in the host
-machine in form of software stack)</p>
+in the host when the processor suffer a software interrupt, enabling the host
+to catch it using the hardware debugging system (half inner the CPU chip, half
+in the host machine in form of software stack)</p>
 <p><img src="/img/articles/arm7m-semihosting/semihosting-flow.png" alt="semihosting flow"></p>
-<p>The steps was explained here:</p>
+<p>The steps was explained below:</p>
 <ul>
-<li>The device and the host are communicated via debug interface controlled, in
-the host for the debug bridge (software like openocd, stlink or jlinkutils)
-using some interface like JTAG, SWD, or other, normally in a form of
-specialized hardware interface (usb to jtag chip, parallel port connection, or
-other hardware that enable communication to the debug interface in the device)</li>
-<li>These software pool the status of the device in regular periods and check the
+<li>The device and the host are communicated via debug interface controlled in
+the host, by the debug bridge (software like openocd, stlink or jlinkutils)
+using some interface like JTAG, SWD, or other, normally as a specialized
+hardware interface (usb to jtag chips, parallel port connection, or other
+hardware that enable communication to the debug interface in the device)</li>
+<li>These software poll the status of the device in regular periods and check the
 CPU state for some special conditions triggered in semihosting call.</li>
 <li>In the device, before we do semihost call, need to perform several actions:
 <ul>
 <li>Prepare a memory buffer with the corresponding data and configure the CPU
-registers to point this data block. Normally, in other register we need to
-put the system call number (an integer indicating the action to perform)</li>
+registers to point to this data block. Normally, in another record we need
+to put the system call number (an integer that indicates the action to be
+performed)</li>
 <li>When the device environment is ready, the CPU perform an action that
-trigger some hardware exceptions or interrupt that can be catch from the
+trigger some hardware exceptions or interrupt that can be catched from the
 debug subsystem internally on the chip. In cortex-m this imply a special
 instruction called <code>bkpt #number</code> with an special value in <code>#number</code>. In
 other architectures the action may imply trigger an interrupt or put some
@@ -319,22 +331,22 @@ special value in memory mapped register but the concept is the same. This
 halt the CPU (or, at least the core that generate the exception)</li>
 </ul>
 </li>
-<li>In the host, when the debug bridge detect the halt condition caused by a
-debug exception, this software in the host read halted CPU state via debug
-interface (JTAG, SWD, etc) and determine the type of call (print text, write
-file, read file data, system call, etc). If the call need more data (like a
-previous write buffer), the debug bridge read from the device to the host}
-these data and use this to perform the requested action.</li>
-<li>Now, with any required data copied from device to host, the debug bridge
-perform the requested action. This may imply, write in screen, read from file
-or standard input, get host system information or any function provided by the
-debug bridge software. In some cases, the debug bridge software can communicate
-with other software via socket or other inter process mechanism to delegate the
-actions in specialized software or plugin.</li>
+<li>When the debug bridge detect the halt condition caused by a debug exception,
+notify the host for halt CPU state via debug interface (JTAG, SWD, etc) and
+select the type of call using the number previously stored in an special CPU
+register. If the call need more data (like the previously write buffer), the
+host read from the device to the host these data and use this to perform the
+requested action.</li>
+<li>Now, with any required data copied from device to host, the this perform the
+requested action. This may imply, write in screen, read from file or standard
+input, get system information or any function provided by the debug bridge
+software running in the host. In some cases, the debug bridge software can
+communicate with other software via socket or other inter process mechanism
+to delegate the actions in specialized software or plugin.</li>
 <li>When the host action is finished, the result of these action is packed and
 sended to the device if required (not all semihost call need returned data).
 The data is write in special buffer in the device via debug interface actions
-and, finally, the halted CPU is resumed when the environment actualized.</li>
+and, finally, the halted CPU is resumed when the environment is actualized.</li>
 </ul>
 <p>The semihosting action will be transparent for the device. This imply, by
 example, when we perform a file read in semihosting mode, the behavior will be
@@ -342,11 +354,11 @@ exactly like a file read locally.</p>
 <h2 id="the-concrete-armv7m-aka-cortex-m-semihosting">The concrete ARMv7M (aka cortex-m) semihosting</h2>
 <p>The concrete implementation of semihosting in ARMv7M (aka cortex-m) is quite
 simple. Only need to put the number of the call in r0 and the pointer to
-parameters in r1. The number and type of parameter array is call dependent.
-When the semihosting resume the CPU execution, a return code is put in r0.
-If the host need to pass other information (like file data block) the function
-call foresees a memory buffer pointer as an one of the parameters passed in the
-array pointed by r1.</p>
+parameter array in r1. The number and type of parameter array is call
+dependent. When the semihosting resume the CPU execution, a return code is put
+in r0. If the host need to pass other information (like file data block) the
+function call will be provide a memory buffer pointer as an one of the
+parameters passed in the array pointed by r1.</p>
 <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-asm" data-lang="asm"><span style="color:#999;font-style:italic">; file: sys_semihost.S 
 </span><span style="color:#999;font-style:italic">; @csignature: int sys_semihost(int, void*)
 </span><span style="color:#999;font-style:italic">; @brief: Semihosting call
@@ -356,19 +368,22 @@ array pointed by r1.</p>
 </span><span style="color:#999;font-style:italic"></span>sys_semihost:
 	<span style="color:#447fcf">bkpt</span> <span style="color:#999;font-style:italic">#0xab
 </span><span style="color:#999;font-style:italic"></span>	<span style="color:#40ffff">bx</span> <span style="color:#40ffff">lr</span>
-</code></pre></div><p>we may call the code in your C/C++ program as:</p>
+</code></pre></div><p>You may call the code in your C/C++ program as:</p>
 <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#6ab825;font-weight:bold">extern</span> <span style="color:#6ab825;font-weight:bold">int</span> <span style="color:#447fcf">sys_semihost</span>(<span style="color:#6ab825;font-weight:bold">int</span> req, <span style="color:#6ab825;font-weight:bold">void</span> *args)
 
 <span style="color:#6ab825;font-weight:bold">void</span> semihost_puts(<span style="color:#6ab825;font-weight:bold">const</span> <span style="color:#6ab825;font-weight:bold">char</span> *str)
 {
 	sys_semihost(<span style="color:#3677a9">0x04</span>, (<span style="color:#6ab825;font-weight:bold">void</span>*) str);
 }
-</code></pre></div><p>In this example, the function invoked is <code>SYS_WRITE0</code> with code <code>0x04</code>. This
-function write a zero terminated string on stdout. The memory block containing
-the zero terminated string is passed in r1 (the second parameter)</p>
-<p>The return value is undefined and may be corrupted by the semihost operation.</p>
-<p>An other example is the case of <code>open</code> syscall that open a file and return an
-integer used by refer to these file in subsequent calls of <code>write</code> and <code>read</code>:</p>
+</code></pre></div><p>In this example, the function invoked is <code>SYS_WRITE0</code> that is represented with
+the code <code>0x04</code>. This function write a zero terminated string on stdout. The
+memory block containing the zero terminated string is passed in r1 (the second
+parameter)</p>
+<p>The return value (in r0) is undefined and may be corrupted by the semihost
+operation.</p>
+<p>Another example is the case of an <code>open</code> syscall that open a file and return
+an integer used as reference to these file in subsequent calls of <code>write</code>
+and <code>read</code>:</p>
 <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c" data-lang="c"><span style="color:#cd2828;font-weight:bold">#include</span> <span style="color:#cd2828;font-weight:bold">&lt;string.h&gt;</span><span style="color:#cd2828;font-weight:bold">
 </span><span style="color:#cd2828;font-weight:bold"></span>
 <span style="color:#6ab825;font-weight:bold">extern</span> <span style="color:#6ab825;font-weight:bold">int</span> <span style="color:#447fcf">sys_semihost</span>(<span style="color:#6ab825;font-weight:bold">int</span> req, <span style="color:#6ab825;font-weight:bold">void</span> *args)
@@ -382,8 +397,8 @@ integer used by refer to these file in subsequent calls of <code>write</code> an
 }
 </code></pre></div><p>In this case, r0 contains the syscall code 0x1 corresponding to <code>SYS_OPEN</code>
 function and r1 contain pointer to array of tree integers containing the
-pointer to the file name at 0, the pointer of string mode at 1 and the size of
-string mode in 2.</p>
+pointer to the file name at index 0, the pointer of string mode at index 1 and
+the size of string mode in index 2.</p>
 <p>On finish, r0 contains an integer number representing the file descriptor for
 refer the new opened file, or -1 in case of error.</p>
 <p>A complete list of semihosting system calls and the required parameters can be
@@ -391,17 +406,18 @@ found in <a href="https://developer.arm.com/documentation/dui0471/g/Semihosting/
 <h2 id="another-history-risc-v-semihosting">Another history: RISC-V Semihosting</h2>
 <p>The semihosting technique is quite simple to implement. we only need a debug
 capability in your processor, a little memory area of exchange, and a some
-mechanism to catch with debugger.</p>
-<p>For this, is not strange that practically all 32 or 64 bits architectures have
+mechanism to catch with the debugger.</p>
+<p>For this, is not strange that practically all recent architectures have
 semihosting support. The rising RISC-V is not the exception.</p>
-<p>In short, the treatment is much similar that ARM semihosting. The r0 and r1 is
-replaced by x10 and x11 respectively (argument 0 and argument 1 in risc-v call
-convention), and <code>BKPT</code> is replaced by hardware catchable instruction <code>EBREAK</code>.</p>
-<p>Last but not least, <code>EBREAK</code> is not only for debug purpose, is the supervisor
-call instruction and may be used in parallel for an embedded RTOS to
-communicate user and kernel code. For this reason, the semihosting encode a tow
-NOP instructions with special encoding in order to mark these particular
-<code>EBREAK</code> occurrence for the debugger.</p>
+<p>In short, the treatment is much similar that ARM semihosting. The r0 and r1
+is replaced by x10 and x11 respectively (argument 0 and argument 1 in risc-v
+call convention), and <code>BKPT</code> is replaced by instruction <code>EBREAK</code> that can be
+detected by the debugger.</p>
+<p>Last but not least, <code>EBREAK</code> is not only used for semihosting interruptuion,
+also is used to mark unreachable code by some compilers (gcc) or inserted as
+software breakpoint by some debuggers (gcc, ldb, etc). For this reason, the
+semihosting encode a tow NOP instructions with special encoding in order to
+mark these particular <code>EBREAK</code> occurrence for the debugger.</p>
 <div class="highlight"><pre style="color:#d0d0d0;background-color:#202020;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-asm" data-lang="asm"><span style="color:#999;font-style:italic">; file: sys_semihost.S 
 </span><span style="color:#999;font-style:italic">; @csignature: int sys_semihost(int, void*)
 </span><span style="color:#999;font-style:italic">; @brief: Semihosting call
@@ -424,20 +440,20 @@ ARM and some little C and ASM code but the gcc arm embedded, and specifically
 the libc bundled on it (newlib) provides many of the work with a funny and
 familiar interface.</p>
 <h3 id="rdimon-an-newlib-with-gcc">RDIMON an newlib with gcc</h3>
-<p>Originally, RDIMON (remote debug interface) was a library bundled with ancient
-ARM port of newlib as part of libgloss, a little piece of code dedicated to
-implements the system dependent part of the newlib library (BTW, newlib is the
-standard c library for embedded and resource constraint systems) implementing
-the Angle software procedure call.</p>
+<p>Originally, RDIMON was a library bundled with ancient ARM port of newlib
+(BTW, newlib is the standard c library for embedded and resource constraint
+systems) as part of libgloss, a little piece of code dedicated to implements
+the system dependent part of the newlib. This implement the Angle software
+procedure call.</p>
 <p>The original idea was the vendor provides a piece of code called monitor (maybe
-in ROM or FLASH into board) and this catch the debug monitor interrupt making
-the communication between the embedded device and software daemon in the host
-system, normally, via serial, network or other system. This piece was baptized
-by ARM as Angle debug monitor or ADB</p>
+in ROM or FLASH into board) and this catch the debug monitor interrupt,
+performing the communication between the embedded device and software daemon in
+the host system, normally via serial port network or other communication
+channel. This piece was baptized by ARM as Angle debug monitor or ADB</p>
 <p>With the advance of the technology, the monitor was replaced by dedicated
-hardware called debug macrocell and the interface finally the communication to
-the host transform in JTAG or SWD but the original idea work in same way, and
-the name RDIMON for these library is maintained for compatibility.</p>
+hardware called debug macrocell and finally the interface  communication to the
+host transform in JTAG or SWD but the original idea work in same way, and the
+name RDIMON for these library is maintained for compatibility.</p>
 <p>These library was update with newer ARMv6 and ARMv7 debug interface enabling
 modern semihosting interactions and many JTAG/SWD controllers like openocd
 JLink or stlink software provides all of the interfaces specified in RDIMON
@@ -445,7 +461,7 @@ API.</p>
 <p>By the way, the newlib bundled with gcc in <code>gcc arm embedded</code> distribution
 (from ARM and others third part vendors) implements as a library all things
 needed to use semihosting as a stdio output/input.</p>
-<p>This imply that we use <code>printf/scanf</code> style C functions and show the result in
+<p>This imply that use <code>printf/scanf</code> style C functions and show the result in
 your debugger console (ok, sorry, in the output of your debug bridge like
 openocd or jlink)</p>
 <p>The arm gcc embedded distribution includes librdimon.a and librdimon_nano.a
@@ -600,43 +616,44 @@ failure or testbench execution over hardware in the loop.</p>
     <span style="color:#6ab825;font-weight:bold">return</span> <span style="color:#3677a9">0</span>;
 }
 </code></pre></div><h3 id="some-security-warns">Some security warns</h3>
-<p>Semihosting is a good tool to work with this, but imply some security risks to
-concider. Semihosting have entire control of your filesystem, at least with the
-permission that openocd (or similar software) is running, and, at least
+<p>Semihosting is a good tool to work with it, but imply some security risks to
+consider. Semihosting have entire control of your filesystem, at least with the
+permission that openocd (or equivalent software) is running, and, at least
 teorically your firmware can create, remove or rename any files in the
-filesystem area where openocd have permission.</p>
+filesystem area where have permission.</p>
 <p>Some scenarios of risk is:</p>
 <ul>
-<li>On windows, you can access any location in your filesystem. Take care with it
-if your semihosting write or rename some files</li>
+<li>On windows, you can access any location in your filesystem. Take care with
+it if your semihosting write or rename some files</li>
 <li>The <code>system</code> call provides remote execution of any script or binary in the
 security ring where openocd is execute</li>
 <li>The function <code>unlink</code> is really harmfull, you can remove any file without
 confirmation or prevention if openocd have permission of write over it</li>
 <li>The <code>open/write</code> pair of functions need to take care for the place to write.
-If you wanna put <code>/tmp/</code> is a secure place to do, and more scure is usage of
-<code>tmpname</code> function for retrieve a secure filename in secure place.</li>
+If you are search for a temporary directory, <code>/tmp/</code> is a secure place to do,
+and more scure is usage of <code>tmpname</code> function for obtain a secure filename in
+secure place.</li>
 </ul>
 <p>All of these errors may be avoided executing openocd with correct permissions
 but this is not possible in all operating systems.</p>
 <h3 id="last-idea-hardware-in-the-loop-verification">Last idea, hardware in the loop verification</h3>
-<p>Embedded design and testing is hard, varios order of magnitude more hard than
-an entire PC based software, because the behavior is dependent on many external
-conditions and generate varios external observable events.</p>
+<p>Design and testing in embedded is hard, varios order of magnitude more hard
+than an entire PC based software, because the behavior is dependent on many
+external conditions and generate varios external observable events.</p>
 <p>During the development process, you may require to prove your engine with the
 real board connected to the system generating specific events in the input and
 sensing specific behavior in the output.</p>
-<p>Normally, this process invole some technical equipment and one or more humans
+<p>Normally, this process involve some technical equipment and one or more humans
 due to run the procedure manually. This is expensive and error prone, in vast
 majority of cases via human errors.</p>
 <p>The ideal way of co-verification of software-firmware-hardware is an automated
 test with an special mount using debugger PC, signal generators, data
 adquisition systems and some scripts to automatize the process.</p>
-<p>In this scenario, the semihosting can help too much controlling entire process
-via the firmware in the device.</p>
+<p>In this scenario, the semihosting can help controlling entire process via the
+firmware in the device.</p>
 <p><img src="/img/articles/arm7m-semihosting/hw-in-the-loop.png" alt="hardware in the loop"></p>
-<p>This technique is quite amplious and require own article, but the idea is very
-powerfull and enables continuous integration for complex hardware.</p>
+<p>This technique is quite amplius and require own article, but the idea is very
+powerful and enables continuous integration for complex hardware.</p>
 <p>We read in the following article</p>
                         </div>
                         
