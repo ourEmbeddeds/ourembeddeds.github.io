@@ -1,0 +1,20 @@
+.swiper-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background: #111;
+  display: block;
+  margin: 0 auto;
+}
+
+.text-slides-light {
+    font-weight: bold;
+    color: rgb(255, 243, 209);
+    text-shadow: 0 0 16px rgba(0, 0, 0);
+}
+
+.text-slides-dark {
+    font-weight: bold;
+    color: rgba(0, 0, 0);
+    text-shadow: 0 0 16px rgb(255, 243, 209);
+}

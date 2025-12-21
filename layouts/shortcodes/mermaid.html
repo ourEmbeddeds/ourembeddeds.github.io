@@ -1,0 +1,19 @@
+{{ $_hugo_config := `{ "version": 1 }` }}
+<!--
+    file name and path from; https://github.com/matcornic/hugo-theme-learn/blob/master/layouts/shortcodes/mermaid.html
+    shortcode js/html from; https://liveaverage.com/projects/integration-mermaid/
+-->
+<script src="https://unpkg.com/mermaid@8.1.0/dist/mermaid.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+    mermaid.initialize({ 
+        theme: 'forest',
+        themeCSS: '',
+        cloneCssStyles: false,
+        useMaxWidth: true,
+        htmlLabels: false,
+        flowchart: { 
+                curve: 'basis' 
+        }
+    });
+</script>
+<pre class="mermaid" align="{{ if .Get "align" }}{{ .Get "align" }}{{ else }}center{{ end }}">{{ safeHTML .Inner }}</pre>

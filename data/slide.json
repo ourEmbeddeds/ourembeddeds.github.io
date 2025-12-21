@@ -1,0 +1,22 @@
+[
+  {
+    "image": "images/Banner1.jpeg",
+    "title": "Custom Firmware Design",
+    "color": "text-slides-light"
+  },
+  {
+    "image": "images/Banner2.jpeg",
+    "title": "Hardware Design, Prototyping and Manufacturing",
+    "color": "text-slides-light"
+  },
+  {
+    "image": "images/Banner3.png",
+    "title": "Industrial grade IoT Solutions",
+    "color": "text-slides-light"
+  },
+  {
+    "image": "images/Banner4.png",
+    "title": "Linux Software Development",
+    "color": "text-slides-light"
+  }
+]

@@ -1,0 +1,38 @@
+.toc {
+  background: #f8fafc;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 1.5rem 1.5rem 1rem 1.5rem;
+  margin: 2rem 0;
+  font-size: 1rem;
+  box-shadow: none;
+}
+.toc h2, .toc h3 {
+  font-size: 1.1em;
+  font-weight: 600;
+  margin-bottom: 0.5em;
+  color: #2563eb;
+}
+.toc ul {
+  list-style: none;
+  padding-left: 0;
+}
+.toc ul ul {
+  margin-left: 1.2em;
+  border-left: none;
+  padding-left: 1em;
+}
+.toc li {
+  margin-bottom: 0.3em;
+}
+.toc a {
+  color: #0f172a;
+  text-decoration: none !important;
+  border-bottom: none !important;
+  transition: color 0.2s;
+}
+.toc a:hover {
+  color: #2563eb;
+  text-decoration: none !important;
+  border-bottom: none !important;
+}

@@ -1,0 +1,49 @@
+baseURL = 'https://ourembeddeds.com/'
+title = 'OurEmbeddeds'
+author = 'OurEmbeddeds Team'
+languageCode = 'es'
+DefaultContentLanguage = 'es'
+enableInlineShortcodes = true
+theme = 'tella'
+enableRobotsTXT = true
+
+[params]
+	showBlog = false
+	mainSections = ['blog']
+	googleFonts = true
+	[params.logo]
+		main = 'images/ourembeddeds-banner.png'
+		alt = 'OurEmbeddeds'
+		size = 'h-14'
+	[params.site]
+		name = 'OurEmbeddeds'
+	[params.icon]
+		fontawesome = true
+
+
+[menu]
+	[[menu.main]]
+		name = 'Home'
+		url = '/'
+		weight = 1
+	[[menu.main]]
+		name = 'Services'
+		url = '/services/'
+		weight = 3
+	[[menu.main]]
+		name = 'About'
+		url = '/about/'
+		weight = 2
+	[[menu.main]]
+		name = 'Blog'
+		url = '/blog/'
+		weight = 4
+	[[menu.main]]
+		name = 'Contact'
+		url = '/contact/'
+		weight = 5
+
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
